@@ -8,3 +8,4 @@ require '../middleware/role.php';
 
 <h1>Halo Siswa</h1>
 <p>Selamat datang, <?= $_SESSION['nama']; ?></p>
+<!-- halo -->
