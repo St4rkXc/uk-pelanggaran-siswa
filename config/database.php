@@ -1,5 +1,6 @@
 <?php
-// define('ROOTPATH', $_SERVER['DOCUMENT_ROOT'] . '/pos-indomaret');
+// include dulu ini file make __DIR__ . ntar di file lain bisa make Base Path
+define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'pelanggaran_siswa');
 define('DB_USER', 'root');
