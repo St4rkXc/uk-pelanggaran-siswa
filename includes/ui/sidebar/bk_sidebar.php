@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../config/config.php';
+require_once __DIR__ . '/../../../config/database.php';
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 $dashboardPath = BASE_PATH . '/dashboard/guru_bk.php';
 $logoutPath = BASE_PATH . '/auth/logout.php';
@@ -28,7 +28,7 @@ $logoutPath = BASE_PATH . '/auth/logout.php';
                 </div>
             </div>
             <div class="space-y-2">
-                <p class="font-paragraph-12 font-semibold text-zinc-500">Surat  </p>
+                <p class="font-paragraph-12 font-semibold text-zinc-500">Surat </p>
                 <div class="space-y-1">
                     <div class="sidebar-link">
                         <div class="icon-paperclip h-5 w-5"></div>

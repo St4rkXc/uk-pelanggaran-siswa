@@ -1,6 +1,11 @@
 <?php
-// include dulu ini file make __DIR__ . ntar di file lain bisa make Base Path
+// Untuk internal PHP (include/require) -> Hasilnya: C:\xampp\htdocs\project
 define('BASE_PATH', realpath(__DIR__ . '/..'));
+
+// Untuk Browser (Link/Gambar) -> Hasilnya: http://localhost/project
+// Sesuaikan 'nama_project_kamu' dengan nama folder project di htdocs
+define('BASE_URL', 'http://localhost/pelanggaran_uk');
+
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'pelanggaran_siswa');
 define('DB_USER', 'root');

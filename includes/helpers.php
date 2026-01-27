@@ -1,18 +1,21 @@
 <?php
 
-function dbFetchAll($pdo, $table) {
+function dbFetchAll($pdo, $table)
+{
     $stmt = $pdo->prepare("SELECT * FROM $table");
     $stmt->execute();
     return $stmt->fetchAll();
 }
 
-function dbFetchById($pdo, $table, $idField, $id) {
+function dbFetchById($pdo, $table, $idField, $id)
+{
     $stmt = $pdo->prepare("SELECT * FROM $table WHERE $idField = :id");
     $stmt->execute(['id' => $id]);
     return $stmt->fetch();
 }
 
-function dbInsert($pdo, $table, $data) {
+function dbInsert($pdo, $table, $data)
+{
     $fields = implode(',', array_keys($data));
     $placeholders = ':' . implode(', :', array_keys($data));
 
@@ -22,7 +25,8 @@ function dbInsert($pdo, $table, $data) {
     return $stmt->execute($data);
 }
 
-function dbUpdate($pdo, $table, $data, $idField, $id) {
+function dbUpdate($pdo, $table, $data, $idField, $id)
+{
     $set = [];
     foreach ($data as $key => $value) {
         $set[] = "$key = :$key";
@@ -35,7 +39,25 @@ function dbUpdate($pdo, $table, $data, $idField, $id) {
     return $stmt->execute($data);
 }
 
-function dbDelete($pdo, $table, $idField, $id) {
+function dbDelete($pdo, $table, $idField, $id)
+{
     $stmt = $pdo->prepare("DELETE FROM $table WHERE $idField = :id");
     return $stmt->execute(['id' => $id]);
 }
+
+function dbCount($pdo, $table, $condition = "", $params = [])
+{
+    $sql = "SELECT COUNT(*) FROM $table";
+
+    // Jika ada kondisi (misal: WHERE role = 'siswa')
+    if (!empty($condition)) {
+        $sql .= " WHERE $condition";
+    }
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+
+    // Mengambil hasil kolom pertama (hasil COUNT)
+    return $stmt->fetchColumn();
+}
+
