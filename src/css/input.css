@@ -1,5 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 @import 'tailwindcss';
 @plugin "daisyui" {
-    themes:
-        light --default;
+    themes: light --default;
+}
+
+@layer components {
+    /* typography */
+    .font-display {
+        font-size: 64px;
+        line-height: 110%;
+    }
+    .font-heading-1 {
+        font-size: 48px;
+        line-height: 110%;
+    }
+    .font-heading-2 {
+        font-size: 40px;
+        line-height: 110%;
+    }
+    .font-heading-3 {
+        font-size: 36px;
+        line-height: 110%;
+    }
+    .font-heading-4 {
+        font-size: 32px;
+        line-height: 150%;
+    }
+    .font-heading-5 {
+        font-size: 24px;
+        line-height: 150%;
+    }
+    .font-paragraph-20 {
+        font-size: 20px;
+        line-height: 150%;
+    }
+    .font-paragraph-16 {
+        font-size: 16px;
+        line-height: 150%;
+    }
+    .font-paragraph-14 {
+        font-size: 14px;
+        line-height: 150%;
+    }
+    .font-paragraph-12 {
+        font-size: 12px;
+        line-height: 150%;
+    }
+}
+
+@layer components {
+    .button-primary {
+        @apply bg-zinc-900 rounded-lg text-zinc-50 font-semibold font-paragraph-16 py-2 px-4 hover:bg-zinc-600 transition-colors inline-flex;
+    }
+}
+
+@layer components {
+    .icon-user {
+        display: inline-block;
+        --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.5'%3E%3Ccircle cx='12' cy='6' r='4'/%3E%3Cellipse cx='12' cy='17' rx='7' ry='4'/%3E%3C/g%3E%3C/svg%3E");
+        background-color: currentColor;
+        -webkit-mask-image: var(--svg);
+        mask-image: var(--svg);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+    }
+}
+
+body {
+    font-family: 'Manrope', sans-serif;
 }

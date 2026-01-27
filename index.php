@@ -9,8 +9,14 @@
 </head>
 
 <body>
-    <p class="text-blue-800 font-black">Nama Saya Dhiyo</p>
-    <div class="btn">halo</div>
+    <div>
+        <div class="space-y-1">
+            <div class="p-3 rounded-2xl border border-zinc-300 w-fit">
+                <img src="./src/assets/img/logo_sekolah.png" alt="" class="h-13 w-[50px]  ">
+            </div>
+            <p class="font-paragraph-14 font-semibold text-zinc-500">Manajemen Pelanggaran</p>
+        </div>
+    </div>
 </body>
 
 </html>
