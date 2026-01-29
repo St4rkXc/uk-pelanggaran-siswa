@@ -25,32 +25,34 @@ $logoutPath = BASE_URL . '/auth/logout.php';
                         <div class="icon-siswa h-5 w-5"></div>
                         <a class="font-paragraph-14 text-700">Data Siswa</a>
                     </div>
-                    <div class="sidebar-link">
-                        <div class="icon-case h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Data User</a>
-                    </div>
-                </div>
+                    <?php if ($_SESSION['role'] == 'admin') { ?>
+                        <div class="sidebar-link">
+                            <div class="icon-case h-5 w-5"></div>
+                            <a class="font-paragraph-14 text-700">Data User</a>
+                        </div>
+                    <?php } ?>
             </div>
-            <div class="space-y-2">
-                <p class="font-paragraph-12 font-semibold text-zinc-500">Surat </p>
-                <div class="space-y-1">
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
-                    </div>
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Perjanjian</a>
-                    </div>
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Pindah</a>
-                    </div>
+        </div>
+        <div class="space-y-2">
+            <p class="font-paragraph-12 font-semibold text-zinc-500">Surat </p>
+            <div class="space-y-1">
+                <div class="sidebar-link">
+                    <div class="icon-paperclip h-5 w-5"></div>
+                    <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
+                </div>
+                <div class="sidebar-link">
+                    <div class="icon-paperclip h-5 w-5"></div>
+                    <a class="font-paragraph-14 text-700">Perjanjian</a>
+                </div>
+                <div class="sidebar-link">
+                    <div class="icon-paperclip h-5 w-5"></div>
+                    <a class="font-paragraph-14 text-700">Pindah</a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="mt-auto">
-        <a href="<?php echo $logoutPath; ?>" class="sidebar-link font-paragraph-14">Logout</a>
-    </div>
+</div>
+<div class="mt-auto">
+    <a href="<?php echo $logoutPath; ?>" class="sidebar-link font-paragraph-14">Logout</a>
+</div>
 </div>

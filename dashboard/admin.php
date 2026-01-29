@@ -10,6 +10,7 @@ require_once BASE_PATH . '/includes/helpers.php';
 // inget include database dlu ya biar bisa make $pdo
 $totalSiswa = dbCount($pdo, 'Siswa');
 $totalGuru = dbCount($pdo, 'Users', "role IN ('admin', 'guru_bk', 'guru_mapel')");
+$totalSurat = dbCount($pdo, 'Surat');
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
@@ -67,7 +68,7 @@ $currentUser = [
                             <span class="icon-paperclip h-6 w-6 "></span>
                         </div>
                         <div>
-                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $totalSiswa ?> Surat</h5>
+                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $totalSurat ?> Surat</h5>
                             <p class="font-paragraph-14 font font-medium text-zinc-600">Total surat Tercatat</p>
                         </div>
                     </div>
