@@ -7,7 +7,7 @@ define('BASE_PATH', realpath(__DIR__ . '/..'));
 define('BASE_URL', 'http://localhost/pelanggaran_uk');
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'pelanggaran_siswa');
+define('DB_NAME', 'pelanggaran_siswa_new');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 
