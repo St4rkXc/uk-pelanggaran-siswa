@@ -19,7 +19,7 @@ if ($user && password_verify($passwordInput, $user['password'])) {
     $_SESSION['id_siswa'] = $user['id_siswa'];
 
 
-    header("Location: ../dashboard/{$user['role']}.php");
+    header("Location: ../pages/dashboard/{$user['role']}.php");
     exit;
 }
 

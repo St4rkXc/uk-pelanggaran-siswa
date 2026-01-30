@@ -2,10 +2,11 @@
 session_start();
 $requiredRole = 'admin';
 
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
+
 
 // inget include database dlu ya biar bisa make $pdo
 $totalSiswa = dbCount($pdo, 'Siswa');

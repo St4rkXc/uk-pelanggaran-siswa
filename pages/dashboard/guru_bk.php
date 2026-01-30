@@ -2,7 +2,7 @@
 session_start();
 $requiredRole = 'guru_bk';
 
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
