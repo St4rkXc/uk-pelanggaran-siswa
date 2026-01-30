@@ -1,6 +1,6 @@
 <?php
 session_start();
-$requiredRole = 'admin';
+$requiredRole = ['admin'];
 
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
@@ -33,7 +33,7 @@ $currentUser = [
 
 <body class="bg-zinc-50 w-dvw">
     <div class="flex w-full">
-        <?php require_once BASE_PATH . '/includes/ui/sidebar/admin_sidebar.php'; ?>
+        <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
             <header class="flex justify-between items-center px-6 py-4 border-b border-zinc-300">
                 <p class="font-paragraph-20 font-semibold text-zinc-800">Selamat Datang, <?= htmlspecialchars($currentUser['role']); ?></p>
