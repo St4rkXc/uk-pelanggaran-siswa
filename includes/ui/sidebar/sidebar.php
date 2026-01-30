@@ -1,8 +1,20 @@
 <?php
 require_once __DIR__ . '/../../../config/database.php';
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
-$dashboardPath = BASE_PATH . '/dashboard/guru_bk.php';
-$logoutPath = BASE_PATH . '/auth/logout.php';
+$dashboardPath = BASE_URL . '/pages/dashboard/' . $_SESSION['role'] . ".php";
+$siswaPath = BASE_URL . '/pages/siswa/';
+$logoutPath = BASE_URL . '/auth/logout.php';
+
+// Mendapatkan path URL saat ini
+// Contoh hasil: /projek/pages/dashboard/admin.php
+$current_url = $_SERVER['PHP_SELF'];
+// Logic Dashboard: Cek apakah URL mengandung kata 'pages/dashboard/'
+$isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
+// Logic Data Siswa: Cek apakah URL mengandung kata 'pages/siswa/'
+$isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
+
+
+
 ?>
 
 <div class="bg-zinc-100 border-r-2 border-r-zinc-200 w-fit sticky h-dvh flex flex-col justify-between py-8 px-10 ">
@@ -17,14 +29,20 @@ $logoutPath = BASE_PATH . '/auth/logout.php';
             <div class="space-y-2">
                 <p class="font-paragraph-12 font-semibold text-zinc-500">Utama</p>
                 <div class="space-y-1">
-                    <div class="sidebar-link sidebar-link-active">
+                    <a href="<?php echo $dashboardPath; ?>" class="sidebar-link <?php echo $isActiveDashboard; ?>">
                         <div class="icon-home h-5 w-5"></div>
-                        <a href="<?php echo $dashboardPath; ?>" class="font-paragraph-14 text-700">Dashboard</a>
-                    </div>
-                    <div class="sidebar-link">
+                        <div class="font-paragraph-14 text-700">Dashboard</div>
+                    </a>
+                    <a href="<?php echo $siswaPath; ?>" class="sidebar-link <?php echo $isActiveSiswa; ?>">
                         <div class="icon-siswa h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Data Siswa</a>
-                    </div>
+                        <div class="font-paragraph-14 text-700">Data Siswa</div>
+                    </a>
+                    <?php if ($_SESSION['role'] == 'admin') { ?>
+                        <div class="sidebar-link">
+                            <div class="icon-case h-5 w-5"></div>
+                            <a class="font-paragraph-14 text-700">Data User</a>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
             <div class="space-y-2">
@@ -47,6 +65,6 @@ $logoutPath = BASE_PATH . '/auth/logout.php';
         </div>
     </div>
     <div class="mt-auto">
-        <a href="' ?>" class="sidebar-link font-paragraph-14">Logout</a>
+        <a href="<?php echo $logoutPath; ?>" class="sidebar-link font-paragraph-14">Logout</a>
     </div>
 </div>
