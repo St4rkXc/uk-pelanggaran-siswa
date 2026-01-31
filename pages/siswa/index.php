@@ -9,6 +9,8 @@ require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
+$imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
+
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
@@ -100,8 +102,7 @@ $stmt->execute($params);
                                 </select>
                             </form>
                             <!-- Modal Open Daisy UI -->
-                            <button class="button-primary flex items-center justify-center" onclick="my_modal_1.showModal()">Add</button>
-
+                            <button class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
                         </div>
                     </div>
                     <div class="rounded-2xl border border-zinc-300 p-6 h-fit mt-4">
@@ -232,7 +233,7 @@ $stmt->execute($params);
         const point = el.getAttribute('data-point');
         const jurusan = el.getAttribute('data-jurusan');
 
-        // 2. Masukin data ke dalem elemen modal berdasarkan id
+        //    masukin data siwa dari tabel
         document.getElementById('m-nama').innerText = nama;
         document.getElementById('m-kelas').innerText = kelas;
         document.getElementById('m-nis').innerText = nis;
@@ -240,20 +241,111 @@ $stmt->execute($params);
         document.getElementById('m-jurusan').innerText = jurusan;
         document.getElementById('m-point').innerText = point;
 
-        // 3. Tampilkan modalnya (DaisyUI method)
+        //tampilin modalnya
         modal_view_siswa.showModal();
     }
 </script>
 
-<dialog id="my_modal_1" class="modal">
-    <div class="modal-box">
-        <h3 class="text-lg font-bold">Ini Modal 1!</h3>
-        <p class="py-4">Press ESC key or click the button below to close</p>
-        <div class="modal-action">
-            <form method="dialog">
-                <button class="btn">Close</button>
-            </form>
+<dialog id="modal_add_siswa" class="modal">
+    <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
+        <div class="space-y-1 pb-8">
+            <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
+            </div>
+            <div>
+                <h5 class="font-heading-5 text-zinc-900 font-bold">Tambah data siswa</h5>
+                <p class="font-paragraph-15 font-medium text-zinc-500">Sistem Pelanggaran Siswa</p>
+            </div>
         </div>
+
+        <form method="POST" action="process/tambah_siswa.php">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-left">
+
+                <div class="space-y-4">
+                    <div class="form-control">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Lengkap</span></label>
+                        <input type="text" name="nama_siswa" placeholder="Masukkan nama siswa" class="input input-bordered w-full focus:ring-2 focus:ring-blue-500" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Jurusan</span></label>
+                        <select name="jurusan" class="select select-bordered w-full" required>
+                            <option value="" disabled selected>Pilih Jurusan</option>
+                            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                            <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
+                            <option value="Multimedia">Multimedia</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Kelas</span></label>
+                        <select name="kelas" class="select select-bordered w-full" required>
+                            <option value="" disabled selected>Pilih Kelas</option>
+                            <option value="XII RPL 1">XII RPL 1</option>
+                            <option value="XII RPL 2">XII RPL 2</option>
+                            <option value="XII RPL 3">XII RPL 3</option>
+                            <option value="XII TKJ 1">XII TKJ 1</option>
+                            <option value="XII TKJ 2">XII TKJ 2</option>
+                            <option value="XII MM 1">XII MM 1</option>
+                            <option value="XII MM 2">XII MM 2</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">NIS</span></label>
+                        <input type="number" name="nis" placeholder="Contoh: 12345" class="input input-bordered w-full" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">NISN</span></label>
+                        <input type="number" name="nisn" placeholder="Contoh: 00123456" class="input input-bordered w-full" required />
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Jenis Kelamin</span></label>
+                        <select name="jenis_kelamin" class="select select-bordered w-full" required>
+                            <option value="" disabled selected>Pilih Jenis Kelamin</option>
+                            <option value="1">Laki-laki</option>
+                            <option value="0">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Alamat Rumah</span></label>
+                        <input type="text" name="alamat_rumah" placeholder="Jl. Kamboja No. 12" class="input input-bordered w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
+                        <input type="text" name="nama_ortu" placeholder="Nama ayah/ibu" class="input input-bordered w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua</span></label>
+                        <input type="text" name="pekerjaan_ortu" placeholder="Contoh: PNS / Wiraswasta" class="input input-bordered w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua</span></label>
+                        <input type="text" name="nomor_ortu" placeholder="08123456789" class="input input-bordered w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Poin Awal</span></label>
+                        <input type="number" name="point" value="0" class="input input-bordered w-full font-bold text-zinc-800 bg-zinc-100" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-action mt-10 gap-2">
+                <button type="button" class="btn bg-white border-zinc-300 hover:bg-zinc-100 text-zinc-700 w-28" onclick="modal_add_siswa.close()">Cancel</button>
+                <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-32 border-none">
+                    Simpan Data
+                </button>
+            </div>
+        </form>
     </div>
 </dialog>
 
