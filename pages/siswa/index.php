@@ -99,6 +99,8 @@ $stmt->execute($params);
                                     <option value="pelanggaran" <?= $filterType == 'pelanggaran' ? 'selected' : '' ?>>Data Pelanggaran</option>
                                 </select>
                             </form>
+                            <!-- Modal Open Daisy UI -->
+                            <button class="button-primary flex items-center justify-center" onclick="my_modal_1.showModal()">Add</button>
 
                         </div>
                     </div>
@@ -123,23 +125,29 @@ $stmt->execute($params);
                                         $no = 1;
                                         while ($row = $stmt->fetch()):
                                         ?>
-                                            <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-colors">
-                                                <td class="py-3 text-zinc-700"><?= $no++; ?></td>
-                                                <td class="py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                                <td class="py-3 text-zinc-600">
-                                                    <span class="px-2 py-1 rounded bg-red-50 text-red-600 font-bold"><?= htmlspecialchars($row['point']); ?></span>
-                                                </td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
+                                            <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-colors cursor-pointer "
+                                                onclick="openModalSiswa(this)"
+                                                data-nama="<?= htmlspecialchars($row['nama_siswa']); ?>"
+                                                data-kelas="<?= htmlspecialchars($row['kelas']); ?>"
+                                                data-nis="<?= htmlspecialchars($row['nis']); ?>"
+                                                data-nisn="<?= htmlspecialchars($row['nisn']); ?>"
+                                                data-point="<?= htmlspecialchars($row['point']); ?>"
+                                                data-jurusan="<?= htmlspecialchars($row['jurusan']); ?>">
+
+                                                <td class=" py-3 text-zinc-700"><?= $no++; ?></td>
+                                                <td class=" py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
+                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
+                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
 
                                         <?php if ($no === 1): ?>
                                             <tr>
                                                 <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                    Data "<?= htmlspecialchars($search) ?>" nggak nemu, bro. Coba kata kunci lain.
+                                                    Data "<?= htmlspecialchars($search) ?>" nggak nemu Coba kata kunci lain.
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
@@ -215,4 +223,54 @@ $stmt->execute($params);
         searchInput.focus();
         searchInput.value = val;
     };
+
+    function openModalSiswa(el) {
+        const nama = el.getAttribute('data-nama');
+        const kelas = el.getAttribute('data-kelas');
+        const nis = el.getAttribute('data-nis');
+        const nisn = el.getAttribute('data-nisn');
+        const point = el.getAttribute('data-point');
+        const jurusan = el.getAttribute('data-jurusan');
+
+        // 2. Masukin data ke dalem elemen modal berdasarkan id
+        document.getElementById('m-nama').innerText = nama;
+        document.getElementById('m-kelas').innerText = kelas;
+        document.getElementById('m-nis').innerText = nis;
+        document.getElementById('m-nisn').innerText = nisn;
+        document.getElementById('m-jurusan').innerText = jurusan;
+        document.getElementById('m-point').innerText = point;
+
+        // 3. Tampilkan modalnya (DaisyUI method)
+        modal_view_siswa.showModal();
+    }
 </script>
+
+<dialog id="my_modal_1" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold">Ini Modal 1!</h3>
+        <p class="py-4">Press ESC key or click the button below to close</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Close</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal_view_siswa" class="modal">
+    <div class="modal-box ">
+        <h3 class="text-lg font-bold border-b pb-2">Detail Siswa</h3>
+        <div class="py-4 space-y-2">
+            <p><strong>Nama:</strong> <span id="m-nama"></span></p>
+            <p><strong>Kelas:</strong> <span id="m-kelas"></span></p>
+            <p><strong>NIS/NISN:</strong> <span id="m-nis"></span> / <span id="m-nisn"></span></p>
+            <p><strong>Jurusan:</strong> <span id="m-jurusan"></span></p>
+            <p><strong>Total Poin:</strong> <span id="m-point" class="badge badge-error text-white font-bold"></span></p>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Tutup</button>
+            </form>
+        </div>
+    </div>
+</dialog>
