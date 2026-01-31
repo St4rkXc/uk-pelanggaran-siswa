@@ -57,8 +57,11 @@
     .sidebar-link-active {
         @apply bg-zinc-200;
     }
-    input {
+    .my-input {
         @apply py-3 px-4 outline outline-zinc-300 rounded-lg w-full placeholder:text-[14px] text-[14px] leading-[150%] focus:outline-zinc-600 transition-all;
+    }
+    .my-select {
+        @apply p-3 rounded-lg border border-zinc-300 focus:outline-none bg-white text-[14px] leading-[150%] w-full focus:border-zinc-600 transition-all;
     }
 }
 

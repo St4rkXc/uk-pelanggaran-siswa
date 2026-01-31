@@ -133,7 +133,12 @@ $stmt->execute($params);
                                                 data-nis="<?= htmlspecialchars($row['nis']); ?>"
                                                 data-nisn="<?= htmlspecialchars($row['nisn']); ?>"
                                                 data-point="<?= htmlspecialchars($row['point']); ?>"
-                                                data-jurusan="<?= htmlspecialchars($row['jurusan']); ?>">
+                                                data-jurusan="<?= htmlspecialchars($row['jurusan']); ?>"
+                                                data-jk="<?= $row['jenis_kelamin'] == 1 ? 'Laki-laki' : 'Perempuan'; ?>"
+                                                data-alamat="<?= htmlspecialchars($row['alamat_rumah'] ?? '-'); ?>"
+                                                data-ortu="<?= htmlspecialchars($row['nama_ortu'] ?? '-'); ?>"
+                                                data-kerja-ortu="<?= htmlspecialchars($row['pekerjaan_ortu'] ?? '-'); ?>"
+                                                data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>">
 
                                                 <td class=" py-3 text-zinc-700"><?= $no++; ?></td>
                                                 <td class=" py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
@@ -258,18 +263,18 @@ $stmt->execute($params);
             </div>
         </div>
 
-        <form method="POST" action="process/tambah_siswa.php">
+        <form method="POST" action="add_process.php">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-left">
 
                 <div class="space-y-4">
-                    <div class="form-control">
+                    <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Lengkap</span></label>
-                        <input type="text" name="nama_siswa" placeholder="Masukkan nama siswa" class="input input-bordered w-full focus:ring-2 focus:ring-blue-500" required />
+                        <input type="text" name="nama_siswa" placeholder="Masukkan nama siswa" class="my-input" required />
                     </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Jurusan</span></label>
-                        <select name="jurusan" class="select select-bordered w-full" required>
+                        <select name="jurusan" class="my-select w-full" required>
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
                             <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
@@ -279,7 +284,7 @@ $stmt->execute($params);
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Kelas</span></label>
-                        <select name="kelas" class="select select-bordered w-full" required>
+                        <select name="kelas" class="my-select w-full" required>
                             <option value="" disabled selected>Pilih Kelas</option>
                             <option value="XII RPL 1">XII RPL 1</option>
                             <option value="XII RPL 2">XII RPL 2</option>
@@ -293,19 +298,19 @@ $stmt->execute($params);
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">NIS</span></label>
-                        <input type="number" name="nis" placeholder="Contoh: 12345" class="input input-bordered w-full" required />
+                        <input type="number" name="nis" placeholder="Contoh: 12345" class="my-input w-full" required />
                     </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">NISN</span></label>
-                        <input type="number" name="nisn" placeholder="Contoh: 00123456" class="input input-bordered w-full" required />
+                        <input type="number" name="nisn" placeholder="Contoh: 00123456" class="my-input w-full" required />
                     </div>
                 </div>
 
                 <div class="space-y-4">
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Jenis Kelamin</span></label>
-                        <select name="jenis_kelamin" class="select select-bordered w-full" required>
+                        <select name="jenis_kelamin" class="my-select w-full" required>
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="1">Laki-laki</option>
                             <option value="0">Perempuan</option>
@@ -314,27 +319,27 @@ $stmt->execute($params);
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Alamat Rumah</span></label>
-                        <input type="text" name="alamat_rumah" placeholder="Jl. Kamboja No. 12" class="input input-bordered w-full" />
-                    </div>
+                        <input type="text" name="alamat_rumah" placeholder="Jl. Kamboja No. 12" class="my-input w-full" />
+                    </div>  
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
-                        <input type="text" name="nama_ortu" placeholder="Nama ayah/ibu" class="input input-bordered w-full" />
+                        <input type="text" name="nama_ortu" placeholder="Nama ayah/ibu" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua</span></label>
-                        <input type="text" name="pekerjaan_ortu" placeholder="Contoh: PNS / Wiraswasta" class="input input-bordered w-full" />
+                        <input type="text" name="pekerjaan_ortu" placeholder="Contoh: PNS / Wiraswasta" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua</span></label>
-                        <input type="text" name="nomor_ortu" placeholder="08123456789" class="input input-bordered w-full" />
+                        <input type="text" name="nomor_ortu" placeholder="08123456789" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Poin Awal</span></label>
-                        <input type="number" name="point" value="0" class="input input-bordered w-full font-bold text-zinc-800 bg-zinc-100" />
+                        <input type="number" name="point" value="0" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
                     </div>
                 </div>
             </div>
@@ -351,8 +356,36 @@ $stmt->execute($params);
 
 <dialog id="modal_view_siswa" class="modal">
     <div class="modal-box ">
-        <h3 class="text-lg font-bold border-b pb-2">Detail Siswa</h3>
         <div class="py-4 space-y-2">
+            <div class="">
+                <div class="space-y-1 pb-8">
+                    <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
+                        <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
+                    </div>
+                    <div>
+                        <h5 class="font-heading-5 text-zinc-900 font-bold">Detail Siswa</h5>
+                        <p class="font-paragraph-15 font-medium text-zinc-500">Sistem Pelanggaran Siswa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-1">
+                <p class="font-heading-5 text-zinc-900 font-bold"><span id="m-nama""></span></p>
+                <p class=" font-paragraph-16 text-zinc-500"><span id="m-kelas"></span>, <span id="m-point" class="font-bold"></span><span class="font-bold"> Point</span></p>
+            </div>
+            <div class="grid grid-cols-3">
+                <div class="grid">
+                    <p class="font-paragraph-14 text-zinc-500">Jenis Kelamin</p>
+                </div>
+                <div class="grid col-span-2">
+                    <p class="font-paragraph-14 text-zinc-700">Laki - Laki</p>
+                </div>
+                <div class="grid">
+                    <p class="font-paragraph-14 text-zinc-500">Jenis Kelamin</p>
+                </div>
+                <div class="grid col-span-2">
+                    <p class="font-paragraph-14 text-zinc-700">Laki - Laki</p>
+                </div>
+            </div>
             <p><strong>Nama:</strong> <span id="m-nama"></span></p>
             <p><strong>Kelas:</strong> <span id="m-kelas"></span></p>
             <p><strong>NIS/NISN:</strong> <span id="m-nis"></span> / <span id="m-nisn"></span></p>
