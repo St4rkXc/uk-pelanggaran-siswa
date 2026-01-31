@@ -321,9 +321,6 @@
   .top-1\/2 {
     top: calc(1/2 * 100%);
   }
-  .right-0 {
-    right: calc(var(--spacing) * 0);
-  }
   .right-4 {
     right: calc(var(--spacing) * 4);
   }
@@ -363,9 +360,6 @@
   .h-6 {
     height: calc(var(--spacing) * 6);
   }
-  .h-10 {
-    height: calc(var(--spacing) * 10);
-  }
   .h-13 {
     height: calc(var(--spacing) * 13);
   }
@@ -383,9 +377,6 @@
   }
   .w-6 {
     width: calc(var(--spacing) * 6);
-  }
-  .w-10 {
-    width: calc(var(--spacing) * 10);
   }
   .w-65 {
     width: calc(var(--spacing) * 65);
@@ -511,9 +502,6 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
-  .border-red-300 {
-    border-color: var(--color-red-300);
-  }
   .border-zinc-300 {
     border-color: var(--color-zinc-300);
   }
@@ -522,9 +510,6 @@
   }
   .border-b-zinc-300 {
     border-bottom-color: var(--color-zinc-300);
-  }
-  .bg-blue-600 {
-    background-color: var(--color-blue-600);
   }
   .bg-red-50 {
     background-color: var(--color-red-50);
@@ -549,9 +534,6 @@
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
-  }
-  .p-12 {
-    padding: calc(var(--spacing) * 12);
   }
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
@@ -598,17 +580,8 @@
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
   }
-  .text-neutral-400 {
-    color: var(--color-neutral-400);
-  }
-  .text-red-500 {
-    color: var(--color-red-500);
-  }
   .text-red-600 {
     color: var(--color-red-600);
-  }
-  .text-white {
-    color: var(--color-white);
   }
   .text-zinc-400 {
     color: var(--color-zinc-400);
@@ -640,11 +613,6 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
-  .placeholder\:text-\[12px\] {
-    &::placeholder {
-      font-size: 12px;
-    }
-  }
   .placeholder\:text-\[14px\] {
     &::placeholder {
       font-size: 14px;
@@ -653,13 +621,6 @@
   .placeholder\:text-neutral-400 {
     &::placeholder {
       color: var(--color-neutral-400);
-    }
-  }
-  .hover\:bg-red-50 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: var(--color-red-50);
-      }
     }
   }
   .hover\:bg-zinc-50 {

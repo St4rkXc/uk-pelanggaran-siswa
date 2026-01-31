@@ -89,10 +89,10 @@ $stmt->execute($params);
                                         class="rounded-lg border border-zinc-300 py-3 px-4 pr-10 w-65 placeholder:text-[14px] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         placeholder="Cari nama atau NIS..."
                                         autocomplete="off">
-    
+
                                     <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
                                 </div>
-    
+
                                 <select name="filter_type" onchange="this.form.submit()" class="p-3 rounded-lg border border-zinc-300 focus:outline-none bg-white">
                                     <!-- <option value="" <?= $filterType == '' ? 'selected' : '' ?>>Semua Data</option> -->
                                     <option value="siswa" <?= $filterType == 'siswa' ? 'selected' : '' ?>>Data Siswa</option>
@@ -148,7 +148,46 @@ $stmt->execute($params);
                             <?php endif;  ?>
                         </div>
                         <?php if ($filterType === 'pelanggaran'): ?>
-                            <p class="text-zinc-500 italic text-center p-6">Filter untuk "Data Pelanggaran" belum tersedia. Mohon bersabar ya</p>
+                            <div class="mt-3">
+                                <table class="w-full text-left table-auto">
+                                    <thead>
+                                        <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
+                                            <th class="">No</th>
+                                            <th class="">Nama</th>
+                                            <th class="">Kelas</th>
+                                            <th class="">Pelanggaran</th>
+                                            <th class="">Pelapor</th>
+                                            <th class="">Waktu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-zinc-200">
+
+                                        <?php
+                                        $no = 1;
+                                        $stmtPelanggaran = $pdo->prepare("SELECT p.*, s.nama_siswa, s.kelas FROM pelanggaran p JOIN siswa s ON p.id_siswa = s.id_siswa WHERE s.nama_siswa LIKE ? OR s.nis LIKE ? ORDER BY p.id_pelanggaran DESC");
+                                        while ($row = $stmtPelanggaran->fetch()):
+                                        ?>
+                                            <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-colors">
+                                                <td class="py-3 text-zinc-700"><?= $no++; ?></td>
+                                                <td class="py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
+                                                <td class="py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['kelas']); ?></td>
+                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['pelanggaran']); ?></td>
+                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['pelapor']); ?></td>
+                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['waktu']); ?></td>
+
+                                            </tr>
+                                        <?php endwhile; ?>
+
+                                        <?php if ($no === 1): ?>
+                                            <tr>
+                                                <td colspan="7" class="p-6 text-center text-zinc-500 italic">
+                                                    Data "<?= htmlspecialchars($search) ?>" Data tidak ada
+                                                </td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -164,15 +203,12 @@ $stmt->execute($params);
     const searchForm = document.getElementById('searchForm');
     let timer;
 
-    // 1. Fungsi buat otomatis submit pas ngetik
     searchInput.addEventListener('input', () => {
         clearTimeout(timer);
         timer = setTimeout(() => {
             searchForm.submit();
-        }, 500); // Nunggu 0.5 detik setelah berhenti ngetik
+        }, 500); // submit setiap 500 ms 
     });
-
-    // 2. Trik biar kursor balik ke posisi akhir setelah page reload
     window.onload = () => {
         const val = searchInput.value;
         searchInput.value = '';
