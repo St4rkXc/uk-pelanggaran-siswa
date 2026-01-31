@@ -96,12 +96,11 @@ $stmt->execute($params);
                                 </div>
 
                                 <select name="filter_type" onchange="this.form.submit()" class="p-3 rounded-lg border border-zinc-300 focus:outline-none bg-white">
-                                    <!-- <option value="" <?= $filterType == '' ? 'selected' : '' ?>>Semua Data</option> -->
                                     <option value="siswa" <?= $filterType == 'siswa' ? 'selected' : '' ?>>Data Siswa</option>
                                     <option value="pelanggaran" <?= $filterType == 'pelanggaran' ? 'selected' : '' ?>>Data Pelanggaran</option>
                                 </select>
                             </form>
-                            <!-- Modal Open Daisy UI -->
+            
                             <button class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
                         </div>
                     </div>
@@ -128,6 +127,7 @@ $stmt->execute($params);
                                         ?>
                                             <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-colors cursor-pointer "
                                                 onclick="openModalSiswa(this)"
+                                                data-id="<?= $row['id_siswa']; ?>"
                                                 data-nama="<?= htmlspecialchars($row['nama_siswa']); ?>"
                                                 data-kelas="<?= htmlspecialchars($row['kelas']); ?>"
                                                 data-nis="<?= htmlspecialchars($row['nis']); ?>"
@@ -231,22 +231,52 @@ $stmt->execute($params);
     };
 
     function openModalSiswa(el) {
-        const nama = el.getAttribute('data-nama');
-        const kelas = el.getAttribute('data-kelas');
-        const nis = el.getAttribute('data-nis');
-        const nisn = el.getAttribute('data-nisn');
-        const point = el.getAttribute('data-point');
-        const jurusan = el.getAttribute('data-jurusan');
+        const get = (attr) => el.getAttribute('data-' + attr);
 
-        //    masukin data siwa dari tabel
-        document.getElementById('m-nama').innerText = nama;
-        document.getElementById('m-kelas').innerText = kelas;
-        document.getElementById('m-nis').innerText = nis;
-        document.getElementById('m-nisn').innerText = nisn;
-        document.getElementById('m-jurusan').innerText = jurusan;
-        document.getElementById('m-point').innerText = point;
+        const viewFields = {
+            'm-nama': get('nama'),
+            'm-kelas': get('kelas'),
+            'm-point': get('point'),
+            'm-jk': get('jk'),
+            'm-nis': get('nis'),
+            'm-nisn': get('nisn'),
+            'm-alamat': get('alamat'),
+            'm-jurusan': get('jurusan'),
+            'm-nama-ortu': get('ortu'),
+            'm-kerja-ortu': get('kerja-ortu'),
+            'm-telp-ortu': get('telp-ortu')
+        };
 
-        //tampilin modalnya
+        Object.keys(viewFields).forEach(id => {
+            const target = document.getElementById(id);
+            if (target) target.innerText = viewFields[id] || '-';
+        });
+
+        const editFields = {
+            'edit-id': get('id'),
+            'edit-nama': get('nama'),
+            'edit-nis': get('nis'),
+            'edit-nisn': get('nisn'),
+            'edit-alamat': get('alamat'),
+            'edit-nama-ortu': get('ortu'),
+            'edit-kerja-ortu': get('kerja-ortu'),
+            'edit-telp-ortu': get('telp-ortu'),
+            'edit-point': get('point')
+        };
+
+        Object.keys(editFields).forEach(id => {
+            const target = document.getElementById(id);
+            if (target) target.value = editFields[id] || '';
+        });
+
+        const setSelect = (id, val) => {
+            const target = document.getElementById(id);
+            if (target) target.value = val;
+        };
+        setSelect('edit-kelas', get('kelas'));
+        setSelect('edit-jurusan', get('jurusan'));
+        setSelect('edit-jenis-kelamin', get('jk') === 'Laki-laki' ? '1' : '0');
+
         modal_view_siswa.showModal();
     }
 </script>
@@ -320,7 +350,7 @@ $stmt->execute($params);
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Alamat Rumah</span></label>
                         <input type="text" name="alamat_rumah" placeholder="Jl. Kamboja No. 12" class="my-input w-full" />
-                    </div>  
+                    </div>
 
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
@@ -345,7 +375,7 @@ $stmt->execute($params);
             </div>
 
             <div class="modal-action mt-10 gap-2">
-                <button type="button" class="btn bg-white border-zinc-300 hover:bg-zinc-100 text-zinc-700 w-28" onclick="modal_add_siswa.close()">Cancel</button>
+
                 <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-32 border-none">
                     Simpan Data
                 </button>
@@ -355,47 +385,147 @@ $stmt->execute($params);
 </dialog>
 
 <dialog id="modal_view_siswa" class="modal">
-    <div class="modal-box ">
-        <div class="py-4 space-y-2">
-            <div class="">
-                <div class="space-y-1 pb-8">
-                    <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
-                        <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
-                    </div>
-                    <div>
-                        <h5 class="font-heading-5 text-zinc-900 font-bold">Detail Siswa</h5>
-                        <p class="font-paragraph-15 font-medium text-zinc-500">Sistem Pelanggaran Siswa</p>
-                    </div>
-                </div>
+    <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
+        <div class="flex flex-col gap-2 mb-8">
+            <div class="p-2 border border-zinc-200 rounded-lg w-fit">
+                <img src="<?= $imgPath; ?>" class="h-10">
             </div>
-            <div class="space-y-1">
-                <p class="font-heading-5 text-zinc-900 font-bold"><span id="m-nama""></span></p>
-                <p class=" font-paragraph-16 text-zinc-500"><span id="m-kelas"></span>, <span id="m-point" class="font-bold"></span><span class="font-bold"> Point</span></p>
-            </div>
-            <div class="grid grid-cols-3">
-                <div class="grid">
-                    <p class="font-paragraph-14 text-zinc-500">Jenis Kelamin</p>
-                </div>
-                <div class="grid col-span-2">
-                    <p class="font-paragraph-14 text-zinc-700">Laki - Laki</p>
-                </div>
-                <div class="grid">
-                    <p class="font-paragraph-14 text-zinc-500">Jenis Kelamin</p>
-                </div>
-                <div class="grid col-span-2">
-                    <p class="font-paragraph-14 text-zinc-700">Laki - Laki</p>
-                </div>
-            </div>
-            <p><strong>Nama:</strong> <span id="m-nama"></span></p>
-            <p><strong>Kelas:</strong> <span id="m-kelas"></span></p>
-            <p><strong>NIS/NISN:</strong> <span id="m-nis"></span> / <span id="m-nisn"></span></p>
-            <p><strong>Jurusan:</strong> <span id="m-jurusan"></span></p>
-            <p><strong>Total Poin:</strong> <span id="m-point" class="badge badge-error text-white font-bold"></span></p>
+            <h2 class="text-xl font-bold text-zinc-900">Data Siswa</h2>
+            <p class="text-sm text-zinc-500">Sistem Pelanggaran Siswa</p>
         </div>
-        <div class="modal-action">
-            <form method="dialog">
-                <button class="btn">Tutup</button>
-            </form>
+
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-zinc-800" id="m-nama"></h1>
+            <p class="text-zinc-500"><span id="m-kelas"></span>, <span id="m-point" class="font-bold text-zinc-800"></span> Point</p>
         </div>
+
+        <div class="grid grid-cols-1 gap-y-3 text-sm">
+            <div class="flex"><span class="w-40 text-zinc-500">Jenis Kelamin</span><span class="font-medium" id="m-jk"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">NIS</span><span class="font-medium" id="m-nis"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">NISN</span><span class="font-medium" id="m-nisn"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Alamat Rumah</span><span class="font-medium" id="m-alamat"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Jurusan</span><span class="font-medium" id="m-jurusan"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Orang Tua</span><span class="font-medium" id="m-nama-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Pekerjaan</span><span class="font-medium" id="m-kerja-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium" id="m-telp-ortu"></span></div>
+        </div>
+
+        <div class="modal-action grid grid-cols-3 gap-4 mt-10">
+            <button type="button" class="btn bg-zinc-100 border-zinc-200 text-zinc-800"
+                onclick="modal_view_siswa.close(); modal_edit_siswa.showModal()">
+                <span class="icon-edit"></span> Edit
+            </button>
+
+            <button type="button"
+                class="btn bg-red-50 text-red-600 border-red-200"
+                onclick="if(confirm('Hapus data siswa ini?')) window.location.href='delete_process.php?id=' + document.getElementById('edit-id').value">
+                Hapus
+            </button>
+
+            <button type="button" class="btn bg-white border-zinc-300 text-zinc-700" onclick="modal_view_siswa.close()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal_edit_siswa" class="modal">
+    <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
+        <div class="space-y-1 pb-8">
+            <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]">
+            </div>
+            <div>
+                <h5 class="font-heading-5 text-zinc-900 font-bold">Ubah data siswa</h5>
+                <p class="font-paragraph-15 font-medium text-zinc-500">Perbarui informasi data siswa di bawah ini.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="edit_process.php">
+            <input type="hidden" name="id_siswa" id="edit-id">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-left">
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Lengkap</span></label>
+                        <input type="text" name="nama_siswa" id="edit-nama" placeholder="Masukkan nama siswa" class="my-input w-full" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Jurusan</span></label>
+                        <select name="jurusan" id="edit-jurusan" class="my-select w-full" required>
+                            <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                            <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
+                            <option value="Multimedia">Multimedia</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Kelas</span></label>
+                        <select name="kelas" id="edit-kelas" class="my-select w-full" required>
+                            <option value="XII RPL 1">XII RPL 1</option>
+                            <option value="XII RPL 2">XII RPL 2</option>
+                            <option value="XII RPL 3">XII RPL 3</option>
+                            <option value="XII TKJ 1">XII TKJ 1</option>
+                            <option value="XII TKJ 2">XII TKJ 2</option>
+                            <option value="XII MM 1">XII MM 1</option>
+                            <option value="XII MM 2">XII MM 2</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">NIS</span></label>
+                        <input type="number" name="nis" id="edit-nis" placeholder="Contoh: 12345" class="my-input w-full" required />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">NISN</span></label>
+                        <input type="number" name="nisn" id="edit-nisn" placeholder="Contoh: 00123456" class="my-input w-full" required />
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Jenis Kelamin</span></label>
+                        <select name="jenis_kelamin" id="edit-jenis-kelamin" class="my-select w-full" required>
+                            <option value="1">Laki-laki</option>
+                            <option value="0">Perempuan</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Alamat Rumah</span></label>
+                        <input type="text" name="alamat_rumah" id="edit-alamat" placeholder="Jl. Kamboja No. 12" class="my-input w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
+                        <input type="text" name="nama_ortu" id="edit-nama-ortu" placeholder="Nama ayah/ibu" class="my-input w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua</span></label>
+                        <input type="text" name="pekerjaan_ortu" id="edit-kerja-ortu" placeholder="Contoh: PNS / Wiraswasta" class="my-input w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua</span></label>
+                        <input type="text" name="nomor_ortu" id="edit-telp-ortu" placeholder="08123456789" class="my-input w-full" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Poin</span></label>
+                        <input type="number" name="point" id="edit-point" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-action mt-10 gap-2">
+                <button type="button" class="btn btn-ghost" onclick="modal_edit_siswa.close()">Batal</button>
+                <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-40 border-none">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
     </div>
 </dialog>

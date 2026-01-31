@@ -3,7 +3,7 @@ session_start();
 // Pastikan path config lu bener, bro
 require_once __DIR__ . '/../../config/database.php'; 
 
-// Cek Role (Opsional tapi penting buat keamanan)
+
 $requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     header("Location: ../dashboard.php?status=error&msg=Akses ditolak!");
