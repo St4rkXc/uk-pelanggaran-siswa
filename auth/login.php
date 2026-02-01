@@ -1,5 +1,7 @@
 <?php session_start();
 require_once __DIR__ . '/../config/database.php';
+$imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
+
 ?>
 <!DOCTYPE html>
 
@@ -15,7 +17,7 @@ require_once __DIR__ . '/../config/database.php';
     <div class="p-8 rounded-2xl border border-zinc-300 w-[400px] bg-zinc-50">
         <div class="mb-4 space-y-3">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit">
-                <img src="../src/assets/img/logo_sekolah.png" alt="" class="h-13 w-[50px]  ">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
             </div>
             <div class="flex-col">
                 <p class="font-paragraph-20 font-semibold text-zinc-800">SMK TI Bali Global Denpasar</p>
