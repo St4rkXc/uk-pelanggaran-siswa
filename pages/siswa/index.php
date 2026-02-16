@@ -100,7 +100,7 @@ $stmt->execute($params);
                                     <option value="pelanggaran" <?= $filterType == 'pelanggaran' ? 'selected' : '' ?>>Data Pelanggaran</option>
                                 </select>
                             </form>
-            
+
                             <button class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
                         </div>
                     </div>
@@ -120,7 +120,6 @@ $stmt->execute($params);
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-zinc-200">
-
                                         <?php
                                         $no = 1;
                                         while ($row = $stmt->fetch()):
@@ -138,7 +137,8 @@ $stmt->execute($params);
                                                 data-alamat="<?= htmlspecialchars($row['alamat_rumah'] ?? '-'); ?>"
                                                 data-ortu="<?= htmlspecialchars($row['nama_ortu'] ?? '-'); ?>"
                                                 data-kerja-ortu="<?= htmlspecialchars($row['pekerjaan_ortu'] ?? '-'); ?>"
-                                                data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>">
+                                                data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
+                                                data-status="<?= $row['status']; ?>">
 
                                                 <td class=" py-3 text-zinc-700"><?= $no++; ?></td>
                                                 <td class=" py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
@@ -233,10 +233,12 @@ $stmt->execute($params);
     function openModalSiswa(el) {
         const get = (attr) => el.getAttribute('data-' + attr);
 
+        // 1. DATA UNTUK VIEW (DETAIL)
         const viewFields = {
             'm-nama': get('nama'),
             'm-kelas': get('kelas'),
             'm-point': get('point'),
+            'm-status': get('status'), // Untuk teks status
             'm-jk': get('jk'),
             'm-nis': get('nis'),
             'm-nisn': get('nisn'),
@@ -249,9 +251,20 @@ $stmt->execute($params);
 
         Object.keys(viewFields).forEach(id => {
             const target = document.getElementById(id);
-            if (target) target.innerText = viewFields[id] || '-';
+            if (target) {
+                target.innerText = viewFields[id] || '-';
+
+                // Refined View: Kasih warna badge otomatis buat status
+                if (id === 'm-status') {
+                    target.className = 'badge font-medium ';
+                    if (viewFields[id] === 'Aktif') target.classList.add('badge-success');
+                    else if (viewFields[id] === 'Pindah') target.classList.add('badge-warning');
+                    else target.classList.add('badge-error', 'text-white');
+                }
+            }
         });
 
+        // 2. DATA UNTUK EDIT (FORM)
         const editFields = {
             'edit-id': get('id'),
             'edit-nama': get('nama'),
@@ -261,7 +274,8 @@ $stmt->execute($params);
             'edit-nama-ortu': get('ortu'),
             'edit-kerja-ortu': get('kerja-ortu'),
             'edit-telp-ortu': get('telp-ortu'),
-            'edit-point': get('point')
+            'edit-point': get('point'),
+            'edit-status': get('status') // Set value select status
         };
 
         Object.keys(editFields).forEach(id => {
@@ -269,6 +283,7 @@ $stmt->execute($params);
             if (target) target.value = editFields[id] || '';
         });
 
+        // Handle Selects Manual (Pastiin ID select-nya bener)
         const setSelect = (id, val) => {
             const target = document.getElementById(id);
             if (target) target.value = val;
@@ -308,7 +323,9 @@ $stmt->execute($params);
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
                             <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
-                            <option value="Multimedia">Multimedia</option>
+                            <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
+                            <option value="Animasi">Animasi</option>
+                            <option value="Bisnis Digital">Bisnis Digital</option>
                         </select>
                     </div>
 
@@ -319,10 +336,15 @@ $stmt->execute($params);
                             <option value="XII RPL 1">XII RPL 1</option>
                             <option value="XII RPL 2">XII RPL 2</option>
                             <option value="XII RPL 3">XII RPL 3</option>
+                            <option value="XII RPL 4">XII RPL 4</option>
+                            <option value="XII RPL 5">XII RPL 5</option>
+                            <option value="XII DKV 1">XII DKV 1</option>
+                            <option value="XII DKV 2">XII DKV 2</option>
+                            <option value="XII DKV 3">XII DKV 3</option>
+                            <option value="XII DKV 4">XII DKV 4</option>
                             <option value="XII TKJ 1">XII TKJ 1</option>
                             <option value="XII TKJ 2">XII TKJ 2</option>
-                            <option value="XII MM 1">XII MM 1</option>
-                            <option value="XII MM 2">XII MM 2</option>
+                            <option value="XII BD 1">XII BD 1</option>
                         </select>
                     </div>
 
@@ -367,15 +389,17 @@ $stmt->execute($params);
                         <input type="text" name="nomor_ortu" placeholder="08123456789" class="my-input w-full" />
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2 hidden">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Poin Awal</span></label>
-                        <input type="number" name="point" value="0" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
+                        <input type="number" name="point" value="100" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
                     </div>
                 </div>
             </div>
 
             <div class="modal-action mt-10 gap-2">
-
+                <button type="button" class="btn bg-white border-zinc-300 text-zinc-700" onclick="modal_add_siswa.close()">
+                    Batal
+                </button>
                 <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-32 border-none">
                     Simpan Data
                 </button>
@@ -408,24 +432,18 @@ $stmt->execute($params);
             <div class="flex"><span class="w-40 text-zinc-500">Orang Tua</span><span class="font-medium" id="m-nama-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Pekerjaan</span><span class="font-medium" id="m-kerja-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium" id="m-telp-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Status Siswa</span><span class="font-medium text-zinc-900" id="m-status"></span></div>
         </div>
-
-        <div class="modal-action grid grid-cols-3 gap-4 mt-10">
+        <div class="modal-action grid grid-cols-2 gap-4 mt-10">
             <button type="button" class="btn bg-zinc-100 border-zinc-200 text-zinc-800"
                 onclick="modal_view_siswa.close(); modal_edit_siswa.showModal()">
                 <span class="icon-edit"></span> Edit
             </button>
-
-            <button type="button"
-                class="btn bg-red-50 text-red-600 border-red-200"
-                onclick="if(confirm('Hapus data siswa ini?')) window.location.href='delete_process.php?id=' + document.getElementById('edit-id').value">
-                Hapus
-            </button>
-
             <button type="button" class="btn bg-white border-zinc-300 text-zinc-700" onclick="modal_view_siswa.close()">
-                Cancel
+                Kembali
             </button>
         </div>
+    </div>
     </div>
 </dialog>
 
@@ -513,9 +531,17 @@ $stmt->execute($params);
                         <input type="text" name="nomor_ortu" id="edit-telp-ortu" placeholder="08123456789" class="my-input w-full" />
                     </div>
 
-                    <div class="space-y-2">
+                    <div class="space-y-2 hidden">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Poin</span></label>
                         <input type="number" name="point" id="edit-point" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Status</span></label>
+                        <select name="status" id="edit-status" class="my-select w-full" required>
+                            <option value="Aktif">Aktif</option>
+                            <option value="Pindah">Pindah</option>
+                            <option value="Nonaktif">Nonaktif</option>
+                        </select>
                     </div>
                 </div>
             </div>

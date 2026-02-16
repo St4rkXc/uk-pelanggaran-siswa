@@ -23,7 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kerja    = $_POST['pekerjaan_ortu'];
         $telp     = $_POST['nomor_ortu'];
         $point    = $_POST['point'];
+        $status   = $_POST['status']; // Ambil data status dari modal edit
 
+        // Query SQL yang sudah ditambah field status
         $sql = "UPDATE siswa SET 
                 nama_siswa = ?, 
                 jurusan = ?, 
@@ -35,19 +37,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 nama_ortu = ?, 
                 pekerjaan_ortu = ?, 
                 nomor_ortu = ?, 
-                point = ? 
+                point = ?,
+                status = ? 
                 WHERE id_siswa = ?";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            $nama, $jurusan, $kelas, $nis, $nisn, $jk, 
-            $alamat, $ortu, $kerja, $telp, $point, $id_siswa
+            $nama,
+            $jurusan,
+            $kelas,
+            $nis,
+            $nisn,
+            $jk,
+            $alamat,
+            $ortu,
+            $kerja,
+            $telp,
+            $point,
+            $status,
+            $id_siswa
         ]);
 
-        header("Location: " . $_SERVER['HTTP_REFERER'] . "");
+        header("Location: " . $_SERVER['HTTP_REFERER'] . "?status=success&msg=Data berhasil diupdate");
         exit;
-
     } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
+        header("Location: " . $_SERVER['HTTP_REFERER'] . "?status=error&msg=" . urlencode($e->getMessage()));
+        exit;
     }
 }
