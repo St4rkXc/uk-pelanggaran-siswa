@@ -185,10 +185,10 @@ $stmt->execute($params);
         clearTimeout(timer);
         timer = setTimeout(() => {
             searchForm.submit();
-        }, 500); // Tunggu 500ms setelah ngetik baru submit
+        }, 500); 
     });
 
-    // Biar kursor nggak pindah ke depan setelah reload
+
     window.onload = () => {
         if (searchInput.value !== '') {
             const val = searchInput.value;

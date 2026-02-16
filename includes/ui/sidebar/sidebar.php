@@ -6,12 +6,10 @@ $siswaPath = BASE_URL . '/pages/siswa/';
 $logoutPath = BASE_URL . '/auth/logout.php';
 $jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
 
-// Mendapatkan path URL saat ini
-// Contoh hasil: /projek/pages/dashboard/admin.php
+
+// current url
 $current_url = $_SERVER['PHP_SELF'];
-// Logic Dashboard: Cek apakah URL mengandung kata 'pages/dashboard/'
 $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
-// Logic Data Siswa: Cek apakah URL mengandung kata 'pages/siswa/'
 $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
 $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
 $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';

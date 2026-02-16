@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':id'       => $id_users
             ];
         } else {
-            // Jika password TIDAK diganti (abaikan kolom password)
+            // Jika password gak diganti (abaikan kolom password)
             $sql = "UPDATE Users SET name = :name, role = :role WHERE id_users = :id";
             $params = [
                 ':name' => $name,

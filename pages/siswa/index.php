@@ -225,12 +225,12 @@ $stmt->execute($params);
     function openModalSiswa(el) {
         const get = (attr) => el.getAttribute('data-' + attr);
 
-        // 1. DATA UNTUK VIEW (DETAIL)
+
         const viewFields = {
             'm-nama': get('nama'),
             'm-kelas': get('kelas'),
             'm-point': get('point'),
-            'm-status': get('status'), // Untuk teks status
+            'm-status': get('status'), 
             'm-jk': get('jk'),
             'm-nis': get('nis'),
             'm-nisn': get('nisn'),
@@ -246,7 +246,6 @@ $stmt->execute($params);
             if (target) {
                 target.innerText = viewFields[id] || '-';
 
-                // Refined View: Kasih warna badge otomatis buat status
                 if (id === 'm-status') {
                     target.className = 'badge font-medium ';
                     if (viewFields[id] === 'Aktif') target.classList.add('badge-success');
@@ -256,7 +255,7 @@ $stmt->execute($params);
             }
         });
 
-        // 2. DATA UNTUK EDIT (FORM)
+
         const editFields = {
             'edit-id': get('id'),
             'edit-nama': get('nama'),
@@ -275,7 +274,7 @@ $stmt->execute($params);
             if (target) target.value = editFields[id] || '';
         });
 
-        // Handle Selects Manual (Pastiin ID select-nya bener)
+
         const setSelect = (id, val) => {
             const target = document.getElementById(id);
             if (target) target.value = val;
