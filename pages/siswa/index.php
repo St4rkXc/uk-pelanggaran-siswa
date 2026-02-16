@@ -48,15 +48,7 @@ $stmt->execute($params);
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
-            <header class="flex justify-between items-center px-6 py-4 border-b border-zinc-300">
-                <p class="font-paragraph-20 font-semibold text-zinc-800">Selamat Datang, <?= htmlspecialchars($currentUser['role']); ?></p>
-                <div class="flex justify-end items-center gap-4">
-                    <p class="font-paragraph-16 font-semibold text-zinc-800"><?= htmlspecialchars($currentUser['nama']); ?></p>
-                    <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center">
-                        <span class="icon-user h-6 w-6 "></span>
-                    </div>
-                </div>
-            </header>
+            <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
             <main class="p-6  gap-6">
                 <div class="grid grid-cols-4 gap-4">
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
@@ -110,13 +102,13 @@ $stmt->execute($params);
                                 <table class="w-full text-left table-auto">
                                     <thead>
                                         <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                            <th class="">No</th>
-                                            <th class="">Nama</th>
-                                            <th class="">Kelas</th>
-                                            <th class="">NIS</th>
-                                            <th class="">NISN</th>
-                                            <th class="">Poin</th>
-                                            <th class="">Jurusan</th>
+                                            <th class="px-2">No</th>
+                                            <th class="px-2">Nama</th>
+                                            <th class="px-2">Kelas</th>
+                                            <th class="px-2">NIS</th>
+                                            <th class="px-2">NISN</th>
+                                            <th class="px-2">Poin</th>
+                                            <th class="px-2">Jurusan</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-zinc-200">
@@ -140,13 +132,13 @@ $stmt->execute($params);
                                                 data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
                                                 data-status="<?= $row['status']; ?>">
 
-                                                <td class=" py-3 text-zinc-700"><?= $no++; ?></td>
-                                                <td class=" py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
-                                                <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-700"><?= $no++; ?></td>
+                                                <td class="px-2 py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
+                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                             </tr>
                                         <?php endwhile; ?>
 

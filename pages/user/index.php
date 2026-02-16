@@ -61,15 +61,7 @@ $stmt->execute($params);
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
-            <header class="flex justify-between items-center px-6 py-4 border-b border-zinc-300">
-                <p class="font-paragraph-20 font-semibold text-zinc-800">Selamat Datang, <?= htmlspecialchars($currentUser['role']); ?></p>
-                <div class="flex justify-end items-center gap-4">
-                    <p class="font-paragraph-16 font-semibold text-zinc-800"><?= htmlspecialchars($currentUser['nama']); ?></p>
-                    <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center">
-                        <span class="icon-user h-6 w-6 "></span>
-                    </div>
-                </div>
-            </header>
+            <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
             <main class="p-6">
                 <!-- quick info can be closed -->
                 <div class="grid grid-cols-4 gap-4">
@@ -138,14 +130,14 @@ $stmt->execute($params);
                         </div>
                     </div>
                     <div class="mt-3">
-                        <div class="p-8 rounded-xl border border-zinc-300">
+                        <div class="p-6 rounded-xl border border-zinc-300">
                             <table class="w-full text-left table-auto">
                                 <thead>
                                     <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                        <th class="py-3 px-4">No</th>
-                                        <th class="py-3 px-4">Username</th>
-                                        <th class="py-3 px-4 text-center">Role</th>
-                                        <th class="py-3 px-4 text-center">Action</th>
+                                        <th class="py-3 px-2">No</th>
+                                        <th class="py-3 px-2">Username</th>
+                                        <th class="py-3 px-2">Role</th>
+                                        <th class="py-3 px-2">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-zinc-200">
@@ -158,16 +150,16 @@ $stmt->execute($params);
                                             data-role="<?= htmlspecialchars($row['role']); ?>"
                                             data-id-siswa="<?= $row['id_siswa'] ?? ''; ?>">
 
-                                            <td class="py-3 px-4 text-zinc-700"><?= $no++; ?></td>
-                                            <td class="py-3 px-4 text-zinc-800 font-medium"><?= htmlspecialchars($row['name'] ?? ''); ?></td>
-                                            <td class="py-3 px-4 text-center">
+                                            <td class="py-3 px-2 text-zinc-700"><?= $no++; ?></td>
+                                            <td class="py-3 px-2 text-zinc-800 font-medium"><?= htmlspecialchars($row['name'] ?? ''); ?></td>
+                                            <td class="py-3 px-2">
                                                 <span class="badge badge-ghost capitalize"><?= htmlspecialchars($row['role']); ?></span>
                                             </td>
 
-                                            <td class="py-3 px-4 text-center">
-                                                <button type="button" class="p-2 button-secondary hover:bg-zinc-200 rounded-lg transition-all gap-3"
+                                            <td class="py-3 px-2">
+                                                <button type="button" class="px-3 py-1 button-secondary hover:bg-zinc-200 rounded-lg transition-all gap-2 flex items-center"
                                                     onclick="event.stopPropagation(); openEditUserModal(this.closest('tr'))">
-                                                    <span class="icon-edit h-5 w-5 text-zinc-600"></span>
+                                                    <span class="icon-edit h-4 w-4 text-zinc-600"></span>
                                                     <p class="">Edit</p>
                                                 </button>
                                             </td>
