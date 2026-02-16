@@ -4,6 +4,7 @@ $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 $dashboardPath = BASE_URL . '/pages/dashboard/' . $_SESSION['role'] . ".php";
 $siswaPath = BASE_URL . '/pages/siswa/';
 $logoutPath = BASE_URL . '/auth/logout.php';
+$jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
 
 // Mendapatkan path URL saat ini
 // Contoh hasil: /projek/pages/dashboard/admin.php
@@ -13,6 +14,7 @@ $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sid
 // Logic Data Siswa: Cek apakah URL mengandung kata 'pages/siswa/'
 $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
 $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
+$isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';
 
 
 
@@ -51,10 +53,10 @@ $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-
             <div class="space-y-2">
                 <p class="font-paragraph-12 font-semibold text-zinc-500">Pelanggaran</p>
                 <div class="space-y-1">
-                    <div class="sidebar-link">
+                    <a href="<?php echo $jenisPelanggaranPath; ?>" class="sidebar-link <?php echo $isActiveJenisPelanggaran; ?>">
                         <div class="icon-siren h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Jenis Pelanggaran</a>
-                    </div>
+                        <div class="font-paragraph-14 text-700">Jenis Pelanggaran</div>
+                    </a>
                     <div class="sidebar-link">
                         <div class="icon-siren h-5 w-5"></div>
                         <a class="font-paragraph-14 text-700">Pelanggaran</a>
