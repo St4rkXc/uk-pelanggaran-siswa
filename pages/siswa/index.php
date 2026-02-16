@@ -300,7 +300,7 @@ $stmt->execute($params);
     <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
         <div class="space-y-1 pb-8">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
-                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
             <div>
                 <h5 class="font-heading-5 text-zinc-900 font-bold">Tambah data siswa</h5>
@@ -451,7 +451,7 @@ $stmt->execute($params);
     <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
         <div class="space-y-1 pb-8">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
-                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5">
             </div>
             <div>
                 <h5 class="font-heading-5 text-zinc-900 font-bold">Ubah data siswa</h5>

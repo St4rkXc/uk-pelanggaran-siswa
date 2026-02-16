@@ -23,7 +23,7 @@ $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-
     <div>
         <div class="space-y-1">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
-                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-[50px]  ">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
             <p class="font-paragraph-14 font-semibold text-zinc-500">Manajemen Pelanggaran</p>
         </div>
