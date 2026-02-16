@@ -64,21 +64,65 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
                 </div>
             </div>
             <div class="space-y-2">
-                <p class="font-paragraph-12 font-semibold text-zinc-500">Surat </p>
-                <div class="space-y-1">
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
-                    </div>
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Perjanjian</a>
-                    </div>
-                    <div class="sidebar-link">
-                        <div class="icon-paperclip h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Pindah</a>
-                    </div>
-                </div>
+                <p class="font-paragraph-12 font-semibold text-zinc-500">Surat dan Laporan </p>
+                <ul class="menu rounded-box w-56 bg-zinc-100 p-0">
+                    <li>
+                        <details open>
+                            <summary class="sidebar-link rounded-lg py-2">
+                                <div class="icon-paperclip h-5 w-5"></div>
+                                Surat
+                            </summary>
+                            <ul>
+                                <li>
+                                    <div class="sidebar-link">
+
+                                        <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-link">
+
+                                        <a class="font-paragraph-14 text-700">Perjanjian</a>
+                                    </div></a>
+                                </li>
+                                <li>
+                                    <div class="sidebar-link">
+
+                                        <a class="font-paragraph-14 text-700">Pindah</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+                <ul class="menu rounded-box w-56 bg-zinc-100 p-0">
+                    <li>
+                        <details open>
+                            <summary class="sidebar-link rounded-lg py-2">
+                                <div class="icon-report h-5 w-5"></div>
+                                Laporan
+                            </summary>
+                            <ul>
+                                <li>
+                                    <div class="sidebar-link">
+                                        <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-link">
+                                        <a class="font-paragraph-14 text-700">Perjanjian</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-link">
+
+                                        <a class="font-paragraph-14 text-700">Pindah</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
