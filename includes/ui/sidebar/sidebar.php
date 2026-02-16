@@ -12,6 +12,8 @@ $current_url = $_SERVER['PHP_SELF'];
 $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
 // Logic Data Siswa: Cek apakah URL mengandung kata 'pages/siswa/'
 $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
+$isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
+
 
 
 
@@ -39,10 +41,10 @@ $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-lin
                     </a>
                     <a href=""></a>
                     <?php if ($_SESSION['role'] == 'admin') { ?>
-                        <div class="sidebar-link">
+                        <a href="<?php echo BASE_URL . '/pages/user/'; ?>" class="sidebar-link <?php echo $isActiveUser; ?>">
                             <div class="icon-case h-5 w-5"></div>
-                            <a class="font-paragraph-14 text-700">Data User</a>
-                        </div>
+                            <div class="font-paragraph-14 text-700">Data User</div>
+                        </a>
                     <?php } ?>
                 </div>
             </div>
