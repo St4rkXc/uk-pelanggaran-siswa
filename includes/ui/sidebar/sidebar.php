@@ -37,6 +37,7 @@ $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-lin
                         <div class="icon-siswa h-5 w-5"></div>
                         <div class="font-paragraph-14 text-700">Data Siswa</div>
                     </a>
+                    <a href=""></a>
                     <?php if ($_SESSION['role'] == 'admin') { ?>
                         <div class="sidebar-link">
                             <div class="icon-case h-5 w-5"></div>
