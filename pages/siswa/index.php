@@ -70,7 +70,7 @@ $stmt->execute($params);
                     </div>
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
                         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
-                            <span class="icon-user h-6 w-6 "></span>
+                            <span class="icon-siren h-6 w-6 "></span>
                         </div>
                         <div>
                             <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahPelanggaran) ?> Pelanggaran</h5>

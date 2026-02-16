@@ -49,6 +49,19 @@ $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-
                 </div>
             </div>
             <div class="space-y-2">
+                <p class="font-paragraph-12 font-semibold text-zinc-500">Pelanggaran</p>
+                <div class="space-y-1">
+                    <div class="sidebar-link">
+                        <div class="icon-siren h-5 w-5"></div>
+                        <a class="font-paragraph-14 text-700">Jenis Pelanggaran</a>
+                    </div>
+                    <div class="sidebar-link">
+                        <div class="icon-siren h-5 w-5"></div>
+                        <a class="font-paragraph-14 text-700">Pelanggaran</a>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-2">
                 <p class="font-paragraph-12 font-semibold text-zinc-500">Surat </p>
                 <div class="space-y-1">
                     <div class="sidebar-link">
