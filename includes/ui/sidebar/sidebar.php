@@ -5,6 +5,7 @@ $dashboardPath = BASE_URL . '/pages/dashboard/' . $_SESSION['role'] . ".php";
 $siswaPath = BASE_URL . '/pages/siswa/';
 $logoutPath = BASE_URL . '/auth/logout.php';
 $jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
+$pelanggaranPath = BASE_URL . '/pages/pelanggaran/';
 
 
 // current url
@@ -55,10 +56,10 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
                         <div class="icon-siren h-5 w-5"></div>
                         <div class="font-paragraph-14 text-700">Jenis Pelanggaran</div>
                     </a>
-                    <div class="sidebar-link">
+                    <a href="<?php echo $pelanggaranPath; ?>" class="sidebar-link <?php echo $isActivePelanggaran; ?>">
                         <div class="icon-siren h-5 w-5"></div>
-                        <a class="font-paragraph-14 text-700">Pelanggaran</a>
-                    </div>
+                        <div class="font-paragraph-14 text-700"> Pelanggaran</div>
+                    </a>
                 </div>
             </div>
             <div class="space-y-2">
@@ -117,6 +118,12 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
                                         <a class="font-paragraph-14 text-700">Pindah</a>
                                     </div>
                                 </li>
+                                <li>
+                                    <div class="sidebar-link">
+
+                                        <a class="font-paragraph-14 text-700">Siswa</a>
+                                    </div>
+                                </li>
                             </ul>
                         </details>
                     </li>
@@ -128,3 +135,4 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
         <a href="<?php echo $logoutPath; ?>" class="sidebar-link font-paragraph-14">Logout</a>
     </div>
 </div>
+
