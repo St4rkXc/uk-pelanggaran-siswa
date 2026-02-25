@@ -6,6 +6,9 @@ $siswaPath = BASE_URL . '/pages/siswa/';
 $logoutPath = BASE_URL . '/auth/logout.php';
 $jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
 $pelanggaranPath = BASE_URL . '/pages/pelanggaran/';
+$suratPemanggilanOrtuPath = BASE_URL . '/pages/suratPemanggilanOrtu/';
+$suratPerjanjianPath = BASE_URL . '/pages/suratPerjanjian/';
+$suratPindahPath = BASE_URL . '/pages/suratPindah/';
 
 
 // current url
@@ -14,7 +17,9 @@ $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sid
 $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
 $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
 $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';
-
+$isActiveSuratPemanggilanOrtu = (strpos($current_url, 'pages/suratPemanggilanOrtu/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPerjanjian = (strpos($current_url, 'pages/suratPerjanjian/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPindah = (strpos($current_url, 'pages/suratPindah/') !== false) ? 'sidebar-link-active' : '';
 
 
 
@@ -71,24 +76,22 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
                                 <div class="icon-paperclip h-5 w-5"></div>
                                 Surat
                             </summary>
-                            <ul>
+                            <ul class="space-y-2">
                                 <li>
-                                    <div class="sidebar-link">
-
-                                        <a class="font-paragraph-14 text-700">Pemanggilan Orang Tua</a>
-                                    </div>
+                                    <a href="<?php echo $suratPemanggilanOrtuPath; ?>" class="sidebar-link <?php echo $isActiveSuratPemanggilanOrtu; ?>">
+                                        <p class="font-paragraph-14 text-700">Pemanggilan Orang Tua</p>
+                                    </a>
                                 </li>
                                 <li>
-                                    <div class="sidebar-link">
-
-                                        <a class="font-paragraph-14 text-700">Perjanjian</a>
-                                    </div></a>
+                                    <a href="<?php echo $suratPerjanjianPath; ?>" class="sidebar-link <?php echo $isActiveSuratPerjanjian; ?>">
+                                        <p class="font-paragraph-14 text-700">Perjanjian</p>
+                                    </a>
+            
                                 </li>
                                 <li>
-                                    <div class="sidebar-link">
-
-                                        <a class="font-paragraph-14 text-700">Pindah</a>
-                                    </div>
+                                    <a href="<?php echo $suratPindahPath; ?>" class="sidebar-link <?php echo $isActiveSuratPindah; ?>">
+                                        <p class="font-paragraph-14 text-700">Pindah</p>
+                                    </a>
                                 </li>
                             </ul>
                         </details>
@@ -135,4 +138,3 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
         <a href="<?php echo $logoutPath; ?>" class="sidebar-link font-paragraph-14">Logout</a>
     </div>
 </div>
-
