@@ -49,15 +49,13 @@ function dbCount($pdo, $table, $condition = "", $params = [])
 {
     $sql = "SELECT COUNT(*) FROM $table";
 
-    // Jika ada kondisi (misal: WHERE role = 'siswa')
     if (!empty($condition)) {
+        // Kita pake operator WHERE kalau kondisinya ada
         $sql .= " WHERE $condition";
     }
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
 
-    // Mengambil hasil kolom pertama (hasil COUNT)
-    return $stmt->fetchColumn();
+    return (int)$stmt->fetchColumn();
 }
-
