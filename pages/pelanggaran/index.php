@@ -50,7 +50,7 @@ $stmt = $pdo->query($sql);
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
-<body class="flex w-dvw">
+<body class="flex w-dvw overflow-x-hidden">
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class="flex-1">
@@ -122,7 +122,7 @@ $stmt = $pdo->query($sql);
                                         <td class="py-4 px-2 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
                                         <td class="py-4 px-2">
                                             <div class="text-zinc-800"><?= htmlspecialchars($row['nama_jenis']); ?></div>
-                                            <p class="text-[11px] text-zinc-400 italic"><?= htmlspecialchars($row['keterangan']); ?></p>
+                                            <p class="text-[11px] text-zinc-400 italic line-clamp-1"><?= htmlspecialchars($row['keterangan']); ?></p>
                                         </td>
                                         <td class="py-4 px-2 text-center">
                                             <span class="text-red-600 font-bold">-<?= $row['bobot_poin']; ?></span>
@@ -210,7 +210,7 @@ $stmt = $pdo->query($sql);
 
 <!-- Modal add pelanggaran -->
 <dialog id="modal_add_pelanggaran" class="modal">
-    <div class="modal-box max-w-lg bg-white p-10 rounded-3xl border border-zinc-100">
+    <div class="modal-box max-w-4xl bg-white p-10 rounded-3xl border border-zinc-100">
         <div class="flex flex-col gap-2 mb-8">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
@@ -219,54 +219,61 @@ $stmt = $pdo->query($sql);
             <p class="text-sm text-zinc-500 font-medium">Sistem Pelanggaran Siswa</p>
         </div>
 
-        <form method="POST" action="add_process.php">
-            <div class="space-y-4">
-                <div class="form-control">
-                    <label class="label font-bold text-zinc-700">Jurusan</label>
-                    <select id="select-jurusan" name="jurusan" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
-                        <option value="" disabled selected>Pilih Jurusan</option>
-                        <?php
-                        $jurusanStmt = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC");
-                        while ($j = $jurusanStmt->fetch()) echo "<option value='{$j['jurusan']}'>{$j['jurusan']}</option>";
-                        ?>
-                    </select>
-                </div>
+        <form method="POST" action="add_process.php" class="w-full">
+            <div class="grid grid-cols-5 w-full gap-4">
+                <div class="space-y-4 bg-zinc-50 p-6 rounded-lg col-span-2">
+                    <div class="form-control">
+                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Informasi Siswa</p>
+                        <label class="label font-bold text-zinc-700">Jurusan</label>
+                        <select id="select-jurusan" name="jurusan" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
+                            <option value="" disabled selected>Pilih Jurusan</option>
+                            <?php
+                            $jurusanStmt = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC");
+                            while ($j = $jurusanStmt->fetch()) echo "<option value='{$j['jurusan']}'>{$j['jurusan']}</option>";
+                            ?>
+                        </select>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label font-bold text-zinc-700">Kelas</label>
-                    <select id="select-kelas" name="kelas" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
-                        <option value="">Pilih Jurusan Dulu</option>
-                    </select>
-                </div>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700">Kelas</label>
+                        <select id="select-kelas" name="kelas" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
+                            <option value="">Pilih Jurusan Terlebih Dahulu</option>
+                        </select>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label font-bold text-zinc-700">Siswa</label>
-                    <select id="select-siswa-final" name="id_siswa" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
-                        <option value="">Pilih Kelas Dulu</option>
-                    </select>
-                </div>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700">Siswa</label>
+                        <select id="select-siswa-final" name="id_siswa" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
+                            <option value="">Pilih Kelas Terlebih Dahulu</option>
+                        </select>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label font-bold text-zinc-700">Jenis Pelanggaran</label>
-                    <select name="id_jenis" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
-                        <option value="" disabled selected>Pilih Pelanggaran</option>
-                        <?php
-                        $jenisStmt = $pdo->query("SELECT id_jenis, nama_jenis, point FROM jenis_pelanggaran ORDER BY nama_jenis ASC");
-                        while ($jp = $jenisStmt->fetch()) echo "<option value='{$jp['id_jenis']}'>{$jp['nama_jenis']} (-{$jp['point']} Point)</option>";
-                        ?>
-                    </select>
-                </div>
 
-                <div class="form-control">
-                    <label class="label font-bold text-zinc-700">Keterangan</label>
-                    <textarea name="keterangan" class="textarea textarea-bordered rounded-xl bg-zinc-50 border-zinc-200 h-24" placeholder="Masukkan detail kejadian..."></textarea>
+                </div>
+                <div class="flex-1 col-span-3 space-y-3">
+                    <div class="form-control space-y-2">
+                        <p class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Informasi Pelanggaran</p>
+                        <label class="label font-bold text-zinc-700">Jenis Pelanggaran</label>
+                        <select name="id_jenis" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
+                            <option value="" disabled selected>Pilih Pelanggaran</option>
+                            <?php
+                            $jenisStmt = $pdo->query("SELECT id_jenis, nama_jenis, point FROM jenis_pelanggaran ORDER BY nama_jenis ASC");
+                            while ($jp = $jenisStmt->fetch()) echo "<option value='{$jp['id_jenis']}'>{$jp['nama_jenis']} (-{$jp['point']} Point)</option>";
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="form-control flex flex-col space-y-2">
+                        <label class="label font-bold text-zinc-700">Keterangan</label>
+                        <textarea name="keterangan" class="textarea textarea-bordered rounded-xl bg-zinc-50 border-zinc-200 h-24 w-full" placeholder="Masukkan detail kejadian..."></textarea>
+                    </div>
                 </div>
             </div>
 
             <div class="modal-action flex justify-end gap-3 mt-10">
-                <button type="button" class="btn bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-100 rounded-xl px-8 normal-case font-bold" onclick="modal_add_pelanggaran.close()">Cancel</button>
-                <button type="submit" class="btn bg-zinc-900 border-none text-white hover:bg-black rounded-xl px-8 normal-case font-bold">
-                    <span class="icon-check w-4 h-4 mr-1"></span> Simpan
+                <button type="button" class="button-primary" onclick="modal_add_pelanggaran.close()">Cancel</button>
+                <button type="submit" class="button-secondary flex flex-row items-center">
+                    <span class="icon-check w-5 h-5 mr-1"></span> Simpan
                 </button>
             </div>
         </form>

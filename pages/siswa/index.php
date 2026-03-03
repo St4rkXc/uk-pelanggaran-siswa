@@ -45,7 +45,7 @@ $stmt->execute($params);
 </head>
 
 <body class="bg-zinc-50 w-dvw">
-    <div class="flex w-full">
+    <div class="flex w-full h-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
             <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>

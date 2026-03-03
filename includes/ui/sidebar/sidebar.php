@@ -25,7 +25,7 @@ $isActiveSuratPindah = (strpos($current_url, 'pages/suratPindah/') !== false) ? 
 
 ?>
 
-<div class="bg-zinc-100 border-r-2 border-r-zinc-200 w-fit sticky h-dvh flex flex-col justify-between py-8 px-10 ">
+<div class=" bg-zinc-100 border-r-2 border-r-zinc-200 w-fit sticky top-0 h-dvh flex flex-col justify-between py-8 px-10 ">
     <div>
         <div class="space-y-1">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
