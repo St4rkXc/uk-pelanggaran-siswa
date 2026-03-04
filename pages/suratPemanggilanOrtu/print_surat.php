@@ -48,6 +48,9 @@ $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
             background: white;
 
         }
+        #print-section {
+            font-family: 'Times New Roman', serif;
+        }
 
         @media print {
             body {
@@ -75,14 +78,33 @@ $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
 
 <body class="bg-zinc-100 p-6 md:p-12">
 
-    <div id="print-button" class="fixed top-6 right-6 z-50">
-        <button onclick="window.print()" class="px-6 py-3 bg-zinc-900 text-white rounded-lg shadow-2xl flex items-center gap-2 hover:bg-black transition-all font-semibold">
-            <span class="icon-print h-5 w-5"></span>
-            Cetak Surat (A4)
-        </button>
+    <div id="print-button" class="fixed top-6 right-6 z-50 w-md p-6 bg-white border border-zinc-200 rounded-lg no-print">
+        <label class="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Pilih Guru BK Penandatangan</label>
+        <div class="space-y-4">
+            <select id="select-guru-bk" class="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl focus:ring-2 focus:ring-zinc-900 outline-none transition-all">
+                <option value="I Gusti Ayu Rinjani, M.Pd">I Gusti Ayu Rinjani, M.Pd</option>
+                <option value="Ni Putu Chintya Pradnya Suari, S.Pd">Ni Putu Chintya Pradnya Suari, S.Pd</option>
+                <option value="Bagus Putu Eka Wijaya, S.Kom">Bagus Putu Eka Wijaya, S.Kom</option>
+                <option value="Custom">-- Input Manual --</option>
+            </select>
+
+            <div id="custom-name-wrapper" class="hidden">
+                <label class="block text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Nama Guru BK Manual</label>
+                <input type="text" id="custom-guru-name" class="w-full p-3 bg-zinc-50 border border-zinc-200 rounded-xl" placeholder="Ketik Nama & Gelar...">
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="terapkanGuruBK()" class="flex-1 py-3 bg-zinc-900 text-white rounded-xl font-bold hover:bg-black transition-all">
+                    Terapkan
+                </button>
+                <button onclick="window.print()" class="px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all">
+                    Cetak
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="bg-white max-w-[21cm] min-h-[29.7cm] mx-auto p-12 border border-zinc-200 shadow-xl rounded-2xl print:shadow-none print:border-none print:p-0">
+    <div class="bg-white max-w-[21cm] min-h-[29.7cm] mx-auto p-12 border border-zinc-200 shadow-xl rounded-2xl print:shadow-none print:border-none print:p-0" id="print-section">
 
         <img src="<?= $kopPath ?>" alt="Kop Surat Sekolah" class="w-full h-auto mb-6">
 
@@ -152,11 +174,40 @@ $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
                 <p class="font-bold underline ">Bagus Putu Eka Wijaya, S.Kom</p>
             </div>
             <div>
-                <p class="mb-24">Denpasar, <?= date('d F Y', strtotime($s['tanggal_surat'])) ?><br>Guru BK</p>
-                <p class="font-bold underline ">I Gusti Ayu Rinjani, M.Pd</p>
+                <p class="mb-24 ">Denpasar, <?= date('d F Y', strtotime($s['tanggal_surat'])) ?><br>Guru BK</p>
+                <p id="nama-guru-bk-display" class="font-bold underline ">I Gusti Ayu Rinjani, M.Pd</p>
             </div>
         </div>
     </div>
 </body>
 
 </html>
+
+<script>
+    function terapkanGuruBK() {
+        const select = document.getElementById('select-guru-bk');
+        const customWrapper = document.getElementById('custom-name-wrapper');
+        const customInput = document.getElementById('custom-guru-name');
+        const display = document.getElementById('nama-guru-bk-display');
+
+        if (select.value === 'Custom') {
+            customWrapper.classList.remove('hidden');
+            if (customInput.value.trim() !== "") {
+                display.innerText = customInput.value;
+            }
+        } else {
+            customWrapper.classList.add('hidden');
+            display.innerText = select.value;
+        }
+    }
+
+    // Logic buat munculin input manual otomatis pas select berubah
+    document.getElementById('select-guru-bk').addEventListener('change', function() {
+        const customWrapper = document.getElementById('custom-name-wrapper');
+        if (this.value === 'Custom') {
+            customWrapper.classList.remove('hidden');
+        } else {
+            customWrapper.classList.add('hidden');
+        }
+    });
+</script>
