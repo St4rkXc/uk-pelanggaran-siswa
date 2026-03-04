@@ -10,16 +10,44 @@ require_once BASE_PATH . '/includes/helpers.php';
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 
 $totalPemanggilanOrtu = dbCount($pdo, 'surat_panggilan_ortu');
-// Query SQL: Mencocokkan tahun dan minggu dari kolom created_at dengan waktu SEKARANG
 $condition = "YEARWEEK(tanggal_surat, 1) = YEARWEEK(CURDATE(), 1)";
 $totalPemanggilanOrtuMingguIni = dbCount($pdo, 'surat_panggilan_ortu', $condition);
-// echo $totalPemanggilanOrtuMingguIni . " Surat";
+
 
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
 ];
 
+// ... code lo sebelumnya ...
+
+
+$query = "SELECT 
+    spo.id_surat_panggilan_ortu,
+    spo.id_siswa,
+    spo.keperluan, 
+    spo.tanggal_temu,
+    spo.tanggal_surat,
+    s.nomor_surat,
+    sw.nama_siswa,
+    sw.nama_ortu,
+    sw.kelas,
+    sw.jurusan
+FROM surat_panggilan_ortu spo
+JOIN surat s ON spo.id_surat_panggilan_ortu = s.id_jenis_surat AND s.jenis_surat = 'surat_panggilan_ortu'
+JOIN siswa sw ON spo.id_siswa = sw.id_siswa
+ORDER BY s.nomor_surat DESC";
+
+$stmt = $pdo->query($query);
+$panggilanList = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+$allSiswa = $pdo->query("SELECT id_siswa, nama_siswa, kelas, jurusan FROM siswa ORDER BY nama_siswa")->fetchAll(PDO::FETCH_ASSOC);
+$jurusans = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan")->fetchAll(PDO::FETCH_ASSOC);
+$kelases = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas")->fetchAll(PDO::FETCH_ASSOC);
+
+$lastNum = $pdo->query("SELECT MAX(nomor_surat) as last FROM surat WHERE jenis_surat = 'surat_panggilan_ortu'")->fetch();
+$nextNum = ($lastNum['last'] ?? 0) + 1;
 
 
 ?>
@@ -66,11 +94,69 @@ $currentUser = [
                     <div class="flex justify-between items-center">
                         <p class="font-heading-6 font-semibold text-zinc-800"> Tabel Surat Pemanggilan Orang Tua</p>
                         <div class="flex items-center">
-                            <button class="button-primary">Add</button>
+                            <button class="button-primary" onclick="modal_add_panggilan.showModal()">Add</button>
                         </div>
                     </div>
                     <!-- table goes here -->
-                    <div></div>
+                    <div class="mt-6 space-y-4">
+                        <?php if (empty($panggilanList)): ?>
+                            <div class="p-10 text-center border-2 border-dashed border-zinc-200 rounded-xl text-zinc-400">
+                                Belum ada jadwal pemanggilan orang tua.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($panggilanList as $item):
+                                $initials = strtoupper(substr($item['nama_siswa'], 0, 2));
+                            ?>
+                                <div class="group flex items-center justify-between px-5 py-6 bg-white border border-zinc-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all duration-200">
+                                    <div class="flex items-center gap-6">
+                                        <div class="flex flex-col items-center justify-center h-16 w-16 bg-zinc-50 rounded-lg border border-zinc-100 group-hover:bg-blue-50 group-hover:border-blue-100 transition-colors">
+                                            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter mb-0.5">No. Surat</span>
+                                            <span class="text-xl font-bold text-zinc-800">#<?= $item['nomor_surat'] ?></span>
+                                        </div>
+
+                                        <div>
+                                            <h4 class="font-bold text-zinc-900 text-lg leading-tight"><?= htmlspecialchars($item['nama_siswa']) ?></h4>
+                                            <p class="text-sm text-zinc-500 font-medium mt-1">
+                                                Ortu: <span class="text-zinc-800 font-bold"><?= htmlspecialchars($item['nama_ortu']) ?></span> • <?= $item['kelas'] ?>
+                                            </p>
+                                        </div>
+
+                                        <div class="h-10 w-px bg-zinc-200"></div>
+
+                                        <div class="max-w-md">
+                                            <div class="flex justify-start items-start gap-2 mb-1 text-blue-600">
+                                                <span class="text-[11px] font-extrabold uppercase tracking-widest">
+                                                    Temu: <?= date('d M Y | H:i', strtotime($item['tanggal_temu'])) ?> WITA
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-zinc-600 line-clamp-1 italic">"<?= htmlspecialchars($item['keperluan']) ?>"</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="openEditPanggilan(
+    '<?= $item['id_surat_panggilan_ortu'] ?>', 
+    '<?= addslashes($item['nama_siswa'] ?? '') ?>', 
+    '<?= $item['kelas'] ?? '' ?>', 
+    '<?= $item['tanggal_temu'] ?? '' ?>', 
+    '<?= addslashes($item['keperluan'] ?? '') ?>'
+)" class="button-secondary p-3">
+                                            <span class="icon-edit w-5 h-5"></span>
+                                        </button>
+                                        <a href="delete_process.php?id=<?= $item['id_surat_panggilan_ortu'] ?>"
+                                            class="button-danger p-3">
+                                            <span class="icon-delete w-5 h-5"></span>
+                                        </a>
+                                        <div class="w-px h-8 bg-zinc-100 mx-1"></div>
+                                        <a href="print_surat.php?id=<?= $item['id_surat_panggilan_ortu'] ?>" target="_blank" class="button-primary flex items-center gap-2 px-5 py-2.5 shadow-lg shadow-zinc-100">
+                                            <span class="icon-print h-5 w-5"></span>
+                                            <span class="font-bold">Cetak</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </main>
         </div>
@@ -79,3 +165,178 @@ $currentUser = [
 </body>
 
 </html>
+
+<dialog id="modal_add_panggilan" class="modal">
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
+            <div class="p-2 border border-zinc-200 rounded-xl w-fit">
+                <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Buat Surat Pemanggilan Orang Tua</h2>
+                <p class="text-sm text-zinc-500 font-medium">Generate dokumen pemanggilan orang tua secara otomatis</p>
+            </div>
+        </div>
+
+        <form method="POST" action="add_process.php" class="space-y-6">
+            <input type="hidden" name="nomor_surat" value="<?= $nextNum ?>">
+            <div class="grid grid-cols-3 gap-6 ">
+                <div class="flex flex-col gap-4 bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700 text-xs uppercase">1. Jurusan</label>
+                        <select id="adj-jurusan-panggilan" name="jurusan" class="select select-bordered w-full rounded-xl border-zinc-200" required>
+                            <option value="" disabled selected>Pilih Jurusan</option>
+                            <?php
+                            $jurs = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC");
+                            while ($j = $jurs->fetch()) echo "<option value='{$j['jurusan']}'>{$j['jurusan']}</option>";
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700 text-xs uppercase">2. Kelas</label>
+                        <select id="adj-kelas-panggilan" name="kelas" class="select select-bordered w-full rounded-xl border-zinc-200" disabled required>
+                            <option value="">Pilih Jurusan Dulu</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700 text-xs uppercase">3. Nama Siswa</label>
+                        <select id="adj-siswa-panggilan" name="id_siswa" class="select select-bordered w-full rounded-xl border-zinc-200" disabled required>
+                            <option value="">Pilih Kelas Dulu</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <div class="flex flex-col gap-6 ">
+                        <div class="form-control">
+                            <label class="label font-bold text-zinc-700 text-sm">Jadwal Pertemuan</label>
+                            <input type="datetime-local" name="tanggal_temu" class="my-input w-full" required>
+                        </div>
+                        <div class="form-control flex flex-col gap-2">
+                            <label class="label font-bold text-zinc-700 text-sm">Keperluan Panggilan</label>
+                            <textarea name="keperluan" class="textarea textarea-bordered rounded-xl border-zinc-200 h-24 w-full" placeholder="Alasan pemanggilan orang tua..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 pt-6 border-t">
+                <button type="button" class="button-secondary" onclick="modal_add_panggilan.close()">Cancel</button>
+                <button type="submit" class="button-primary px-10">Simpan & Terbitkan</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<dialog id="modal_edit_panggilan" class="modal">
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
+            <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Edit Panggilan Orang Tua</h2>
+            <p class="text-sm text-zinc-500 font-medium">Perbarui jadwal atau keperluan pemanggilan</p>
+        </div>
+
+        <form method="POST" action="edit_process.php" class="space-y-6">
+            <input type="hidden" name="id_surat_panggilan_ortu" id="edit-id-panggilan">
+
+            <div class="grid grid-cols-3 gap-6">
+                <div class="flex flex-col gap-4 bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Data Siswa (Locked)</p>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700 text-xs uppercase">Nama Siswa</label>
+                        <input type="text" id="edit-nama-siswa" class="my-input bg-zinc-100 text-zinc-500 cursor-not-allowed" readonly>
+                    </div>
+                    <div class="form-control">
+                        <label class="label font-bold text-zinc-700 text-xs uppercase">Kelas</label>
+                        <input type="text" id="edit-kelas-siswa" class="my-input bg-zinc-100 text-zinc-500 cursor-not-allowed" readonly>
+                    </div>
+                </div>
+
+                <div class="col-span-2">
+                    <div class="flex flex-col gap-6 ">
+                        <div class="form-control">
+                            <label class="label font-bold text-zinc-700 text-sm">Jadwal Pertemuan Baru</label>
+                            <input type="datetime-local" name="tanggal_temu" id="edit-tanggal-temu" class="my-input w-full" required>
+                        </div>
+                        <div class="form-control flex flex-col gap-2">
+                            <label class="label font-bold text-zinc-700 text-sm">Keperluan Panggilan Baru</label>
+                            <textarea name="keperluan" id="edit-keperluan" class="textarea textarea-bordered rounded-xl border-zinc-200 h-24 w-full focus:ring-2 focus:ring-blue-500" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-6 border-t">
+                <button type="button" class="button-secondary" onclick="modal_edit_panggilan.close()">Cancel</button>
+                <button type="submit" class="button-primary px-10">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
+</dialog>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selJurusan = document.getElementById('adj-jurusan-panggilan');
+        const selKelas = document.getElementById('adj-kelas-panggilan');
+        const selSiswa = document.getElementById('adj-siswa-panggilan');
+
+        // 1. Fetch Kelas berdasarkan Jurusan
+        selJurusan.addEventListener('change', async function() {
+            const val = encodeURIComponent(this.value);
+            try {
+                const res = await fetch(`get_filter_data.php?type=kelas&jurusan=${val}`);
+                const data = await res.json();
+
+                selKelas.innerHTML = '<option value="" disabled selected>Pilih Kelas</option>';
+                data.forEach(item => {
+                    selKelas.innerHTML += `<option value="${item.kelas}">${item.kelas}</option>`;
+                });
+                selKelas.disabled = false;
+                selSiswa.disabled = true;
+                selSiswa.innerHTML = '<option value="">Pilih Kelas Dulu</option>';
+            } catch (err) {
+                console.error(err);
+            }
+        });
+
+        // 2. Fetch Siswa berdasarkan Kelas
+        selKelas.addEventListener('change', async function() {
+            const val = encodeURIComponent(this.value);
+            try {
+                const res = await fetch(`get_filter_data.php?type=siswa&kelas=${val}`);
+                const data = await res.json();
+
+                selSiswa.innerHTML = '<option value="" disabled selected>Pilih Siswa</option>';
+                data.forEach(item => {
+                    selSiswa.innerHTML += `<option value="${item.id_siswa}">${item.nama_siswa}</option>`;
+                });
+                selSiswa.disabled = false;
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    });
+
+    function openEditPanggilan(id, nama, kelas, tgl, keperluan) {
+        const modal = document.getElementById('modal_edit_panggilan');
+        if (!modal) return;
+
+        // 1. Set ID Hidden & Data Locked
+        document.getElementById('edit-id-panggilan').value = id;
+        document.getElementById('edit-nama-siswa').value = nama;
+        document.getElementById('edit-kelas-siswa').value = kelas;
+
+        // 2. Set Tanggal (Format ISO untuk datetime-local)
+        if (tgl) {
+            let date = new Date(tgl);
+            let isoStr = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+            document.getElementById('edit-tanggal-temu').value = isoStr;
+        }
+
+        // 3. FIX: Masukin teks ke Textarea Keperluan
+        // Pastikan ID 'edit-keperluan' ini sama dengan ID di HTML lo
+        const textareaKeperluan = document.getElementById('edit-keperluan');
+        if (textareaKeperluan) {
+            textareaKeperluan.value = keperluan;
+        }
+
+        modal.showModal();
+    }
+</script>
