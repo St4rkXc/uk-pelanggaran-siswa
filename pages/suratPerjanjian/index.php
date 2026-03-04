@@ -120,7 +120,7 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     <div class="flex items-center gap-2">
                                         <button onclick="openEditSurat('<?= $item['id_perjanjian'] ?>', '<?= $item['id_siswa'] ?>', '<?= addslashes($item['nama_siswa']) ?>', '<?= $item['id_pelanggaran'] ?>', '<?= $item['tanggal_perjanjian'] ?>', '<?= addslashes($item['isi_perjanjian']) ?>')"
-                                            class="p-2.5 rounded-lg border border-zinc-200 text-zinc-400 hover:text-blue-600 hover:bg-blue-50 transition-all">
+                                            class="button-secondary p-3">
                                             <span class="icon-edit w-5 h-5"></span>
                                         </button>
 
