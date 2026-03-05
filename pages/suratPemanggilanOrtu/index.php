@@ -46,9 +46,11 @@ $allSiswa = $pdo->query("SELECT id_siswa, nama_siswa, kelas, jurusan FROM siswa 
 $jurusans = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan")->fetchAll(PDO::FETCH_ASSOC);
 $kelases = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas")->fetchAll(PDO::FETCH_ASSOC);
 
-$lastNum = $pdo->query("SELECT MAX(nomor_surat) as last FROM surat WHERE jenis_surat = 'surat_panggilan_ortu'")->fetch();
-$nextNum = ($lastNum['last'] ?? 0) + 1;
+$stmtNext = $pdo->query("SELECT MAX(nomor_surat) as max_num FROM surat");
+$rowNext = $stmtNext->fetch();
 
+// Jika hasil MAX() adalah null (tabel kosong), mulai dari 1
+$nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 
 ?>
 
