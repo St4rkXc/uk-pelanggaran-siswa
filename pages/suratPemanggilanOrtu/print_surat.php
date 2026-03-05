@@ -125,7 +125,7 @@ $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
             </table>
         </div>
 
-        <div class="content-area space-y-6">
+        <div class="content-area space-y-4">
             <div class="mb-4">
                 <p>Kepada</p>
                 <p>Yth. Bapak/ Ibu</p>
