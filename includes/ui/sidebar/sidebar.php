@@ -13,6 +13,7 @@ $laporanSurat = BASE_URL . '/pages/laporan_surat/';
 $laporanSiswa = BASE_URL . '/pages/laporan_siswa/';
 
 
+
 // current url
 $current_url = $_SERVER['PHP_SELF'];
 $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
@@ -113,9 +114,9 @@ $isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false)
                                     </a>
                                 </li>
                                 <li>
-                                    <div class="sidebar-link">
-                                        <a class="font-paragraph-14 text-700">Siswa</a>
-                                    </div>
+                                    <a href="<?php echo $laporanSiswa; ?>" class="sidebar-link <?php echo $isActiveLaporanSiswa; ?>">
+                                        <p class="font-paragraph-14 text-700">Siswa</p>
+                                    </a>
                                 </li>
                             </ul>
                         </details>

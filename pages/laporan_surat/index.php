@@ -157,7 +157,7 @@ $grandTotal = array_sum(array_column($reports, 'total'));
                     </form>
                 </div>
 
-                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-xl" id="printable-area">
+                <div class="bg-white rounded-2xl border border-zinc-200 overflow-hidden " id="printable-area">
                     <div class="p-6 border-b border-zinc-100 bg-zinc-50/50">
                         <h2 class="font-black text-zinc-900 uppercase">
                             Rekap <?= str_replace('_', ' ', $jenisSurat) ?> Per <?= ucfirst($rekapBy) ?>
@@ -235,11 +235,11 @@ $grandTotal = array_sum(array_column($reports, 'total'));
                 </table>
 
                 <div class="flex justify-end mt-12">
-                    <div class="text-center">
+                    <!-- <div class="text-center">
                         <p class="mb-20 text-zinc-900">Denpasar, <?= date('d M Y') ?></p>
                         <p class="font-bold underline text-zinc-900"><?= htmlspecialchars($currentUser['nama']) ?></p>
                         <p class="text-sm text-zinc-900"><?= ucfirst(str_replace('_', ' ', $currentUser['role'])) ?></p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <!-- END PRINT SECTION -->
