@@ -1,6 +1,6 @@
 <?php
 session_start();
-$requiredRole = ['admin'];
+$requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     header("Location: index.php?status=error&msg=Unauthorized");
     exit;

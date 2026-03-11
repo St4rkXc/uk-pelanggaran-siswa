@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
+$requiredRole = ['admin', 'guru_bk'];
 
 // Pastikan hanya admin yang bisa akses
 if ($_SESSION['role'] !== 'admin') {

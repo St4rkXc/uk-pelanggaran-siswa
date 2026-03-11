@@ -1,4 +1,5 @@
 <?php
+$requiredRole = ['guru_bk', 'admin'];
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 

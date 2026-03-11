@@ -1,6 +1,8 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../config/database.php';
+$requiredRole = ['admin', 'guru_bk'];
+
 
 $id_pindah = $_GET['id'] ?? null;
 

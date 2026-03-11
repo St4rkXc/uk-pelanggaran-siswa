@@ -1,5 +1,8 @@
 <?php
+session_start();
 require_once __DIR__ . '/../../config/database.php';
+$requiredRole = ['admin', 'guru_bk'];
+
 
 // Ambil ID Detail dari URL
 $id_panggilan = $_GET['id'] ?? '';
@@ -48,6 +51,7 @@ $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
             background: white;
 
         }
+
         #print-section {
             font-family: 'Times New Roman', serif;
         }

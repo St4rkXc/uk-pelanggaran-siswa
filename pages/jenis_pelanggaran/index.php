@@ -1,6 +1,7 @@
 <?php
 session_start();
-$requiredRole = ['admin'];
+$requiredRole = ['guru_bk', 'admin'];
+
 
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';

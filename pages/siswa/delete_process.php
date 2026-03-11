@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Cek Role (Biasanya cuma admin yang boleh hapus)
-$requiredRole = ['admin'];
+$requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     exit("Akses ditolak!");
 }

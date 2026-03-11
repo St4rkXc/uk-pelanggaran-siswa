@@ -1,5 +1,7 @@
 <?php
 session_start();
+$requiredRole = ['admin', 'guru_bk'];
+
 // Pastiin path database.php bener sesuai struktur folder lo
 require_once __DIR__ . '/../../config/database.php';
 

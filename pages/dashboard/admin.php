@@ -15,7 +15,7 @@ $totalSurat = dbCount($pdo, 'Surat');
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
-]
+];
 
 
 ?>
@@ -31,7 +31,7 @@ $currentUser = [
 
 </head>
 
-<body class="bg-zinc-50 w-dvw">
+<body class="bg-zinc-50 w-dvw overflow-x-hidden">
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
@@ -68,18 +68,21 @@ $currentUser = [
                 </div>
                 <div class="grid grid-cols-6 w-full mt-6 gap-4">
                     <div class="col-span-4 rounded-2xl border border-zinc-300 p-6 h-fit">
-                        <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel data siswa</h5>
+                        <div class="flex justify-between items-center">
+                            <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel data siswa</h5>
+                            <a href="<?php echo $siswaPath; ?>" class="icon-arrow-up-right rotate-45 hover:rotate-0 transition-all duration-200 hover:scale-110 w-6 h-6"></a>
+                        </div>
                         <div class="mt-3">
                             <table class="w-full text-left table-auto">
-                                <thead>
-                                    <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                        <th class="">No</th>
-                                        <th class="">Nama</th>
-                                        <th class="">Kelas</th>
-                                        <th class="">NIS</th>
-                                        <th class="">NISN</th>
-                                        <th class="">Poin</th>
-                                        <th class="">Jurusan</th>
+                                <thead class="p-4">
+                                    <tr class=" text-zinc-800 font-paragraph-16 font-medium  ">
+                                        <th class=" py-3 ">No</th>
+                                        <th class=" py-3 ">Nama</th>
+                                        <th class=" py-3 ">Kelas</th>
+                                        <th class=" py-3 ">NIS</th>
+                                        <th class=" py-3 ">NISN</th>
+                                        <th class=" py-3 ">Poin</th>
+                                        <th class=" py-3 ">Jurusan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-zinc-200">
@@ -89,14 +92,27 @@ $currentUser = [
                                     $stmt = $pdo->query("SELECT * FROM siswa ORDER BY id_siswa ");
                                     while ($row = $stmt->fetch()):
                                     ?>
-                                        <tr class="border-b border-b-zinc-300 ">
-                                            <td class=" py-3 text-zinc-700"><?= $no++; ?></td>
-                                            <td class=" py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                            <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                            <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                            <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                            <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
-                                            <td class=" py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
+                                        <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 hover:cursor-pointer duration-200  ">
+                                            <td class=" py-4 text-zinc-700"><?= $no++; ?></td>
+                                            <td class=" py-4 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
+                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                            <td class=" py-4 px-2 ">
+                                                <div class="text-center p-1 rounded-full text-sm font-medium <?php
+                                                                                                                $point = (int)$row['point'];
+                                                                                                                if ($point < 20) {
+                                                                                                                    echo 'bg-red-200 text-red-800';
+                                                                                                                } elseif ($point < 50) {
+                                                                                                                    echo 'bg-yellow-200 text-yellow-800';
+                                                                                                                } else {
+                                                                                                                    echo 'bg-green-200 text-green-800';
+                                                                                                                }
+                                                                                                                ?>">
+                                                    <?= htmlspecialchars($row['point']); ?>
+                                                </div>
+                                            </td>
+                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
 
@@ -110,7 +126,10 @@ $currentUser = [
                         </div>
                     </div>
                     <div class="col-span-2 rounded-2xl border border-zinc-300 p-6">
-                        <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel Guru</h5>
+                        <div class="flex justify-between items-center pb-4">
+                            <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel Guru</h5>
+                            <a href="<?php echo $userPath; ?>" class="icon-arrow-up-right rotate-45 hover:rotate-0 transition-all duration-200 hover:scale-110 w-6 h-6"></a>
+                        </div>
                         <table class="w-full text-left table-auto">
                             <thead>
                                 <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">

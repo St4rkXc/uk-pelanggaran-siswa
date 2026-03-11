@@ -5,7 +5,7 @@
 // die();
 session_start();
 // Security Check: Hanya admin yang bisa eksekusi
-$requiredRole = ['admin'];
+$requiredRole = ['guru_bk', 'admin'];
 
 $pelapor = $_SESSION['id_users'] ?? null;
 

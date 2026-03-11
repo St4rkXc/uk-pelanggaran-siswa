@@ -1,5 +1,7 @@
 <?php
 session_start();
+$requiredRole = ['guru_bk', 'admin'];
+
 require_once __DIR__ . '/../../config/database.php';
 
 $id = $_GET['id'] ?? null;
