@@ -5,7 +5,7 @@
 // die();
 session_start();
 // Security Check: Hanya admin yang bisa eksekusi
-$requiredRole = ['guru_bk', 'admin'];
+$requiredRole = ['guru_bk', 'admin', 'guru_mapel'];
 
 $pelapor = $_SESSION['id_users'] ?? null;
 
@@ -21,16 +21,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_siswa   = $_POST['id_siswa'] ?? null;
     $id_jenis   = $_POST['id_jenis'] ?? null;
     $keterangan = trim($_POST['keterangan'] ?? '');
-    $pelapor    = $_SESSION['id_users'] ?? null; // ID Admin/Guru yang lagi login
-
+    $pelapor    = $_SESSION['id_users'] ?? null;
     // Validasi input minimal
     if (!$id_siswa || !$id_jenis || !$pelapor) {
-        header("Location: index.php?status=error&msg=Data seleksi tidak lengkap!");
+        if ($_SESSION['role'] === 'guru_mapel') {
+            header("Location: ../dashboard/guru_mapel.php?status=error&msg=Data seleksi tidak lengkap!");
+        } else {
+            header("Location: index.php?status=error&msg=Data seleksi tidak lengkap!");
+        }
         exit;
     }
 
     if (!$id_siswa || !$id_jenis || !$pelapor) {
-        header("Location: index.php?status=error&msg=Data seleksi tidak lengkap! Pelapor: " . ($pelapor ? 'Ada' : 'Kosong'));
+        if ($_SESSION['role'] === 'guru_mapel') {
+            header("Location: ../dashboard/guru_mapel.php?status=error&msg=Data seleksi tidak lengkap! Pelapor: " . ($pelapor ? 'Ada' : 'Kosong'));
+        } else {
+            header("Location: index.php?status=error&msg=Data seleksi tidak lengkap! Pelapor: " . ($pelapor ? 'Ada' : 'Kosong'));
+        }
         exit;
     }
 
@@ -69,12 +76,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Kalau semua OK, simpan permanen
         $pdo->commit();
 
-        header("Location: index.php?status=success&msg=Pelanggaran berhasil dicatat dan poin siswa telah dipotong!");
+
+        if ($_SESSION['role'] === 'guru_mapel') {
+            header("Location: ../dashboard/guru_mapel.php");
+        } else {
+            header("Location: index.php");
+        }
         exit;
     } catch (Exception $e) {
         // Kalau ada yang error, batalin semua perubahan (Rollback)
         $pdo->rollBack();
-        header("Location: index.php?status=error&msg=" . urlencode($e->getMessage()));
+        if ($_SESSION['role'] === 'guru_mapel') {
+            header("Location: ../dashboard/guru_mapel.php?status=error&msg=" . urlencode($e->getMessage()));
+        } else {
+            header("Location: index.php?status=error&msg=" . urlencode($e->getMessage()));
+        }   
         exit;
     }
 } else {

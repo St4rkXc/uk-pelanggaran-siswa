@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../config/database.php';
+$logoutPath = BASE_URL . '/auth/logout.php';
+
 
 ?>
 
@@ -16,5 +18,12 @@ require_once __DIR__ . '/../../../config/database.php';
         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center">
             <span class="icon-user h-6 w-6 "></span>
         </div>
+        <?php if ($_SESSION['role'] == 'guru_mapel' || $_SESSION['role'] == 'siswa'): ?>
+            <a href="<?php echo $logoutPath; ?>" class="button-primary text-sm">
+                Logout
+            </a>
+        <?php endif; ?>
+
+
     </div>
 </header>

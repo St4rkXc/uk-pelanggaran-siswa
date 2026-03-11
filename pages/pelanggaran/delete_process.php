@@ -1,6 +1,6 @@
 <?php
 session_start();
-$requiredRole = ['admin', 'guru_bk'];
+$requiredRole = ['admin', 'guru_bk', 'guru_mapel'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     header("Location: index.php?status=error&msg=Unauthorized");
     exit;
@@ -37,15 +37,29 @@ if ($id_pelanggaran) {
             $stmtRefund->execute([$poin_refund, $id_siswa]);
 
             $pdo->commit();
-            header("Location: index.php?status=success&msg=Catatan dihapus dan poin siswa dikembalikan.");
+            if ($_SESSION['role'] === 'guru_mapel') {
+                header("Location: ../dashboard/guru_mapel.php?status=success&msg=Catatan dihapus dan poin siswa dikembalikan.");
+            } else {
+                header("Location: index.php?status=success&msg=Catatan dihapus dan poin siswa dikembalikan.");
+            }
+            exit;
+            
         } else {
             throw new Exception("Data pelanggaran tidak ditemukan.");
         }
     } catch (Exception $e) {
         $pdo->rollBack();
-        header("Location: index.php?status=error&msg=" . urlencode($e->getMessage()));
+        if ($_SESSION['role'] === 'guru_mapel') {
+            header("Location: ../dashboard/guru_mapel.php?status=error&msg=" . urlencode($e->getMessage()));
+        } else {
+            header("Location: index.php?status=error&msg=" . urlencode($e->getMessage()));
+        }
     }
 } else {
-    header("Location: index.php?status=error&msg=ID tidak valid.");
+    if ($_SESSION['role'] === 'guru_mapel') {
+        header("Location: ../dashboard/guru_mapel.php?status=error&msg=ID tidak valid.");
+    } else {
+        header("Location: index.php?status=error&msg=ID tidak valid.");
+    }
 }
 exit;
