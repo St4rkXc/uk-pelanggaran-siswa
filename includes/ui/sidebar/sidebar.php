@@ -3,6 +3,7 @@ require_once __DIR__ . '/../../../config/database.php';
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 $dashboardPath = BASE_URL . '/pages/dashboard/' . $_SESSION['role'] . ".php";
 $siswaPath = BASE_URL . '/pages/siswa/';
+$userPath = BASE_URL . '/pages/user/';
 $logoutPath = BASE_URL . '/auth/logout.php';
 $jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
 $pelanggaranPath = BASE_URL . '/pages/pelanggaran/';
@@ -20,6 +21,7 @@ $isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sid
 $isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
 $isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
 $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';
+$isActivePelanggaran = (strpos($current_url, 'pages/pelanggaran/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPemanggilanOrtu = (strpos($current_url, 'pages/suratPemanggilanOrtu/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPerjanjian = (strpos($current_url, 'pages/suratPerjanjian/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPindah = (strpos($current_url, 'pages/suratPindah/') !== false) ? 'sidebar-link-active' : '';
@@ -50,7 +52,7 @@ $isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false)
                     </a>
                     <a href=""></a>
                     <?php if ($_SESSION['role'] == 'admin') { ?>
-                        <a href="<?php echo BASE_URL . '/pages/user/'; ?>" class="sidebar-link <?php echo $isActiveUser; ?>">
+                        <a href="<?php echo $userPath; ?>" class="sidebar-link <?php echo $isActiveUser; ?>">
                             <div class="icon-case h-5 w-5"></div>
                             <div class="font-paragraph-14 text-700">Data User</div>
                         </a>

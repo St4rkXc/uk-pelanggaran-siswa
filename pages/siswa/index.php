@@ -44,7 +44,7 @@ $stmt->execute($params);
 
 </head>
 
-<body class="bg-zinc-50 w-dvw">
+<body class="bg-zinc-50 w-dvw overflow-x-hidden">
     <div class="flex w-full h-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
@@ -145,7 +145,7 @@ $stmt->execute($params);
                                         <?php if ($no === 1): ?>
                                             <tr>
                                                 <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                    Data "<?= htmlspecialchars($search) ?>" nggak nemu Coba kata kunci lain.
+                                                    Data "<?= htmlspecialchars($search) ?>"  Coba kata kunci lain.
                                                 </td>
                                             </tr>
                                         <?php endif; ?>

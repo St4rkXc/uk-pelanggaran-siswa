@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../../config/database.php';
 
 ?>
 
-<header class="flex justify-between items-center px-6 py-4 border-b border-zinc-300">
+<header class="flex sticky top-0 z-20 bg-white justify-between items-center px-6 py-4 border-b border-zinc-300">
     <p class="font-paragraph-20 font-semibold text-zinc-800">Selamat Datang, <?= htmlspecialchars($currentUser['role']); ?></p>
     <div class="flex justify-end items-center gap-4">
         <span class="relative flex size-3">
