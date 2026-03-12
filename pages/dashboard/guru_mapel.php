@@ -6,9 +6,6 @@ require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
-
-
-
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
@@ -79,7 +76,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Guru Mapel</title>
+    <title>Dashboard Guru Mapel - <?= htmlspecialchars($currentUser['nama']) ?></title>
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
@@ -88,9 +85,9 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
     <main class="container mx-auto bg-zinc-50 p-6">
         <div class="grid grid-cols-4 gap-4">
 
-            <div class="flex flex-col rounded-lg border border-zinc-300 p-6 gap-6 bg-white">
-                <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
-                    <span class="icon-siren h-6 w-6 text-zinc-600"></span>
+            <div class="flex items-center hover:-translate-y-1 hover:shadow-xl transition-all cursor-pointer duration-200 rounded-lg border border-zinc-300 p-6 gap-6 bg-white">
+                <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center h-fit w-fit">
+                    <span class="icon-siren h-6 w-6 text-zinc-600 rounded-full"></span>
                 </div>
                 <div>
                     <h5 class="font-heading-5 font-semibold text-zinc-800"><?= $totalLaporanSaya ?> Laporan</h5>
@@ -104,7 +101,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
                     <h5 class="font-paragraph-18 font-semibold text-zinc-800 tracking-tight">Riwayat Pelaporan Saya</h5>
                     <p class="text-xs text-zinc-500 font-medium">Menampilkan 10 laporan pelanggaran terakhir yang dibuat</p>
                 </div>
-                <button class="button-primary" onclick="modal_add_pelanggaran.showModal()">Add</button>
+                <button class="button-primary" onclick="modal_add_pelanggaran.showModal()">Laporan Baru</button>
             </div>
 
             <form id="riwayat-filter-form" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
