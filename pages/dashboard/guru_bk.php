@@ -73,6 +73,46 @@ $currentUser = [
                         </div>
                     </div>
                 </div>
+                <div class="grid grid-cols-4 gap-4 mt-6">
+                    <a href="<?php echo BASE_URL; ?>/pages/siswa" class="group flex justify-between gap-3 rounded-lg border border-zinc-300 p-4 transition-all duration-200 hover:bg-zinc-100">
+                        <div class="flex gap-4">
+                            <span class="icon-user h-6 w-6 text-zinc-700"></span>
+                            <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Siswa</h6>
+                        </div>
+                        <span class="icon-arrow-up-right h-5 w-5 rotate-45 transition-all duration-200 group-hover:rotate-0 group-hover:scale-110"></span>
+                    </a>
+
+                    <a href="<?php echo BASE_URL; ?>/pages/user" class="group flex justify-between gap-3 rounded-lg border border-zinc-300 p-4 transition-all duration-200 hover:bg-zinc-100">
+                        <div class="flex gap-4">
+                            <span class="icon-user h-6 w-6 text-zinc-700"></span>
+                            <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Users</h6>
+                        </div>
+                        <span class="icon-arrow-up-right h-5 w-5 rotate-45 transition-all duration-200 group-hover:rotate-0 group-hover:scale-110"></span>
+                    </a>
+
+                    <div class=" dropdown dropdown-start rounded-lg border border-zinc-300 p-4 transition-all duration-200 hover:bg-zinc-100 cursor-pointer">
+                        <div tabindex="0" role="button" class="flex gap-3">
+                            <span class="icon-paperclip h-6 w-6 text-zinc-700"></span>
+                            <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Surat</h6>
+                        </div>
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                            <li><a href="<?php echo BASE_URL; ?>/pages/suratPemanggilanOrtu/">Surat Pemanggilan Ortu</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>/pages/suratPerjanjian/">Surat Perjanjian Siswa</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>/pages/suratPindah/">Surat Pindah</a></li>
+                        </ul>
+                    </div>
+
+                    <div class=" dropdown dropdown-start rounded-lg border border-zinc-300 p-4 transition-all duration-200 hover:bg-zinc-100 cursor-pointer">
+                        <div tabindex="0" role="button" class="flex gap-3">
+                            <span class="icon-report h-6 w-6 text-zinc-700"></span>
+                            <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Laporan</h6>
+                        </div>
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                            <li><a href="<?php echo BASE_URL; ?>/pages/laporan_siswa/">Laporan Poin Siswa</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>/pages/laporan_surat/">Laporan Surat Keluar</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <div class="grid grid-cols-6 w-full mt-6 gap-4">
                     <div class="col-span-4 rounded-2xl border border-zinc-300 p-6 h-fit">
                         <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel data siswa</h5>
