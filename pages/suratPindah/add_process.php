@@ -2,7 +2,10 @@
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
-
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header("Location: index.php?status=error&msg=Unauthorized");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_siswa     = $_POST['id_siswa'] ?? null;

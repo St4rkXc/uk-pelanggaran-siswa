@@ -2,13 +2,13 @@
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
-
-
-// Proteksi: Cuma admin yang boleh eksekusi update
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: index.php');
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header("Location: index.php?status=error&msg=Unauthorized");
     exit;
 }
+
+// Proteksi: Cuma admin yang boleh eksekusi update
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form modal edit

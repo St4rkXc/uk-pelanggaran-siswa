@@ -4,6 +4,11 @@ $requiredRole = ['admin', 'guru_bk'];
 
 // Pastiin path database.php bener sesuai struktur folder lo
 require_once __DIR__ . '/../../config/database.php';
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header("Location: index.php?status=error&msg=Unauthorized");
+    exit;
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form modal edit

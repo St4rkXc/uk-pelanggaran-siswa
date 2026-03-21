@@ -2,6 +2,10 @@
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header("Location: index.php?status=error&msg=Unauthorized");
+    exit;
+}
 
 
 $id_pindah = $_GET['id'] ?? null;

@@ -2,7 +2,10 @@
 session_start();
 require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
-
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header("Location: index.php?status=error&msg=Unauthorized");
+    exit;
+}
 // Ambil ID dari URL (print_surat.php?id=123)
 $id_perjanjian = $_GET['id'] ?? '';
 
