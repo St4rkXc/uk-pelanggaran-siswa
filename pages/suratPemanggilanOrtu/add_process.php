@@ -5,7 +5,7 @@ require_once BASE_PATH . '/middleware/auth.php';
 $requiredRole = ['admin', 'guru_bk'];
 
 // Pastikan hanya admin yang bisa akses
-if ($_SESSION['role'] !== 'admin') {
+if ($_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'guru_bk') {
     header('Location: ' . BASE_URL . '/dashboard.php');
     exit;
 }

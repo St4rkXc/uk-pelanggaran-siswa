@@ -50,7 +50,7 @@ $currentUser = [
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
                         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
                             <span class="icon-user h-6 w-6 "></span>
-                        </div>
+                        </div> 
                         <div>
                             <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $totalGuru ?> Guru</h5>
                             <p class="font-paragraph-14 font font-medium text-zinc-600">Total Guru Tercatat</p>
@@ -88,7 +88,7 @@ $currentUser = [
                             <span class="icon-paperclip h-6 w-6 text-zinc-700"></span>
                             <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Surat</h6>
                         </div>
-                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-4">
                             <li><a href="<?php echo BASE_URL; ?>/pages/suratPemanggilanOrtu/">Surat Pemanggilan Ortu</a></li>
                             <li><a href="<?php echo BASE_URL; ?>/pages/suratPerjanjian/">Surat Perjanjian Siswa</a></li>
                             <li><a href="<?php echo BASE_URL; ?>/pages/suratPindah/">Surat Pindah</a></li>
@@ -100,7 +100,7 @@ $currentUser = [
                             <span class="icon-report h-6 w-6 text-zinc-700"></span>
                             <h6 class="font-paragraph-16 font-semibold text-zinc-800">Kelola Laporan</h6>
                         </div>
-                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm mt-4">
                             <li><a href="<?php echo BASE_URL; ?>/pages/laporan_siswa/">Laporan Poin Siswa</a></li>
                             <li><a href="<?php echo BASE_URL; ?>/pages/laporan_surat/">Laporan Surat Keluar</a></li>
                         </ul>

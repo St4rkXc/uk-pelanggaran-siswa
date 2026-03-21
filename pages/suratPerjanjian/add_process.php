@@ -4,8 +4,8 @@ $requiredRole = ['admin', 'guru_bk'];
 require_once __DIR__ . '/../../config/database.php';
 
 // Pastikan cuma admin/guru yang bisa akses
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: index.php');
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    header('Location: index.php?status=error&msg=SuratPerjanjianGagalDibuat" ');
     exit;
 }
 
