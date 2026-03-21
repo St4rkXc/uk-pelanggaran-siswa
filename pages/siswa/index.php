@@ -101,14 +101,14 @@ $stmt->execute($params);
                             <?php if ($filterType === 'siswa' || $filterType === ''): ?>
                                 <table class="w-full text-left table-auto">
                                     <thead>
-                                        <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                            <th class="px-2">No</th>
-                                            <th class="px-2">Nama</th>
-                                            <th class="px-2">Kelas</th>
-                                            <th class="px-2">NIS</th>
-                                            <th class="px-2">NISN</th>
-                                            <th class="px-2">Poin</th>
-                                            <th class="px-2">Jurusan</th>
+                                        <tr class="">
+                                            <th class="my-th">No</th>
+                                            <th class="my-th">Nama</th>
+                                            <th class="my-th">Kelas</th>
+                                            <th class="my-th">NIS</th>
+                                            <th class="my-th">NISN</th>
+                                            <th class="my-th">Poin</th>
+                                            <th class="my-th">Jurusan</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-zinc-200">
@@ -145,7 +145,7 @@ $stmt->execute($params);
                                         <?php if ($no === 1): ?>
                                             <tr>
                                                 <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                    Data "<?= htmlspecialchars($search) ?>"  Coba kata kunci lain.
+                                                    Data "<?= htmlspecialchars($search) ?>" Coba kata kunci lain.
                                                 </td>
                                             </tr>
                                         <?php endif; ?>
@@ -230,7 +230,7 @@ $stmt->execute($params);
             'm-nama': get('nama'),
             'm-kelas': get('kelas'),
             'm-point': get('point'),
-            'm-status': get('status'), 
+            'm-status': get('status'),
             'm-jk': get('jk'),
             'm-nis': get('nis'),
             'm-nisn': get('nisn'),
@@ -289,7 +289,7 @@ $stmt->execute($params);
 
 <dialog id="modal_add_siswa" class="modal">
     <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
-        <div class="space-y-1 pb-8">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
                 <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
@@ -387,12 +387,13 @@ $stmt->execute($params);
                 </div>
             </div>
 
-            <div class="modal-action mt-10 gap-2">
-                <button type="button" class="btn bg-white border-zinc-300 text-zinc-700" onclick="modal_add_siswa.close()">
+            <div class="modal-action mt-10 gap-2 border-t border-zinc-200 pt-6 ">
+                <button type="button" class="button-secondary" onclick="modal_add_siswa.close()">
                     Batal
                 </button>
-                <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-32 border-none">
-                    Simpan Data
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-6 h-6 text-white"></span>
+                    Simpan
                 </button>
             </div>
         </form>
@@ -401,12 +402,14 @@ $stmt->execute($params);
 
 <dialog id="modal_view_siswa" class="modal">
     <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
-        <div class="flex flex-col gap-2 mb-8">
-            <div class="p-2 border border-zinc-200 rounded-lg w-fit">
-                <img src="<?= $imgPath; ?>" class="h-10">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
+            <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
-            <h2 class="text-xl font-bold text-zinc-900">Data Siswa</h2>
-            <p class="text-sm text-zinc-500">Sistem Pelanggaran Siswa</p>
+            <div>
+                <h5 class="font-heading-5 text-zinc-900 font-bold">Lihat Data Siswa</h5>
+                <p class="font-paragraph-15 font-medium text-zinc-500">Sistem Pelanggaran Siswa</p>
+            </div>
         </div>
 
         <div class="mb-8">
@@ -425,7 +428,7 @@ $stmt->execute($params);
             <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium" id="m-telp-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Status Siswa</span><span class="font-medium text-zinc-900" id="m-status"></span></div>
         </div>
-        <div class="modal-action grid grid-cols-2 gap-4 mt-10">
+        <div class="modal-action grid grid-cols-2 gap-4 py-6 mt-6 border-t border-zinc-200">
             <button type="button" class="btn bg-zinc-100 border-zinc-200 text-zinc-800"
                 onclick="modal_view_siswa.close(); modal_edit_siswa.showModal()">
                 <span class="icon-edit"></span> Edit
@@ -440,9 +443,9 @@ $stmt->execute($params);
 
 <dialog id="modal_edit_siswa" class="modal">
     <div class="modal-box w-11/12 max-w-4xl bg-white p-8">
-        <div class="space-y-1 pb-8">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
-                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5">
+                <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
             <div>
                 <h5 class="font-heading-5 text-zinc-900 font-bold">Ubah data siswa</h5>
@@ -537,7 +540,7 @@ $stmt->execute($params);
                 </div>
             </div>
 
-            <div class="modal-action mt-10 gap-2">
+            <div class="modal-action mt-gap-2 pb-6 mt-6 pt-6 border-t border-zinc-200">
                 <button type="button" class="btn btn-ghost" onclick="modal_edit_siswa.close()">Batal</button>
                 <button type="submit" class="btn bg-zinc-900 hover:bg-zinc-800 text-white w-40 border-none">
                     Simpan Perubahan

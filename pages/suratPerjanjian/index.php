@@ -83,7 +83,7 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <!-- table goes here -->
-                    <div class="mt-6 space-y-2">
+                    <div class="mt-6 space-y-3">
                         <?php if (empty($suratList)): ?>
                             <div class="p-10 text-center border-2 border-dashed border-zinc-200 rounded-xl text-zinc-400">
                                 Belum ada data surat perjanjian.
@@ -153,8 +153,8 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </html>
 
 <dialog id="modal_add_surat_perjanjian" class="modal">
-    <div class="modal-box max-w-6xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
-        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
+    <div class="modal-box max-w-6xl bg-white p-10 rounded-lg border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-200 pb-6">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
             </div>
@@ -222,8 +222,8 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 pt-6 border-t border-zinc-100">
-                <button type="button" class="button-secondary" onclick="modal_add_surat_perjanjian.close()">Cancel</button>
+            <div class="flex justify-end gap-3 border-t pt-6 mt-8 border-zinc-200">
+                <button type="button" class="button-secondary" onclick="modal_add_surat_perjanjian.close()">Batal</button>
                 <button type="submit" class="button-primary flex items-center gap-2">
                     <span class="icon-check w-5 h-5"></span>
                     Simpan & Generate
@@ -234,8 +234,16 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </dialog>
 
 <dialog id="modal_edit_surat_perjanjian" class="modal">
-    <div class="modal-box max-w-2xl bg-white p-10 rounded-3xl border border-zinc-100">
-        <h2 class="text-2xl font-bold text-zinc-900 mb-6 tracking-tight">Edit Detail Perjanjian</h2>
+    <div class="modal-box max-w-2xl bg-white p-10 rounded-lg border border-zinc-100">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-200 pb-6">
+            <div class="p-2 border border-zinc-200 rounded-xl w-fit">
+                <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Edit Detail Perjanjian</h2>
+                <p class="text-sm text-zinc-500 font-medium">Edit dokumen pernyataan siswa secara otomatis</p>
+            </div>
+        </div>
 
         <form method="POST" action="edit_process.php" class="space-y-6">
             <input type="hidden" name="id_perjanjian" id="edit-id-perjanjian">
@@ -263,9 +271,11 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 pt-6 border-t">
-                <button type="button" class="button-secondary" onclick="modal_edit_surat_perjanjian.close()">Cancel</button>
-                <button type="submit" class="button-primary px-10">Simpan Perubahan</button>
+            <div class="flex justify-end gap-3 mt-8 torder-t border-zinc-200 pt-6">
+                <button type="button" class="button-secondary" onclick="modal_edit_surat_perjanjian.close()">Batal</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-5 h-5"></span>
+                    Simpan Perubahan</button>
             </div>
         </form>
     </div>

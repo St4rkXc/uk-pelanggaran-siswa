@@ -133,7 +133,7 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 
                                         <div class="w-px h-8 bg-zinc-100 mx-1"></div>
 
-                                        <a href="print_surat.php?id=<?= $item['id_surat_pindah'] ?>" target="_blank" class="button-primary flex items-center gap-2 px-5 py-2.5 shadow-lg shadow-zinc-100 bg-orange-600 hover:bg-orange-700 border-none">
+                                        <a href="print_surat.php?id=<?= $item['id_surat_pindah'] ?>" target="_blank" class="button-primary flex items-center gap-2 px-5 py-2.5 shadow-lg ">
                                             <span class="icon-print h-5 w-5"></span>
                                             <span class="font-bold">Cetak</span>
                                         </a>
@@ -152,10 +152,10 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 </html>
 
 <dialog id="modal_add_pindah" class="modal">
-    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
-        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
-            <div class="p-2 border border-orange-200 bg-orange-50 rounded-xl w-fit text-orange-600">
-                <span class="icon-logout w-8 h-8"></span>
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-lg border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-200 pb-6">
+            <div class="p-2 border border-zinc-200 rounded-xl w-fit">
+                <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
             </div>
             <div>
                 <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Buat Surat Pindah Sekolah</h2>
@@ -212,9 +212,10 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 pt-6 border-t">
-                <button type="button" class="button-secondary" onclick="modal_add_pindah.close()">Cancel</button>
-                <button type="submit" class="button-primary bg-orange-600 hover:bg-orange-700 border-none px-10">
+            <div class="flex justify-end gap-3 mt-8 border-t border-zinc-200 pt-6">
+                <button type="button" class="button-secondary" onclick="modal_add_pindah.close()">Batal</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-5 h-5"></span>
                     Nonaktifkan & Terbitkan
                 </button>
             </div>
@@ -223,7 +224,16 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 </dialog>
 
 <dialog id="modal_edit_pindah" class="modal">
-    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-lg border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-200 pb-6">
+            <div class="p-2 border border-zinc-200 rounded-xl w-fit">
+                <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Edit Surat Pindah Sekolah</h2>
+                <p class="text-sm text-zinc-500 font-medium">Data akan diubah berdasarkan data baru yang diinputkan</p>
+            </div>
+        </div>
         <form method="POST" action="edit_process.php" class="space-y-6">
             <input type="hidden" name="id_surat_pindah" id="edit-pindah-id">
 
@@ -267,8 +277,10 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
             </div>
 
             <div class="flex justify-end gap-3 pt-6 border-t">
-                <button type="button" class="button-secondary" onclick="modal_edit_pindah.close()">Cancel</button>
-                <button type="submit" class="button-primary bg-orange-600 border-none px-10">Update Data</button>
+                <button type="button" class="button-secondary" onclick="modal_edit_pindah.close()">Batal</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-5 h-5"></span>
+                    Update Data</button>
             </div>
         </form>
     </div>

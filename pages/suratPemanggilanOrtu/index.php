@@ -104,7 +104,7 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                         </div>
                     </div>
                     <!-- table goes here -->
-                    <div class="mt-6 space-y-4">
+                    <div class="mt-6 space-y-3">
                         <?php if (empty($panggilanList)): ?>
                             <div class="p-10 text-center border-2 border-dashed border-zinc-200 rounded-xl text-zinc-400">
                                 Belum ada jadwal pemanggilan orang tua.
@@ -173,8 +173,8 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 </html>
 
 <dialog id="modal_add_panggilan" class="modal">
-    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
-        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-lg border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 border-b pb-6 mb-8 border-zinc-200">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
             </div>
@@ -224,19 +224,26 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                     </div>
                 </div>
             </div>
-            <div class="flex justify-end gap-3 pt-6 border-t">
-                <button type="button" class="button-secondary" onclick="modal_add_panggilan.close()">Cancel</button>
-                <button type="submit" class="button-primary px-10">Simpan & Terbitkan</button>
+            <div class="flex justify-end gap-3 border-t pt-6 mt-8 border-zinc-200">
+                <button type="button" class="button-secondary" onclick="modal_add_panggilan.close()">Batal</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-6 h-6 text-white"></span>
+                    Simpan & Terbitkan</button>
             </div>
         </form>
     </div>
 </dialog>
 
 <dialog id="modal_edit_panggilan" class="modal">
-    <div class="modal-box max-w-5xl bg-white p-10 rounded-3xl border border-zinc-100 shadow-2xl">
-        <div class="flex flex-col gap-2 mb-8 border-b border-zinc-100 pb-6">
-            <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Edit Panggilan Orang Tua</h2>
-            <p class="text-sm text-zinc-500 font-medium">Perbarui jadwal atau keperluan pemanggilan</p>
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-lg border border-zinc-100 shadow-2xl">
+        <div class="flex flex-col gap-2 border-b pb-6 mb-8 border-zinc-200">
+            <div class="p-2 border border-zinc-200 rounded-xl w-fit">
+                <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
+            </div>
+            <div>
+                <h2 class="text-2xl font-bold text-zinc-900 tracking-tight">Edit Surat Pemanggilan Orang Tua</h2>
+                <p class="text-sm text-zinc-500 font-medium">Edit dokumen pemanggilan orang tua secara otomatis</p>
+            </div>
         </div>
 
         <form method="POST" action="edit_process.php" class="space-y-6">
@@ -269,9 +276,11 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 pt-6 border-t">
-                <button type="button" class="button-secondary" onclick="modal_edit_panggilan.close()">Cancel</button>
-                <button type="submit" class="button-primary px-10">Simpan Perubahan</button>
+            <div class="flex justify-end gap-3 border-t pt-6 mt-8 border-zinc-200 ">
+                <button type="button" class="button-secondary" onclick="modal_edit_panggilan.close()">Batal</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-6 h-6 text-white"></span>
+                    Simpan Perubahan</button>
             </div>
         </form>
     </div>

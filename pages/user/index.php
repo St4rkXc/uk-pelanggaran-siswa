@@ -57,7 +57,7 @@ $stmt->execute($params);
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 </head>
 
-<body class="bg-zinc-50 w-dvw">
+<body class="bg-zinc-50 overflow-x-hidden">
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">
@@ -131,29 +131,50 @@ $stmt->execute($params);
                     </div>
                     <div class="mt-3">
                         <div class="p-6 rounded-xl border border-zinc-300">
-                            <table class="w-full text-left table-auto">
+                            <table class="w-full text-left ">
                                 <thead>
-                                    <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                        <th class="py-3 px-2">No</th>
-                                        <th class="py-3 px-2">Username</th>
-                                        <th class="py-3 px-2">Role</th>
-                                        <th class="py-3 px-2">Action</th>
+                                    <tr class="bg-zinc-50/50">
+                                        <th class="p-4 my-th">Nama User</th>
+                                        <th class="p-4 my-th">Access Level</th>
+                                        <th class="py-3 px-4 border-b border-zinc-200"></th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-zinc-200">
-                                    <?php $no = 1;
-                                    while ($row = $stmt->fetch()): ?>
-                                        <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-colors cursor-pointer"
-                                            onclick="openModalUser(this)"
-                                            data-id="<?= $row['id_users']; ?>"
-                                            data-name="<?= htmlspecialchars($row['name']); ?>"
-                                            data-role="<?= htmlspecialchars($row['role']); ?>"
-                                            data-id-siswa="<?= $row['id_siswa'] ?? ''; ?>">
+                                    <?php
+                                    // Use the prepared statement above so search and role filter are applied.
+                                    while ($row = $stmt->fetch()):
+                                        // Logic warna badge berdasarkan role
+                                        $roleStyles = [
+                                            'admin' => 'bg-violet-50 text-violet-700 border-violet-200',
+                                            'guru_bk' => 'bg-blue-50 text-blue-700 border-blue-200',
+                                            'guru_mapel' => 'bg-zinc-100 text-zinc-700 border-zinc-200',
+                                            'siswa' => 'bg-green-50 text-green-700 border-green-200'
+                                        ];
+                                        $roleName = [
+                                            'admin' => 'Administrator',
+                                            'guru_bk' => 'Guru BK',
+                                            'guru_mapel' => 'Guru Mapel',
+                                            'siswa' => 'Siswa'
+                                        ];
+                                        $style = $roleStyles[$row['role']] ?? 'bg-zinc-50 text-zinc-600 border-zinc-200';
+                                        $label = $roleName[$row['role']] ?? $row['role'];
+                                    ?>
+                                        <tr class="border-b border-b-zinc-300">
+                                            <td class="py-4 px-4">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="h-9 w-9 rounded-full bg-zinc-100 flex items-center justify-center border border-zinc-300  transition-colors">
+                                                        <span class="text-xs font-bold text-zinc-500"><?= strtoupper(substr($row['name'], 0, 2)); ?></span>
+                                                    </div>
+                                                    <div class="flex flex-col">
+                                                        <span class="text-base font-semibold text-zinc-900 leading-tight"><?= htmlspecialchars($row['name']); ?></span>
+                                                    </div>
+                                                </div>
+                                            </td>
 
-                                            <td class="py-3 px-2 text-zinc-700"><?= $no++; ?></td>
-                                            <td class="py-3 px-2 text-zinc-800 font-medium"><?= htmlspecialchars($row['name'] ?? ''); ?></td>
-                                            <td class="py-3 px-2">
-                                                <span class="badge badge-ghost capitalize"><?= htmlspecialchars($row['role']); ?></span>
+                                            <td class="py-4 px-4">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full border text-[12px] font-bold tracking-tight <?= $style ?>">
+                                                    <?= htmlspecialchars($label); ?>
+                                                </span>
                                             </td>
 
                                             <td class="py-3 px-2">
@@ -168,6 +189,7 @@ $stmt->execute($params);
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
             </main>
         </div>
@@ -185,7 +207,7 @@ $stmt->execute($params);
         clearTimeout(timer);
         timer = setTimeout(() => {
             searchForm.submit();
-        }, 500); 
+        }, 500);
     });
 
 
@@ -228,7 +250,7 @@ $stmt->execute($params);
 
 <dialog id="modal_add_user" class="modal">
     <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
-        <div class="space-y-1 pb-8">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
                 <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
@@ -274,9 +296,12 @@ $stmt->execute($params);
                 </div>
             </div>
 
-            <div class="modal-action mt-8">
+            <div class="modal-action border-t pt-6 mt-8 border-zinc-200">
                 <button type="button" class="button-secondary" onclick="modal_add_user.close()">Batal</button>
-                <button type="submit" class="button-primary">Buat User</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-5 h-5"></span>
+                    Buat User
+                </button>
             </div>
         </form>
     </div>
@@ -324,6 +349,7 @@ $stmt->execute($params);
     });
 </script>
 
+<!-- !todo : ini coba di fungsikan sama di refined untuk uinya -->
 <dialog id="modal_view_user" class="modal">
     <div class="modal-box w-11/12 max-w-md bg-white p-8">
         <div class="flex flex-col items-center gap-4 mb-8">
@@ -349,7 +375,7 @@ $stmt->execute($params);
 
 <dialog id="modal_edit_user" class="modal">
     <div class="modal-box w-11/12 max-w-2xl bg-white p-8 text-left">
-        <div class="space-y-1 pb-8">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
                 <img src="<?php echo $imgPath; ?>" alt="" class="h-13 w-12.5  ">
             </div>
@@ -380,9 +406,12 @@ $stmt->execute($params);
                     </select>
                 </div>
             </div>
-            <div class="modal-action mt-8">
+            <div class="modal-action border-t pt-6 mt-8 border-zinc-200">
                 <button type="button" class="button-secondary" onclick="modal_edit_user.close()">Batal</button>
-                <button type="submit" class="button-primary">Simpan Perubahan</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-5 h-5"></span>
+                    Simpan
+                </button>
             </div>
         </form>
     </div>

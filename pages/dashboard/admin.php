@@ -116,12 +116,12 @@ $currentUser = [
                             <table class="w-full text-left table-auto">
                                 <thead class="p-4">
                                     <tr class=" text-zinc-800 font-paragraph-16 font-medium  ">
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">Nama</th>
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">Kelas</th>
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">NIS</th>
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">NISN</th>
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">Poin</th>
-                                        <th class=" py-3  border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500 ">Jurusan</th>
+                                        <th class=" my-th ">Nama</th>
+                                        <th class=" my-th ">Kelas</th>
+                                        <th class=" my-th ">NIS</th>
+                                        <th class=" my-th ">NISN</th>
+                                        <th class=" my-th ">Poin</th>
+                                        <th class=" my-th ">Jurusan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-zinc-200">
@@ -170,8 +170,8 @@ $currentUser = [
                         <table class="w-full text-left ">
                             <thead>
                                 <tr class="bg-zinc-50/50">
-                                    <th class="py-3 px-4 border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500">Nama User</th>
-                                    <th class="py-3 px-4 border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500">Access Level</th>
+                                    <th class="p-4 my-th">Nama User</th>
+                                    <th class="p-4 my-th">Access Level</th>
                                     <th class="py-3 px-4 border-b border-zinc-200"></th>
                                 </tr>
                             </thead>

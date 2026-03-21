@@ -91,8 +91,8 @@ $stmt = $pdo->query($sql);
                     <div class="rounded-lg border border-zinc-300 p-8">
                         <table class="w-full text-left table-auto">
                             <thead>
-                                <tr class="text-zinc-800 font-paragraph-16 font-medium border-b border-zinc-200">
-                                    <th class="px-2 py-3">No</th>
+                                <tr class="my-th">
+
                                     <th class="px-2 py-3">Nama Siswa</th>
                                     <th class="px-2 py-3">Kelas</th>
                                     <th class="px-2 py-3">Pelanggaran</th>
@@ -105,7 +105,6 @@ $stmt = $pdo->query($sql);
                                 <?php
                                 $no = 1;
                                 while ($row = $stmt->fetch()):
-                                    // Formatting tanggal biar enak dibaca
                                     $waktu = date('d M Y, H:i', strtotime($row['tanggal_pelaporan']));
                                 ?>
                                     <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer" onclick="openViewPelanggaran(this)"
@@ -119,7 +118,7 @@ $stmt = $pdo->query($sql);
                                         data-id="<?= $row['id_pelanggaran']; ?>">
 
 
-                                        <td class=" py-4 px-2 text-zinc-600"><?= $no++; ?></td>
+                                        <td class=" py-4 px-2 text-zinc-600 hidden"><?= $no++; ?></td>
                                         <td class="py-4 px-2">
                                             <div class="font-medium text-zinc-900"><?= htmlspecialchars($row['nama_siswa']); ?></div>
                                         </td>
@@ -163,8 +162,8 @@ $stmt = $pdo->query($sql);
 
 <!-- modal view pelanggaran -->
 <dialog id="modal_view_pelanggaran" class="modal">
-    <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
-        <div class="flex flex-col gap-2 mb-8">
+    <div class="modal-box w-11/12 max-w-2xl bg-white p-8 rounded-lg">
+        <div class="flex flex-col gap-2 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
             </div>
@@ -206,7 +205,7 @@ $stmt = $pdo->query($sql);
                 <span class="icon-trash w-5 h-5"></span> Delete
             </button>
             <button type="button" class="button-primary " onclick="modal_view_pelanggaran.close()">
-                <span class="icon-arrow-left w-5 h-5"></span> Back
+                <span class="icon-arrow-left w-5 h-5"></span> Kembali
             </button>
         </div>
     </div>
@@ -214,8 +213,8 @@ $stmt = $pdo->query($sql);
 
 <!-- Modal add pelanggaran -->
 <dialog id="modal_add_pelanggaran" class="modal">
-    <div class="modal-box max-w-4xl bg-white p-10 rounded-3xl border border-zinc-100">
-        <div class="flex flex-col gap-2 mb-8">
+    <div class="modal-box max-w-5xl bg-white p-10 rounded-lg border border-zinc-100">
+        <div class="flex flex-col gap-2 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $imgPath; ?>" class="h-12 w-12 object-contain">
             </div>
@@ -274,9 +273,9 @@ $stmt = $pdo->query($sql);
                 </div>
             </div>
 
-            <div class="modal-action flex justify-end gap-3 mt-10">
-                <button type="button" class="button-primary" onclick="modal_add_pelanggaran.close()">Cancel</button>
-                <button type="submit" class="button-secondary flex flex-row items-center">
+            <div class="modal-action flex justify-end border-t pt-6 mt-8 border-zinc-200">
+                <button type="button" class="button-secondary" onclick="modal_add_pelanggaran.close()">Batal</button>
+                <button type="submit" class="button-primary flex flex-row items-center">
                     <span class="icon-check w-5 h-5 mr-1"></span> Simpan
                 </button>
             </div>

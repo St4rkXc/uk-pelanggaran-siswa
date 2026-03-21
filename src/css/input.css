@@ -79,6 +79,9 @@
     .form-control {
         @apply space-y-2;
     }
+    .my-th {
+        @apply py-3 border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500
+    }
 }
 
 @layer components {

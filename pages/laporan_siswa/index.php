@@ -57,7 +57,7 @@ $currentUser = [
         <aside class="sidebar print:hidden shrink-0 border-r border-zinc-200">
             <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         </aside>
-        <div class="flex-1 overflow-x-hidden w-full bg-slate-50">
+        <div class="flex-1 overflow-x-hidden w-full bg-zinc-50">
             <div class="print:hidden">
                 <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
             </div>

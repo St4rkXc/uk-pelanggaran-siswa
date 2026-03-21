@@ -39,7 +39,7 @@ $currentUser = [
                 <div class="p-8 rounded-lg border border-zinc-300 mt-4">
                     <table class="w-full text-left table-auto">
                         <thead>
-                            <tr class=" text-zinc-800 font-paragraph-16 font-medium">
+                            <tr class=" my-th">
                                 <th class="px-2 py-3">No</th>
                                 <th class="px-2 py-3">Jenis Pelanggaran</th>
                                 <th class="px-2 py-3">Deskripsi</th>
@@ -108,7 +108,7 @@ $currentUser = [
 
 <dialog id="modal_add_jenis_penaggaran" class="modal">
     <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
-        <div class="space-y-1 pb-8">
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
                 <img src="<?= $imgPath; ?>" alt="Logo" class="h-13 w-12.5">
             </div>
@@ -137,9 +137,12 @@ $currentUser = [
                 </div>
             </div>
 
-            <div class="modal-action mt-8">
+            <div class="modal-action border-t pt-6 mt-8 border-zinc-200">
                 <button type="button" class="button-secondary" onclick="modal_add_jenis_penaggaran.close()">Batal</button>
-                <button type="submit" class="button-primary">Simpan Master Data</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-6 h-6 text-white"></span>
+                    Simpan
+                </button>
             </div>
         </form>
     </div>
@@ -147,9 +150,14 @@ $currentUser = [
 
 <dialog id="modal_edit_jenis_pelanggaran" class="modal">
     <div class="modal-box w-11/12 max-w-2xl bg-white p-8">
-        <div class="space-y-1 pb-8 text-left">
-            <h5 class="font-heading-5 text-zinc-900 font-bold">Ubah Jenis Pelanggaran</h5>
-            <p class="font-paragraph-15 font-medium text-zinc-500">Perbarui master data bobot poin.</p>
+        <div class="space-y-1 border-b pb-6 mb-6 border-zinc-200">
+            <div class="p-3 rounded-2xl border border-zinc-300 w-fit bg-zinc-50">
+                <img src="<?= $imgPath; ?>" alt="Logo" class="h-13 w-12.5">
+            </div>
+            <div>
+                <h5 class="font-heading-5 text-zinc-900 font-bold">Ubah Jenis Pelanggaran</h5>
+                <p class="font-paragraph-15 font-medium text-zinc-500">Perbarui master data bobot poin pelanggaran.</p>
+            </div>
         </div>
 
         <form method="POST" action="edit_process.php">
@@ -171,9 +179,12 @@ $currentUser = [
                 </div>
             </div>
 
-            <div class="modal-action mt-8">
+            <div class="modal-action border-t pt-6 mt-8 border-zinc-200">
                 <button type="button" class="button-secondary" onclick="modal_edit_jenis_pelanggaran.close()">Batal</button>
-                <button type="submit" class="button-primary">Simpan Perubahan</button>
+                <button type="submit" class="button-primary flex items-center gap-2">
+                    <span class="icon-check w-6 h-6 text-white"></span>
+                    Simpan
+                </button>
             </div>
         </form>
     </div>
