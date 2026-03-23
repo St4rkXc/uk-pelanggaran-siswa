@@ -128,7 +128,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
                         class="my-input input-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" />
                 </div>
 
-                
+
             </form>
 
             <div class="overflow-x-auto">
@@ -195,7 +195,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
 
 <dialog id="modal_add_pelanggaran" class="modal">
     <div class="modal-box max-w-6xl bg-white p-10 rounded-lg border border-zinc-100">
-        <div class="flex flex-col gap-2 mb-8">
+        <div class="flex flex-col gap-2  border-b pb-6 mb-6 border-zinc-200">
             <div class="p-2 border border-zinc-200 rounded-xl w-fit">
                 <img src="<?= $logoPath; ?>" class="h-12 w-12 object-contain">
             </div>
@@ -241,7 +241,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
                         <select name="id_jenis" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
                             <option value="" disabled selected>Pilih Pelanggaran</option>
                             <?php
-                            $jenisStmt = $pdo->query("SELECT id_jenis, nama_jenis, point FROM jenis_pelanggaran ORDER BY nama_jenis ASC");
+                            $jenisStmt = $pdo->query("SELECT id_jenis, nama_jenis, point FROM jenis_pelanggaran ORDER BY point ASC");
                             while ($jp = $jenisStmt->fetch()) echo "<option value='{$jp['id_jenis']}'>{$jp['nama_jenis']} (-{$jp['point']} Point)</option>";
                             ?>
                         </select>
@@ -254,9 +254,9 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
 
-            <div class="modal-action flex justify-end gap-3 mt-10">
-                <button type="button" class="button-primary" onclick="modal_add_pelanggaran.close()">Cancel</button>
-                <button type="submit" class="button-secondary flex flex-row items-center">
+            <div class="modal-action flex justify-end border-t pt-6 mt-8 border-zinc-200">
+                <button type="button" class="button-secondary" onclick="modal_add_pelanggaran.close()">Batal</button>
+                <button type="submit" class="button-primary flex flex-row items-center">
                     <span class="icon-check w-5 h-5 mr-1"></span> Simpan
                 </button>
             </div>
@@ -296,7 +296,6 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
         const selKelas = document.getElementById('select-kelas');
         const selSiswa = document.getElementById('select-siswa-final');
 
-        // 1. Saat Jurusan dipilih -> Cari Kelas yang ada di Jurusan itu
         selJurusan.addEventListener('change', async function() {
             const val = encodeURIComponent(this.value);
             console.log("Fetching kelas for: " + this.value);

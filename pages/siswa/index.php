@@ -1,26 +1,28 @@
 <?php
 session_start();
+
 $requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     exit;
 }
+
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
-
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
 ];
 
+// Stats
 $jumlahSiswa = dbCount($pdo, 'Siswa');
 $jumlahPelanggaran = dbCount($pdo, 'Pelanggaran');
 
+// Student Data Logic
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$filterType = isset($_GET['filter_type']) ? $_GET['filter_type'] : '';
 $query = "SELECT * FROM siswa";
 $params = [];
 
@@ -28,6 +30,7 @@ if (!empty($search)) {
     $query .= " WHERE nama_siswa LIKE ? OR nis LIKE ?";
     $params = ["%$search%", "%$search%"];
 }
+
 $query .= " ORDER BY id_siswa DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
@@ -86,115 +89,67 @@ $stmt->execute($params);
 
                                     <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
                                 </div>
-
-                                <select name="filter_type" onchange="this.form.submit()" class="p-3 rounded-lg border border-zinc-300 focus:outline-none bg-white">
-                                    <option value="siswa" <?= $filterType == 'siswa' ? 'selected' : '' ?>>Data Siswa</option>
-                                    <option value="pelanggaran" <?= $filterType == 'pelanggaran' ? 'selected' : '' ?>>Data Pelanggaran</option>
-                                </select>
                             </form>
 
                             <button class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
                         </div>
                     </div>
+
                     <div class="rounded-2xl border border-zinc-300 p-6 h-fit mt-4">
                         <div class="mt-3">
-                            <?php if ($filterType === 'siswa' || $filterType === ''): ?>
-                                <table class="w-full text-left table-auto">
-                                    <thead>
-                                        <tr class="">
-                                            <th class="my-th">No</th>
-                                            <th class="my-th">Nama</th>
-                                            <th class="my-th">Kelas</th>
-                                            <th class="my-th">NIS</th>
-                                            <th class="my-th">NISN</th>
-                                            <th class="my-th">Poin</th>
-                                            <th class="my-th">Jurusan</th>
+                            <table class="w-full text-left table-auto">
+                                <thead>
+                                    <tr class="">
+                                        <th class="my-th">No</th>
+                                        <th class="my-th">Nama</th>
+                                        <th class="my-th">Kelas</th>
+                                        <th class="my-th">NIS</th>
+                                        <th class="my-th">NISN</th>
+                                        <th class="my-th">Poin</th>
+                                        <th class="my-th">Jurusan</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-zinc-200">
+                                    <?php
+                                    $no = 1;
+                                    while ($row = $stmt->fetch()):
+                                    ?>
+                                        <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-colors cursor-pointer"
+                                            onclick="openModalSiswa(this)"
+                                            data-id="<?= $row['id_siswa']; ?>"
+                                            data-nama="<?= htmlspecialchars($row['nama_siswa']); ?>"
+                                            data-kelas="<?= htmlspecialchars($row['kelas']); ?>"
+                                            data-nis="<?= htmlspecialchars($row['nis']); ?>"
+                                            data-nisn="<?= htmlspecialchars($row['nisn']); ?>"
+                                            data-point="<?= htmlspecialchars($row['point']); ?>"
+                                            data-jurusan="<?= htmlspecialchars($row['jurusan']); ?>"
+                                            data-jk="<?= $row['jenis_kelamin'] == 1 ? 'Laki-laki' : 'Perempuan'; ?>"
+                                            data-alamat="<?= htmlspecialchars($row['alamat_rumah'] ?? '-'); ?>"
+                                            data-ortu="<?= htmlspecialchars($row['nama_ortu'] ?? '-'); ?>"
+                                            data-kerja-ortu="<?= htmlspecialchars($row['pekerjaan_ortu'] ?? '-'); ?>"
+                                            data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
+                                            data-status="<?= $row['status']; ?>">
+
+                                            <td class="px-2 py-3 text-zinc-700"><?= $no++; ?></td>
+                                            <td class="px-2 py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
+                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
+                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                         </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-zinc-200">
-                                        <?php
-                                        $no = 1;
-                                        while ($row = $stmt->fetch()):
-                                        ?>
-                                            <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-colors cursor-pointer "
-                                                onclick="openModalSiswa(this)"
-                                                data-id="<?= $row['id_siswa']; ?>"
-                                                data-nama="<?= htmlspecialchars($row['nama_siswa']); ?>"
-                                                data-kelas="<?= htmlspecialchars($row['kelas']); ?>"
-                                                data-nis="<?= htmlspecialchars($row['nis']); ?>"
-                                                data-nisn="<?= htmlspecialchars($row['nisn']); ?>"
-                                                data-point="<?= htmlspecialchars($row['point']); ?>"
-                                                data-jurusan="<?= htmlspecialchars($row['jurusan']); ?>"
-                                                data-jk="<?= $row['jenis_kelamin'] == 1 ? 'Laki-laki' : 'Perempuan'; ?>"
-                                                data-alamat="<?= htmlspecialchars($row['alamat_rumah'] ?? '-'); ?>"
-                                                data-ortu="<?= htmlspecialchars($row['nama_ortu'] ?? '-'); ?>"
-                                                data-kerja-ortu="<?= htmlspecialchars($row['pekerjaan_ortu'] ?? '-'); ?>"
-                                                data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
-                                                data-status="<?= $row['status']; ?>">
+                                    <?php endwhile; ?>
 
-                                                <td class="px-2 py-3 text-zinc-700"><?= $no++; ?></td>
-                                                <td class="px-2 py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
-                                                <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
-                                            </tr>
-                                        <?php endwhile; ?>
-
-                                        <?php if ($no === 1): ?>
-                                            <tr>
-                                                <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                    Data "<?= htmlspecialchars($search) ?>" Coba kata kunci lain.
-                                                </td>
-                                            </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            <?php endif;  ?>
+                                    <?php if ($no === 1): ?>
+                                        <tr>
+                                            <td colspan="7" class="p-6 text-center text-zinc-500 italic">
+                                                Data "<?= htmlspecialchars($search) ?>" tidak ditemukan. Coba kata kunci lain.
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
-                        <?php if ($filterType === 'pelanggaran'): ?>
-                            <div class="mt-3">
-                                <table class="w-full text-left table-auto">
-                                    <thead>
-                                        <tr class="bg-zinc-50 text-zinc-800 font-paragraph-16 font-medium">
-                                            <th class="">No</th>
-                                            <th class="">Nama</th>
-                                            <th class="">Kelas</th>
-                                            <th class="">Pelanggaran</th>
-                                            <th class="">Pelapor</th>
-                                            <th class="">Waktu</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-zinc-200">
-
-                                        <?php
-                                        $no = 1;
-                                        $stmtPelanggaran = $pdo->prepare("SELECT p.*, s.nama_siswa, s.kelas FROM pelanggaran p JOIN siswa s ON p.id_siswa = s.id_siswa WHERE s.nama_siswa LIKE ? OR s.nis LIKE ? ORDER BY p.id_pelanggaran DESC");
-                                        while ($row = $stmtPelanggaran->fetch()):
-                                        ?>
-                                            <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-colors">
-                                                <td class="py-3 text-zinc-700"><?= $no++; ?></td>
-                                                <td class="py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                                <td class="py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['kelas']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['pelanggaran']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['pelapor']); ?></td>
-                                                <td class="py-3 text-zinc-600"><?= htmlspecialchars($row['waktu']); ?></td>
-
-                                            </tr>
-                                        <?php endwhile; ?>
-
-                                        <?php if ($no === 1): ?>
-                                            <tr>
-                                                <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                    Data "<?= htmlspecialchars($search) ?>" Data tidak ada
-                                                </td>
-                                            </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        <?php endif; ?>
                     </div>
 
                 </div>
@@ -209,12 +164,15 @@ $stmt->execute($params);
     const searchForm = document.getElementById('searchForm');
     let timer;
 
+    // Search with debounce
     searchInput.addEventListener('input', () => {
         clearTimeout(timer);
         timer = setTimeout(() => {
             searchForm.submit();
-        }, 500); // submit setiap 500 ms 
+        }, 500);
     });
+
+    // Auto focus search input on load
     window.onload = () => {
         const val = searchInput.value;
         searchInput.value = '';
@@ -222,11 +180,15 @@ $stmt->execute($params);
         searchInput.value = val;
     };
 
+    /**
+     * Opens the student details modal and populates view/edit fields.
+     * @param {HTMLElement} el The table row element containing data attributes.
+     */
     function openModalSiswa(el) {
         const get = (attr) => el.getAttribute('data-' + attr);
 
-
-        const viewFields = {
+        // Map data attributes to view/edit element IDs
+        const fieldMapping = {
             'm-nama': get('nama'),
             'm-kelas': get('kelas'),
             'm-point': get('point'),
@@ -238,25 +200,7 @@ $stmt->execute($params);
             'm-jurusan': get('jurusan'),
             'm-nama-ortu': get('ortu'),
             'm-kerja-ortu': get('kerja-ortu'),
-            'm-telp-ortu': get('telp-ortu')
-        };
-
-        Object.keys(viewFields).forEach(id => {
-            const target = document.getElementById(id);
-            if (target) {
-                target.innerText = viewFields[id] || '-';
-
-                if (id === 'm-status') {
-                    target.className = 'badge font-medium ';
-                    if (viewFields[id] === 'Aktif') target.classList.add('badge-success');
-                    else if (viewFields[id] === 'Pindah') target.classList.add('badge-warning');
-                    else target.classList.add('badge-error', 'text-white');
-                }
-            }
-        });
-
-
-        const editFields = {
+            'm-telp-ortu': get('telp-ortu'),
             'edit-id': get('id'),
             'edit-nama': get('nama'),
             'edit-nis': get('nis'),
@@ -266,15 +210,31 @@ $stmt->execute($params);
             'edit-kerja-ortu': get('kerja-ortu'),
             'edit-telp-ortu': get('telp-ortu'),
             'edit-point': get('point'),
-            'edit-status': get('status') // Set value select status
+            'edit-status': get('status')
         };
 
-        Object.keys(editFields).forEach(id => {
+        // Populate text and values
+        Object.entries(fieldMapping).forEach(([id, value]) => {
             const target = document.getElementById(id);
-            if (target) target.value = editFields[id] || '';
+            if (!target) return;
+
+            if (target.tagName === 'INPUT' || target.tagName === 'SELECT') {
+                target.value = value || '';
+            } else {
+                target.innerText = value || '-';
+            }
+
+            // Handle status badge styling
+            if (id === 'm-status') {
+                target.className = 'badge font-medium ' + (
+                    value === 'Aktif' ? 'badge-success' :
+                    value === 'Pindah' ? 'badge-warning' :
+                    'badge-error text-white'
+                );
+            }
         });
 
-
+        // Handle special selects
         const setSelect = (id, val) => {
             const target = document.getElementById(id);
             if (target) target.value = val;
