@@ -114,7 +114,7 @@ $currentUser = [
                         </div>
                         <div class="mt-3">
                             <table class="w-full text-left table-auto">
-                                <thead class="p-4">
+                                <thead>
                                     <tr class=" text-zinc-800 font-paragraph-16 font-medium  ">
                                         <th class=" my-th ">Nama</th>
                                         <th class=" my-th ">Kelas</th>
@@ -132,16 +132,16 @@ $currentUser = [
                                     while ($row = $stmt->fetch()):
                                     ?>
                                         <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 hover:cursor-pointer duration-200  ">
-                                            <td class=" py-4 text-zinc-800 font-medium flex gap-4 items-center">
+                                            <td class="text-sm text-zinc-800 font-medium flex gap-4 items-center p-4">
                                                 <div class="p-3 bg-zinc-100 border border-zinc-300 rounded-full flex justify-center items-center">
                                                     <span class="icon-user h-4 w-4 text-zinc-500"></span>
                                                 </div>
                                                 <?= htmlspecialchars($row['nama_siswa']); ?>
                                             </td>
-                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                            <td class=" py-4 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                            <td class=" py-4  ">
+                                            <td class="text-sm p-4 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                            <td class="text-sm p-4 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                            <td class="text-sm p-4 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                            <td class=" p-4  ">
                                                 <div class="text-center p-1 rounded-full text-[12px] font-medium <?php
                                                                                                                     $point = (int)$row['point'];
                                                                                                                     if ($point < 20) {
@@ -155,7 +155,7 @@ $currentUser = [
                                                     <?= htmlspecialchars($row['point']); ?>
                                                 </div>
                                             </td>
-                                            <td class=" py-4 pl-2 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
+                                            <td class="text-sm p-4 pl-2 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
@@ -170,8 +170,8 @@ $currentUser = [
                         <table class="w-full text-left ">
                             <thead>
                                 <tr class="bg-zinc-50/50">
-                                    <th class="p-4 my-th">Nama User</th>
-                                    <th class="p-4 my-th">Access Level</th>
+                                    <th class=" my-th">Nama User</th>
+                                    <th class=" my-th">Access Level</th>
                                     <th class="py-3 px-4 border-b border-zinc-200"></th>
                                 </tr>
                             </thead>
@@ -194,13 +194,13 @@ $currentUser = [
                                     $label = $roleName[$row['role']] ?? $row['role'];
                                 ?>
                                     <tr class="border-b border-b-zinc-300">
-                                        <td class="py-4 px-4">
+                                        <td class="p-4">
                                             <div class="flex items-center gap-3">
                                                 <div class="h-9 w-9 rounded-full bg-zinc-100 flex items-center justify-center border border-zinc-300  transition-colors">
                                                     <span class="text-xs font-bold text-zinc-500"><?= strtoupper(substr($row['name'], 0, 2)); ?></span>
                                                 </div>
                                                 <div class="flex flex-col">
-                                                    <span class="text-sm font-semibold text-zinc-900 leading-tight"><?= htmlspecialchars($row['name']); ?></span>
+                                                    <span class="text-sm  text-zinc-900 leading-tight"><?= htmlspecialchars($row['name']); ?></span>
                                                 </div>
                                             </div>
                                         </td>
@@ -211,11 +211,7 @@ $currentUser = [
                                             </span>
                                         </td>
 
-                                        <td class="py-4 px-4 text-right">
-                                            <button class="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-zinc-200 rounded-md text-zinc-500">
-                                                <span class="icon-settings text-sm"></span>
-                                            </button>
-                                        </td>
+                                       
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>

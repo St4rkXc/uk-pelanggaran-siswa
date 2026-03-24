@@ -36,15 +36,15 @@ $currentUser = [
                         <div class="button-primary" onclick="modal_add_jenis_penaggaran.showModal()">Add</div>
                     </div>
                 </div>
-                <div class="p-8 rounded-lg border border-zinc-300 mt-4">
-                    <table class="w-full text-left table-auto">
+                <div class="p-6 rounded-2xl border border-zinc-300 mt-4">
+                    <table class="w-full text-left table-auto mt-3">
                         <thead>
                             <tr class=" my-th">
-                                <th class="px-2 py-3">No</th>
-                                <th class="px-2 py-3">Jenis Pelanggaran</th>
-                                <th class="px-2 py-3">Deskripsi</th>
-                                <th class="px-2 py-3">Pengurangan Poin</th>
-                                <th class="px-2 py-3">Action</th>
+                                <th class="my-th">No</th>
+                                <th class="my-th">Jenis Pelanggaran</th>
+                                <th class="my-th">Deskripsi</th>
+                                <th class="my-th">Pengurangan Poin</th>
+                                <th class="my-th">Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-zinc-200">
@@ -59,11 +59,11 @@ $currentUser = [
                                     data-deskripsi="<?= htmlspecialchars($row['deskripsi']); ?>"
                                     data-point="<?= $row['point']; ?>">
 
-                                    <td class="py-3 px-2 text-zinc-600"><?= $no++; ?></td>
-                                    <td class="py-3 px-2 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_jenis']); ?></td>
-                                    <td class="py-3 px-2 text-zinc-600"><?= htmlspecialchars($row['deskripsi']); ?></td>
-                                    <td class="py-3 px-2 text-zinc-600 font-bold"><?= htmlspecialchars($row['point']); ?> Poin</td>
-                                    <td class="py-3 px-2">
+                                    <td class="p-4 text-zinc-600"><?= $no++; ?></td>
+                                    <td class="p-4 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_jenis']); ?></td>
+                                    <td class="p-4 text-zinc-600"><?= htmlspecialchars($row['deskripsi']); ?></td>
+                                    <td class="p-4 text-red-600 font-bold">-<?= htmlspecialchars($row['point']); ?> Poin</td>
+                                    <td class="p-4">
                                         <div class="flex gap-2">
                                             <button type="button" class="button-secondary px-3 py-1 flex items-center gap-2" onclick="openEditJenisModal(this.closest('tr'))">
                                                 <span class="icon-edit w-4 h-4 text-zinc-800"></span>

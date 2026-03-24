@@ -23,12 +23,30 @@ $jumlahPelanggaran = dbCount($pdo, 'Pelanggaran');
 
 // Student Data Logic
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$query = "SELECT * FROM siswa";
+$jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
+$kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+
+// Fetch all classes and majors for filters
+$all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
+$all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
+
+$query = "SELECT * FROM siswa WHERE 1=1";
 $params = [];
 
 if (!empty($search)) {
-    $query .= " WHERE nama_siswa LIKE ? OR nis LIKE ?";
-    $params = ["%$search%", "%$search%"];
+    $query .= " AND (nama_siswa LIKE ? OR nis LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
+if (!empty($jurusan_filter)) {
+    $query .= " AND jurusan = ?";
+    $params[] = $jurusan_filter;
+}
+
+if (!empty($kelas_filter)) {
+    $query .= " AND kelas = ?";
+    $params[] = $kelas_filter;
 }
 
 $query .= " ORDER BY id_siswa DESC";
@@ -50,57 +68,68 @@ $stmt->execute($params);
 <body class="bg-zinc-50 w-dvw overflow-x-hidden">
     <div class="flex w-full h-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
-        <div class=" flex-1">
+        <div class="flex-1">
             <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
-            <main class="p-6  gap-6">
+            <main class="p-6 gap-6">
                 <div class="grid grid-cols-4 gap-4">
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
                         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
-                            <span class="icon-user h-6 w-6 "></span>
+                            <span class="icon-user h-6 w-6"></span>
                         </div>
                         <div>
                             <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahSiswa); ?> Siswa</h5>
-                            <p class="font-paragraph-14 font font-medium text-zinc-600">Total Siswa Tercatat</p>
+                            <p class="font-paragraph-14 font-medium text-zinc-600">Total Siswa Tercatat</p>
                         </div>
                     </div>
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
                         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
-                            <span class="icon-siren h-6 w-6 "></span>
+                            <span class="icon-siren h-6 w-6"></span>
                         </div>
                         <div>
                             <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahPelanggaran) ?> Pelanggaran</h5>
-                            <p class="font-paragraph-14 font font-medium text-zinc-600">Total Pelanggaran Tercatat</p>
+                            <p class="font-paragraph-14 font-medium text-zinc-600">Total Pelanggaran Tercatat</p>
                         </div>
                     </div>
                 </div>
                 <div class="w-full mt-6 gap-4">
-                    <div class="flex justify-between items-center">
-                        <h5 class="font-paragraph-16 font-semibold  text-zinc-800">Tabel Data Siswa</h5>
-                        <div class="flex gap-2">
-                            <form method="GET" id="searchForm" class="gap-2 flex">
-                                <div class="relative flex items-center">
-                                    <input type="text"
-                                        id="searchInput"
-                                        name="search"
-                                        value="<?= htmlspecialchars($search) ?>"
-                                        class="rounded-lg border border-zinc-300 py-3 px-4 pr-10 w-65 placeholder:text-[14px] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Cari nama atau NIS..."
-                                        autocomplete="off">
-
-                                    <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
+                    <form method="GET" id="searchForm" class="flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <h5 class="font-paragraph-16 font-semibold text-zinc-800">Tabel Data Siswa</h5>
+                            <div class="flex gap-2">
+                                <div class="flex gap-2">
+                                    <select name="jurusan_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                        <option value="">Semua Jurusan</option>
+                                        <?php foreach ($all_jurusan as $j): ?>
+                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusan_filter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                        <option value="">Semua Kelas</option>
+                                        <?php foreach ($all_kelas as $k): ?>
+                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="relative flex items-center">
+                                        <input type="text"
+                                            id="searchInput"
+                                            name="search"
+                                            value="<?= htmlspecialchars($search) ?>"
+                                            class="rounded-lg border border-zinc-300 py-3 px-4 pr-10 w-65 placeholder:text-[14px] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Cari nama atau NIS..."
+                                            autocomplete="off">
+                                        <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
+                                    </div>
                                 </div>
-                            </form>
-
-                            <button class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
+                                <button type="button" class="button-primary flex items-center justify-center" onclick="modal_add_siswa.showModal()">Add</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="rounded-2xl border border-zinc-300 p-6 h-fit mt-4">
-                        <div class="mt-3">
+                        <div class="mt-3 overflow-x-auto">
                             <table class="w-full text-left table-auto">
                                 <thead>
-                                    <tr class="">
-                                        <th class="my-th">No</th>
+                                    <tr class="text-zinc-800 font-paragraph-16 font-medium">
                                         <th class="my-th">Nama</th>
                                         <th class="my-th">Kelas</th>
                                         <th class="my-th">NIS</th>
@@ -130,20 +159,60 @@ $stmt->execute($params);
                                             data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
                                             data-status="<?= $row['status']; ?>">
 
-                                            <td class="px-2 py-3 text-zinc-700"><?= $no++; ?></td>
-                                            <td class="px-2 py-3 text-zinc-800 font-medium"><?= htmlspecialchars($row['nama_siswa']); ?></td>
-                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
-                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
-                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['point']); ?></td>
-                                            <td class="px-2 py-3 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
+                                            <td class="p-4 text-zinc-800 font-medium flex gap-4 items-center">
+                                                <div class="p-3 bg-zinc-100 border border-zinc-300 rounded-full flex justify-center items-center">
+                                                    <span class="icon-user h-4 w-4 text-zinc-500"></span>
+                                                </div>
+                                                <?= htmlspecialchars($row['nama_siswa']); ?>
+                                            </td>
+                                            <td class="p-4 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                            <td class="p-4 text-zinc-600"><?= htmlspecialchars($row['nis']); ?></td>
+                                            <td class="p-4 text-zinc-600"><?= htmlspecialchars($row['nisn']); ?></td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2 text-center py-1 px-4 h-fit w-fit rounded-full text-[12px] font-medium <?php
+                                                                                                                                                            $point = (int)$row['point'];
+                                                                                                                                                            if ($point < 20) {
+                                                                                                                                                                echo 'bg-red-200 text-red-800';
+                                                                                                                                                            } elseif ($point < 50) {
+                                                                                                                                                                echo 'bg-yellow-200 text-yellow-800';
+                                                                                                                                                            } else {
+                                                                                                                                                                echo 'bg-green-200 text-green-800';
+                                                                                                                                                            }
+                                                                                                                                                            ?>">
+                                                    <span class="relative flex size-2">
+                                                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full <?php
+                                                                                                                                    $point = (int)$row['point'];
+                                                                                                                                    if ($point < 20) {
+                                                                                                                                        echo 'bg-red-500';
+                                                                                                                                    } elseif ($point < 50) {
+                                                                                                                                        echo 'bg-yellow-500';
+                                                                                                                                    } else {
+                                                                                                                                        echo 'bg-green-500';
+                                                                                                                                    }
+                                                                                                                                    ?> opacity-75"></span>
+                                                        <span class="relative inline-flex size-2 rounded-full <?php
+                                                                                                                $point = (int)$row['point'];
+                                                                                                                if ($point < 20) {
+                                                                                                                    echo 'bg-red-600';
+                                                                                                                } elseif ($point < 50) {
+                                                                                                                    echo 'bg-yellow-600';
+                                                                                                                } else {
+                                                                                                                    echo 'bg-green-600';
+                                                                                                                }
+                                                                                                                ?>"></span>
+                                                    </span>
+                                                    <?= htmlspecialchars($row['point']); ?>
+                                                </div>
+                                            </td>
+                                            <td class="p-4 pl-2 text-zinc-600"><?= htmlspecialchars($row['jurusan']); ?></td>
                                         </tr>
-                                    <?php endwhile; ?>
+                                    <?php $no++;
+                                    endwhile; ?>
 
                                     <?php if ($no === 1): ?>
                                         <tr>
-                                            <td colspan="7" class="p-6 text-center text-zinc-500 italic">
-                                                Data "<?= htmlspecialchars($search) ?>" tidak ditemukan. Coba kata kunci lain.
+                                            <td colspan="6" class="p-6 text-center text-zinc-500 italic">
+                                                Data tidak ditemukan. Coba kata kunci lain atau filter yang berbeda.
                                             </td>
                                         </tr>
                                     <?php endif; ?>

@@ -80,7 +80,7 @@
         @apply space-y-2;
     }
     .my-th {
-        @apply py-3 border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500
+        @apply pb-3 px-4 border-b border-zinc-200 text-[12px] font-bold uppercase tracking-wider text-zinc-500
     }
 }
 

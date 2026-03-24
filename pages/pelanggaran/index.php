@@ -88,17 +88,17 @@ $stmt = $pdo->query($sql);
                             <button class="button-primary" onclick="modal_add_pelanggaran.showModal()">Add</button>
                         </div>
                     </div>
-                    <div class="rounded-lg border border-zinc-300 p-8">
+                    <div class="rounded-2xl border border-zinc-300 p-8">
                         <table class="w-full text-left table-auto">
                             <thead>
                                 <tr class="my-th">
 
-                                    <th class="px-2 py-3">Nama Siswa</th>
-                                    <th class="px-2 py-3">Kelas</th>
-                                    <th class="px-2 py-3">Pelanggaran</th>
-                                    <th class="px-2 py-3 text-center">Poin</th>
-                                    <th class="px-2 py-3">Pelapor</th>
-                                    <th class="px-2 py-3">Waktu Pelaporan</th>
+                                    <th class="my-th">Nama Siswa</th>
+                                    <th class="my-th">Kelas</th>
+                                    <th class="my-th">Pelanggaran</th>
+                                    <th class="my-th text-center">Poin</th>
+                                    <th class="my-th">Pelapor</th>
+                                    <th class="my-th">Waktu Pelaporan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-zinc-200">
@@ -118,19 +118,19 @@ $stmt = $pdo->query($sql);
                                         data-id="<?= $row['id_pelanggaran']; ?>">
 
 
-                                        <td class=" py-4 px-2 text-zinc-600 hidden"><?= $no++; ?></td>
-                                        <td class="py-4 px-2">
-                                            <div class="font-medium text-zinc-900"><?= htmlspecialchars($row['nama_siswa']); ?></div>
+                                        <td class=" p-4 text-zinc-600 hidden"><?= $no++; ?></td>
+                                        <td class="p-4">
+                                            <div class="font-medium text-zinc-800"><?= htmlspecialchars($row['nama_siswa']); ?></div>
                                         </td>
-                                        <td class="py-4 px-2 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
-                                        <td class="py-4 px-2">
+                                        <td class="p-4 text-zinc-600"><?= htmlspecialchars($row['kelas']); ?></td>
+                                        <td class="p-4">
                                             <div class="text-zinc-800"><?= htmlspecialchars($row['nama_jenis']); ?></div>
-                                            <p class="text-[11px] text-zinc-400 italic line-clamp-1"><?= htmlspecialchars($row['keterangan']); ?></p>
+                                            <p class="text-[11px] text-zinc-400 italic line-clamp-1"><?= $row['keterangan'] ? htmlspecialchars($row['keterangan']) : '-'; ?></p>
                                         </td>
-                                        <td class="py-4 px-2 text-center">
+                                        <td class="p-4 text-center">
                                             <span class="text-red-600 font-bold">-<?= $row['bobot_poin']; ?></span>
                                         </td>
-                                        <td class="py-4 px-2">
+                                        <td class="p-4">
                                             <div class="flex items-center gap-2">
                                                 <div class="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center">
                                                     <span class="icon-user w-3 h-3 text-zinc-500"></span>
