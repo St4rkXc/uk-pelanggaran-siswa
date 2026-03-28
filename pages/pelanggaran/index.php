@@ -20,9 +20,23 @@ $currentUser = [
 
 
 $totalSiswa = dbCount($pdo, 'siswa');
+
+// [PAGINATION LOGIC]
+// Menentukan jumlah maksimal data yang tampil per halaman
+$limit = 10;
+// Menangkap nomor halaman aktif dari URL. Jika tidak ada, default ke halaman 1.
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+// Menghitung pergeseran baris (offset) untuk kueri database
+$offset = ($page - 1) * $limit;
+
+// Menghitung total seluruh data pelanggaran untuk menentukan jumlah halaman
 $totalPelanggaran = dbCount($pdo, 'pelanggaran');
+$total_rows = $totalPelanggaran; // Variabel yang dibutuhkan oleh component pagination.php
+$total_pages = ceil($total_rows / $limit);
 
-
+// [QUERY DATA]
+// Mengambil data pelanggaran dengan relasi tabel Siswa, Jenis Pelanggaran, dan User (Pelapor)
 $sql = "SELECT 
             p.id_pelanggaran, 
             p.keterangan, 
@@ -36,7 +50,8 @@ $sql = "SELECT
         JOIN siswa s ON p.id_siswa = s.id_siswa
         JOIN jenis_pelanggaran jp ON p.id_jenis = jp.id_jenis
         JOIN users u ON p.pelapor = u.id_users
-        ORDER BY p.tanggal_pelaporan DESC";
+        ORDER BY p.tanggal_pelaporan DESC
+        LIMIT $limit OFFSET $offset";
 
 $stmt = $pdo->query($sql);
 
@@ -151,6 +166,7 @@ $stmt = $pdo->query($sql);
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                        <?php include BASE_PATH . '/includes/ui/pagination/pagination.php'; ?>
                     </div>
                 </div>
             </main>

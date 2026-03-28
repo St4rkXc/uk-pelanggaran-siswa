@@ -19,25 +19,39 @@ $currentUser = [
 ];
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-// Ganti filter_type jadi filter_role biar sesuai konteks
 $filterRole = isset($_GET['filter_role']) ? $_GET['filter_role'] : '';
 
-$query = "SELECT * FROM Users WHERE 1=1"; // Pakai 1=1 biar gampang nambahin AND
+// [PAGINATION LOGIC]
+// Menentukan jumlah maksimal data yang tampil per halaman
+$limit = 10;
+// Menangkap nomor halaman aktif dari URL. Jika tidak ada, default ke halaman 1.
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+// Menghitung pergeseran baris (offset) untuk kueri database
+$offset = ($page - 1) * $limit;
+
+// [FILTER DATA]
+// Menyusun kondisi pencarian dan filter role agar bisa digunakan di COUNT dan SELECT
+$condition = "1=1";
 $params = [];
 
-// Filter Search (Username/Name)
 if (!empty($search)) {
-    $query .= " AND (name LIKE ?)";
+    $condition .= " AND (name LIKE ?)";
     $params[] = "%$search%";
 }
 
-// Filter Role
 if (!empty($filterRole)) {
-    $query .= " AND role = ?";
+    $condition .= " AND role = ?";
     $params[] = $filterRole;
 }
 
-$query .= " ORDER BY id_users DESC";
+// Menghitung total seluruh data Users yang sesuai kriteria untuk menentukan jumlah halaman
+$total_rows = dbCount($pdo, 'Users', $condition, $params);
+$total_pages = ceil($total_rows / $limit);
+
+// [QUERY DATA]
+// Mengambil data Users dengan limit dan offset sesuai halaman aktif
+$query = "SELECT * FROM Users WHERE $condition ORDER BY id_users DESC LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 
@@ -187,8 +201,9 @@ $stmt->execute($params);
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
-                            </table>
-                        </div>
+                             </table>
+                             <?php include BASE_PATH . '/includes/ui/pagination/pagination.php'; ?>
+                         </div>
 
                     </div>
             </main>

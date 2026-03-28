@@ -33,36 +33,46 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
 $kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
 
+// [PAGINATION]
+// Menentukan batas data per halaman (10 record)
+$limit = 10;
+// Mengambil nomor halaman dari URL, jika tidak ada atau tidak valid maka default ke halaman 1
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+// Menghitung titik awal data (offset) untuk kueri SQL
+$offset = ($page - 1) * $limit;
+
 // 3. Mengambil opsi-opsi list Jurusan dan Kelas untuk ditampilkan di dropdown Filter (Tanpa nilai kembar/DISTINCT)
 $all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
 $all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
 
-// 4. Menyusul fondasi awal kueri database untuk menampilkan list
-$query = "SELECT * FROM siswa WHERE 1=1";
+// 4. Menyusun kondisi filter untuk menghitung total data dan menampilkan list
+$condition = "1=1";
 $params = [];
 
-// Menyambungkan perintah `AND` ke query Master apabila salah satu box Search/Filter terisi (Pencarian Dinamis)
 if (!empty($search)) {
-    // Mencari kriteria nama atau nis yang memiliki huruf mirip
-    $query .= " AND (nama_siswa LIKE ? OR nis LIKE ?)";
+    $condition .= " AND (nama_siswa LIKE ? OR nis LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
 if (!empty($jurusan_filter)) {
-    // Menyaring presisi berdasarkan Jurusan
-    $query .= " AND jurusan = ?";
+    $condition .= " AND jurusan = ?";
     $params[] = $jurusan_filter;
 }
 
 if (!empty($kelas_filter)) {
-    // Menyaring presisi berdasarkan Kelas
-    $query .= " AND kelas = ?";
+    $condition .= " AND kelas = ?";
     $params[] = $kelas_filter;
 }
 
-// 5. Mengurutkan hasil dari Siswa paling baru diregistrasikan. Dan mengeksekusinya di PDO (Prepared Statement)
-$query .= " ORDER BY id_siswa DESC";
+// Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman)
+$total_rows = dbCount($pdo, 'siswa', $condition, $params);
+// Menghitung jumlah total halaman yang tersedia
+$total_pages = ceil($total_rows / $limit);
+
+// 5. Mengambil subset data berdasarkan LIMIT dan OFFSET sesuai halaman aktif. Mengurutkan dari ID terbesar (terbaru).
+$query = "SELECT * FROM siswa WHERE $condition ORDER BY id_siswa DESC LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 ?>
@@ -232,6 +242,8 @@ $stmt->execute($params);
                                 </tbody>
                             </table>
                         </div>
+
+                        <?php include BASE_PATH . '/includes/ui/pagination/pagination.php'; ?>
                     </div>
 
                 </div>
@@ -510,7 +522,9 @@ $stmt->execute($params);
                         <select name="jurusan" id="edit-jurusan" class="my-select w-full" required>
                             <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
                             <option value="Teknik Komputer Jaringan">Teknik Komputer Jaringan</option>
-                            <option value="Multimedia">Multimedia</option>
+                            <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
+                            <option value="Animasi">Animasi</option>
+                            <option value="Bisnis Digital">Bisnis Digital</option>
                         </select>
                     </div>
 
@@ -520,10 +534,16 @@ $stmt->execute($params);
                             <option value="XII RPL 1">XII RPL 1</option>
                             <option value="XII RPL 2">XII RPL 2</option>
                             <option value="XII RPL 3">XII RPL 3</option>
+                            <option value="XII RPL 4">XII RPL 4</option>
+                            <option value="XII RPL 5">XII RPL 5</option>
+                            <option value="XII DKV 1">XII DKV 1</option>
+                            <option value="XII DKV 2">XII DKV 2</option>
+                            <option value="XII DKV 3">XII DKV 3</option>
+                            <option value="XII DKV 4">XII DKV 4</option>
                             <option value="XII TKJ 1">XII TKJ 1</option>
                             <option value="XII TKJ 2">XII TKJ 2</option>
-                            <option value="XII MM 1">XII MM 1</option>
-                            <option value="XII MM 2">XII MM 2</option>
+                            <option value="XII AN 1">XII AN 1</option>
+                            <option value="XII BD 1">XII BD 1</option>
                         </select>
                     </div>
 
