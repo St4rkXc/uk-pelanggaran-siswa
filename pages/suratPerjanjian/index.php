@@ -43,6 +43,7 @@ $stmt = $pdo->query($query);
 $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +84,10 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <!-- table goes here -->
-                    <div class="mt-6 space-y-3">
+                    <div id="table-need-focus" class="mt-6 space-y-3">
+
+                    </div>
+                    <div id="surat-perjanjian" class="mt-6 space-y-3">
                         <?php if (empty($suratList)): ?>
                             <div class="p-10 text-center border-2 border-dashed border-zinc-200 rounded-xl text-zinc-400">
                                 Belum ada data surat perjanjian.

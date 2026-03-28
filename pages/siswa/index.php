@@ -1,54 +1,67 @@
 <?php
-session_start();
+session_start(); // Memulai/melanjutkan sesi dari pengguna yang login
 
+// [OTORISASI AKSES]
+// Cek Role: Pengawasan ini dipasang agar yang dapat membuka page Daftar Siswa hanyalah role 'admin' atau 'guru_bk'
 $requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    // Jika rolenya tidak cocok atau belum login, blokir/tolak akses proses (biasa dikelola oleh router utama)
     exit;
 }
 
+// Mengimpor koneksi database beserta fungsi helper dan pengecekan akses (middleware)
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
+// Menyiapkan variabel lokal yang dipakai di halaman seperti path gambar dan profile user sekarang
 $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 $currentUser = [
     'nama' => $_SESSION['nama'],
     'role' => $_SESSION['role'],
 ];
 
-// Stats
+// [WIDGET STATISTIK] Menggunakan helper dbCount untuk menghitung total baris dan ditampilkan di atas halaman
 $jumlahSiswa = dbCount($pdo, 'Siswa');
 $jumlahPelanggaran = dbCount($pdo, 'Pelanggaran');
 
-// Student Data Logic
+// [LOGIKA FILTER & PENCARIAN (READ DATA)]
+// 1. Menangkap inputan pencarian (Jika ada), contoh: mengetikkan nama Budi
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+// 2. Menangkap filter pilihan dropdown
 $jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
 $kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
 
-// Fetch all classes and majors for filters
+// 3. Mengambil opsi-opsi list Jurusan dan Kelas untuk ditampilkan di dropdown Filter (Tanpa nilai kembar/DISTINCT)
 $all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
 $all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
 
+// 4. Menyusul fondasi awal kueri database untuk menampilkan list
 $query = "SELECT * FROM siswa WHERE 1=1";
 $params = [];
 
+// Menyambungkan perintah `AND` ke query Master apabila salah satu box Search/Filter terisi (Pencarian Dinamis)
 if (!empty($search)) {
+    // Mencari kriteria nama atau nis yang memiliki huruf mirip
     $query .= " AND (nama_siswa LIKE ? OR nis LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
 if (!empty($jurusan_filter)) {
+    // Menyaring presisi berdasarkan Jurusan
     $query .= " AND jurusan = ?";
     $params[] = $jurusan_filter;
 }
 
 if (!empty($kelas_filter)) {
+    // Menyaring presisi berdasarkan Kelas
     $query .= " AND kelas = ?";
     $params[] = $kelas_filter;
 }
 
+// 5. Mengurutkan hasil dari Siswa paling baru diregistrasikan. Dan mengeksekusinya di PDO (Prepared Statement)
 $query .= " ORDER BY id_siswa DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);

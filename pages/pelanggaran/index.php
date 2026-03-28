@@ -226,6 +226,7 @@ $stmt = $pdo->query($sql);
             <div class="grid grid-cols-5 w-full gap-4">
                 <div class="space-y-4 bg-zinc-50 p-6 rounded-lg col-span-2">
                     <div class="form-control">
+                        <!-- Dropdown Level 1: Memilih Jurusan Terlebih Dahulu (Datanya diambil langsung dari PHP saat halaman di-load) -->
                         <p class="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-2">Informasi Siswa</p>
                         <label class="label font-bold text-zinc-700">Jurusan</label>
                         <select id="select-jurusan" name="jurusan" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" required>
@@ -238,6 +239,7 @@ $stmt = $pdo->query($sql);
                     </div>
 
                     <div class="form-control">
+                        <!-- Dropdown Level 2: Memilih Kelas (Awalnya disabled dan kosong. Akan diisi oleh JavaScript Fetch API `get_filter_data.php?type=kelas` setelah Jurusan dipilih) -->
                         <label class="label font-bold text-zinc-700">Kelas</label>
                         <select id="select-kelas" name="kelas" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
                             <option value="">Pilih Jurusan Terlebih Dahulu</option>
@@ -245,6 +247,7 @@ $stmt = $pdo->query($sql);
                     </div>
 
                     <div class="form-control">
+                        <!-- Dropdown Level 3: Menentukan Siswa (Aktif setelah Kelas dipilih, datanya di-load dari `get_filter_data.php?type=siswa`) -->
                         <label class="label font-bold text-zinc-700">Siswa</label>
                         <select id="select-siswa-final" name="id_siswa" class="select select-bordered w-full rounded-xl bg-zinc-50 border-zinc-200" disabled required>
                             <option value="">Pilih Kelas Terlebih Dahulu</option>
@@ -313,44 +316,62 @@ $stmt = $pdo->query($sql);
         const selKelas = document.getElementById('select-kelas');
         const selSiswa = document.getElementById('select-siswa-final');
 
-        // 1. Saat Jurusan dipilih -> Cari Kelas yang ada di Jurusan itu
+        // [LOGIKA CHAINED DROPDOWN 1 / FETCH API]
+        // Trigger: Event listener aktif saat elemen Jurusan berubah nilainya (`onchange`)
         selJurusan.addEventListener('change', async function() {
+            // Encode value inputan user agar aman saat dilekatkan pada URL (Mencegah karakter aneh merusak parameter HTTP)
             const val = encodeURIComponent(this.value);
             console.log("Fetching kelas for: " + this.value);
 
             try {
+                // Melakukan HTTP Request secara Async/Await ke Web Service mini kita, meminta daftar Kelas
                 const res = await fetch(`get_filter_data.php?type=kelas&jurusan=${val}`);
+
+                // Mengkonversi format balikan dari JSON string menjadi Object/Array Javascript
                 const data = await res.json();
 
+                // Bersihkan dropdown Kelas dengan default value
                 selKelas.innerHTML = '<option value="" disabled selected>Pilih Kelas</option>';
+
+                // Melakukan perulangan, untuk setiap objek `item` di dalam `data`, buatkan elemen HTML <option>
                 data.forEach(item => {
                     selKelas.innerHTML += `<option value="${item.kelas}">${item.kelas}</option>`;
                 });
 
-                selKelas.disabled = false; // Aktifin select kelas
-                selSiswa.disabled = true; // Riset select siswa
-                selSiswa.innerHTML = '<option value="">Pilih Kelas Dulu</option>';
+                // UI UX Adjustments:
+                selKelas.disabled = false; // Aktifin select kelas (Remove atribut 'disabled')
+                selSiswa.disabled = true; // Riset select siswa agar disabled lagi
+                selSiswa.innerHTML = '<option value="">Pilih Kelas Dulu</option>'; // Memaksa user menyelesaikan urutan pilihan
             } catch (err) {
                 console.error("Fetch Error (Kelas):", err);
             }
         });
 
-        // 2. Saat Kelas dipilih -> Cari Nama Siswa yang ada di Kelas itu
+        // [LOGIKA CHAINED DROPDOWN 2 / FETCH API]
+        // Trigger: Saat Kelas secara spesifik dipilih...
         selKelas.addEventListener('change', async function() {
             const val = encodeURIComponent(this.value);
             console.log("Fetching siswa for: " + this.value);
 
             try {
+                // Tembak request kedua, kali ini ambil daftar Siswa berdasarkan jenis Kelas-nya
                 const res = await fetch(`get_filter_data.php?type=siswa&kelas=${val}`);
                 const data = await res.json();
 
+                // Bersihkan tampilan nama-nama siswa dari aksi-aksi sebelumnya
                 selSiswa.innerHTML = '<option value="" disabled selected>Pilih Siswa</option>';
+
+                // Masukkan ulang element list <option> data murid
                 data.forEach(item => {
+                    // Perhatikan: Value yang disimpan adalah 'id_siswa', namun yang ditampilkan di UI adalah 'nama_siswa'
                     selSiswa.innerHTML += `<option value="${item.id_siswa}">${item.nama_siswa}</option>`;
                 });
 
-                selSiswa.disabled = false; // Aktifin select siswa
+                // Tampilan siap dipilih
+                selSiswa.disabled = false;
+
             } catch (err) {
+                // Tangani error, misal internet putus di tengah proses Fetch JSON
                 console.error("Fetch Error (Siswa):", err);
             }
         });

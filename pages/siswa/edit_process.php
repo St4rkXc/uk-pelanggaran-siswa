@@ -1,17 +1,24 @@
 <?php
-session_start();
+session_start(); // Memulai sesi login pengguna
+
+// [OTORISASI AKSES]
+// Cek Role: Modul ini hanya membolehkan role 'admin' atau 'guru_bk'
 $requiredRole = ['admin', 'guru_bk'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
+    // Karena request edit mungkin dikirim dengan AJAX/Form, kita bisa melempar return format JSON atau redirect
     header('Content-Type: application/json');
     echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
     exit;
 }
 
-require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/database.php'; // Mengimpor koneksi database
 
+// [PROSES UPDATE DATA]
+// Pastikan skrip ini hanya dijalankan ketika menerima request POST (saat modal edit disubmit)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        $id_siswa = $_POST['id_siswa'];
+        // 1. Menangkap semua baris input dari form edit di View, termasuk primary key (ID)
+        $id_siswa = $_POST['id_siswa']; // Kunci Utama (Primary Key), tidak boleh diedit user
         $nama     = $_POST['nama_siswa'];
         $jurusan  = $_POST['jurusan'];
         $kelas    = $_POST['kelas'];
@@ -23,8 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kerja    = $_POST['pekerjaan_ortu'];
         $telp     = $_POST['nomor_ortu'];
         $point    = $_POST['point'];
-        $status   = $_POST['status']; // Ambil data status dari modal edit
+        $status   = $_POST['status']; // Mengambil nilai dropdown pilihan Status ('Aktif', 'Pindah', dll) dari modal form edit
 
+        // 2. Menyiapkan kueri PHP PDO SQL UPDATE (menggunakan placeholder `?` untuk keamanan Anti SQL-Injection)
         // Query SQL yang sudah ditambah field status
         $sql = "UPDATE siswa SET 
                 nama_siswa = ?, 
@@ -41,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 status = ? 
                 WHERE id_siswa = ?";
 
+        // 3. Melekatkan input dari form tadi dengan urutan placeholder ? pada Query
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             $nama,
@@ -55,12 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $telp,
             $point,
             $status,
-            $id_siswa
+            $id_siswa // Target Primary Key untuk dieksekusi UPDATE
         ]);
 
+        // 4. Kembali secara mulus (Redirect) menuju halaman darimana user berasal ketika berhasil di perbarui
         header("Location: " . $_SERVER['HTTP_REFERER'] . "?status=success&msg=Data berhasil diupdate");
         exit;
     } catch (PDOException $e) {
+        // 5. Menangani jika ada Error atau konflik (Misalya NISN duplikat)
         header("Location: " . $_SERVER['HTTP_REFERER'] . "?status=error&msg=" . urlencode($e->getMessage()));
         exit;
     }
