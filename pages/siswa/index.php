@@ -180,6 +180,8 @@ $stmt->execute($params);
                                             data-ortu="<?= htmlspecialchars($row['nama_ortu'] ?? '-'); ?>"
                                             data-kerja-ortu="<?= htmlspecialchars($row['pekerjaan_ortu'] ?? '-'); ?>"
                                             data-telp-ortu="<?= htmlspecialchars($row['nomor_ortu'] ?? '-'); ?>"
+                                            data-tempat-lahir-ortu="<?= htmlspecialchars($row['tempat_lahir_ortu'] ?? '-'); ?>"
+                                            data-tanggal-lahir-ortu="<?= htmlspecialchars($row['tanggal_lahir_ortu'] ?? '-'); ?>"
                                             data-status="<?= $row['status']; ?>">
 
                                             <td class="p-4 text-zinc-800 font-medium flex gap-4 items-center">
@@ -295,6 +297,8 @@ $stmt->execute($params);
             'm-nama-ortu': get('ortu'),
             'm-kerja-ortu': get('kerja-ortu'),
             'm-telp-ortu': get('telp-ortu'),
+            'm-tempat-lahir-ortu': get('tempat-lahir-ortu'),
+            'm-tanggal-lahir-ortu': get('tanggal-lahir-ortu'),
             'edit-id': get('id'),
             'edit-nama': get('nama'),
             'edit-nis': get('nis'),
@@ -303,6 +307,8 @@ $stmt->execute($params);
             'edit-nama-ortu': get('ortu'),
             'edit-kerja-ortu': get('kerja-ortu'),
             'edit-telp-ortu': get('telp-ortu'),
+            'edit-tempat-lahir-ortu': get('tempat-lahir-ortu'),
+            'edit-tanggal-lahir-ortu': get('tanggal-lahir-ortu'),
             'edit-point': get('point'),
             'edit-status': get('status')
         };
@@ -434,6 +440,17 @@ $stmt->execute($params);
                         <input type="text" name="nomor_ortu" placeholder="08123456789" class="my-input w-full" />
                     </div>
 
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu</span></label>
+                            <input type="text" name="tempat_lahir_ortu" placeholder="Kota lahir" class="my-input w-full" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu</span></label>
+                            <input type="date" name="tanggal_lahir_ortu" class="my-input w-full" />
+                        </div>
+                    </div>
+
                     <div class="space-y-2 hidden">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Poin Awal</span></label>
                         <input type="number" name="point" value="100" class="my-input w-full font-bold text-zinc-800 bg-zinc-100" />
@@ -480,6 +497,8 @@ $stmt->execute($params);
             <div class="flex"><span class="w-40 text-zinc-500">Orang Tua</span><span class="font-medium" id="m-nama-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Pekerjaan</span><span class="font-medium" id="m-kerja-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium" id="m-telp-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Tempat Lahir Ortu</span><span class="font-medium" id="m-tempat-lahir-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Tanggal Lahir Ortu</span><span class="font-medium" id="m-tanggal-lahir-ortu"></span></div>
             <div class="flex"><span class="w-40 text-zinc-500">Status Siswa</span><span class="font-medium text-zinc-900" id="m-status"></span></div>
         </div>
         <div class="modal-action grid grid-cols-2 gap-4 py-6 mt-6 border-t border-zinc-200">
@@ -585,6 +604,17 @@ $stmt->execute($params);
                     <div class="space-y-2">
                         <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua</span></label>
                         <input type="text" name="nomor_ortu" id="edit-telp-ortu" placeholder="08123456789" class="my-input w-full" />
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu</span></label>
+                            <input type="text" name="tempat_lahir_ortu" id="edit-tempat-lahir-ortu" placeholder="Kota lahir" class="my-input w-full" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu</span></label>
+                            <input type="date" name="tanggal_lahir_ortu" id="edit-tanggal-lahir-ortu" class="my-input w-full" />
+                        </div>
                     </div>
 
                     <div class="space-y-2 hidden">

@@ -29,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ortu     = $_POST['nama_ortu'];
         $kerja    = $_POST['pekerjaan_ortu'];
         $telp     = $_POST['nomor_ortu'];
+        $tempat_lahir  = $_POST['tempat_lahir_ortu'] ?? '';
+        $tanggal_lahir = $_POST['tanggal_lahir_ortu'] ?: null;
         $point    = $_POST['point'];
         $status   = $_POST['status']; // Mengambil nilai dropdown pilihan Status ('Aktif', 'Pindah', dll) dari modal form edit
 
@@ -45,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 nama_ortu = ?, 
                 pekerjaan_ortu = ?, 
                 nomor_ortu = ?, 
+                tempat_lahir_ortu = ?,
+                tanggal_lahir_ortu = ?,
                 point = ?,
                 status = ? 
                 WHERE id_siswa = ?";
@@ -62,6 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ortu,
             $kerja,
             $telp,
+            $tempat_lahir,
+            $tanggal_lahir,
             $point,
             $status,
             $id_siswa // Target Primary Key untuk dieksekusi UPDATE
