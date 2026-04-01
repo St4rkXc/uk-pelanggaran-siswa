@@ -90,12 +90,20 @@ try {
         $stmtSPD->execute([$id_siswa]);
         $pindah = $stmtSPD->fetchAll(PDO::FETCH_ASSOC);
 
+        // 5. Ambil Data Surat Pernyataan Orang Tua
+        $stmtSPOrtu = $pdo->prepare("
+            SELECT * FROM surat_pernyataan_ortu WHERE id_siswa = ? ORDER BY tanggal_surat DESC
+        ");
+        $stmtSPOrtu->execute([$id_siswa]);
+        $pernyataan_ortu = $stmtSPOrtu->fetchAll(PDO::FETCH_ASSOC);
+
         // Gabungin semua jadi satu response JSON
         echo json_encode([
-            'pelanggaran' => $pelanggaran,
-            'panggilan'   => $panggilan,
-            'perjanjian'  => $perjanjian,
-            'pindah'      => $pindah
+            'pelanggaran'      => $pelanggaran,
+            'panggilan'        => $panggilan,
+            'perjanjian'       => $perjanjian,
+            'pindah'           => $pindah,
+            'pernyataan_ortu'  => $pernyataan_ortu
         ]);
     } else {
         echo json_encode([]);

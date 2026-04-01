@@ -9,6 +9,7 @@ $jenisPelanggaranPath = BASE_URL . '/pages/jenis_pelanggaran/';
 $pelanggaranPath = BASE_URL . '/pages/pelanggaran/';
 $suratPemanggilanOrtuPath = BASE_URL . '/pages/suratPemanggilanOrtu/';
 $suratPerjanjianPath = BASE_URL . '/pages/suratPerjanjian/';
+$suratPernyataanOrtuPath = BASE_URL . '/pages/suratPernyataanOrtu/';
 $suratPindahPath = BASE_URL . '/pages/suratPindah/';
 $laporanSurat = BASE_URL . '/pages/laporan_surat/';
 $laporanSiswa = BASE_URL . '/pages/laporan_siswa/';
@@ -24,6 +25,7 @@ $isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !=
 $isActivePelanggaran = (strpos($current_url, 'pages/pelanggaran/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPemanggilanOrtu = (strpos($current_url, 'pages/suratPemanggilanOrtu/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPerjanjian = (strpos($current_url, 'pages/suratPerjanjian/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPernyataanOrtu = (strpos($current_url, 'pages/suratPernyataanOrtu/') !== false) ? 'sidebar-link-active' : '';
 $isActiveSuratPindah = (strpos($current_url, 'pages/suratPindah/') !== false) ? 'sidebar-link-active' : '';
 $isActiveLaporanSurat = (strpos($current_url, 'pages/laporan_surat/') !== false) ? 'sidebar-link-active' : '';
 $isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false) ? 'sidebar-link-active' : '';
@@ -90,6 +92,12 @@ $isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false)
                                 <li>
                                     <a href="<?php echo $suratPerjanjianPath; ?>" class="sidebar-link <?php echo $isActiveSuratPerjanjian; ?>">
                                         <p class="font-paragraph-14 text-700">Perjanjian</p>
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="<?php echo $suratPernyataanOrtuPath; ?>" class="sidebar-link <?php echo $isActiveSuratPernyataanOrtu; ?>">
+                                        <p class="font-paragraph-14 text-700">Pernyataan Orang Tua</p>
                                     </a>
 
                                 </li>

@@ -115,6 +115,7 @@ $currentUser = [
                                     <button class="tab-btn border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase transition-colors" data-target="tab-perjanjian">Surat Perjanjian</button>
                                     <button class="tab-btn border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase transition-colors" data-target="tab-pindah">Surat Pindah</button>
                                     <button class="tab-btn border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase transition-colors" data-target="tab-panggilan">Surat Panggilan</button>
+                                    <button class="tab-btn border-transparent text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium uppercase transition-colors" data-target="tab-pernyataan-ortu">Pernyataan Ortu</button>
                                 </nav>
                             </div>
 
@@ -137,7 +138,7 @@ $currentUser = [
                                     </table>
                                 </div>
 
-                                <div class="grid grid-cols-3 gap-4">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     <div class="bg-white p-4 rounded-xl border border-zinc-200">
                                         <h4 class="font-bold text-blue-600 text-[10px] uppercase mb-3">Surat Perjanjian</h4>
                                         <div id="list-perjanjian" class="space-y-3 text-xs"></div>
@@ -149,6 +150,10 @@ $currentUser = [
                                     <div class="bg-white p-4 rounded-xl border border-zinc-200">
                                         <h4 class="font-bold text-red-600 text-[10px] uppercase mb-3">Surat Pindah</h4>
                                         <div id="list-pindah" class="space-y-3 text-xs"></div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-zinc-200">
+                                        <h4 class="font-bold text-emerald-600 text-[10px] uppercase mb-3">Pernyataan Ortu</h4>
+                                        <div id="list-pernyataan-ortu" class="space-y-3 text-xs"></div>
                                     </div>
                                 </div>
                             </div>
@@ -195,6 +200,14 @@ $currentUser = [
                                     <div id="list-panggilan-tab" class="space-y-4"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Tab: Surat Pernyataan Ortu -->
+                            <div id="tab-pernyataan-ortu" class="tab-pane hidden space-y-6">
+                                <div class="bg-white p-6 rounded-xl border border-zinc-200">
+                                    <h4 class="font-bold text-emerald-600 text-sm uppercase mb-4 border-b pb-2">Pernyataan Orang Tua</h4>
+                                    <div id="list-pernyataan-ortu-tab" class="space-y-4"></div>
+                                </div>
+                            </div>
                         </div> <!-- end report content -->
                     </div> <!-- end right area -->
                 </div>
@@ -231,6 +244,9 @@ $currentUser = [
 
                 <div class="mb-2 text-md font-bold text-zinc-900 border-b-2 border-zinc-900 pb-1 uppercase mt-8">Data Surat Pindah</div>
                 <div id="print-pindah" class="mb-8 mt-2"></div>
+                
+                <div class="mb-2 text-md font-bold text-zinc-900 border-b-2 border-zinc-900 pb-1 uppercase mt-8">Data Surat Pernyataan Orang Tua</div>
+                <div id="print-pernyataan-ortu" class="mb-8 mt-2"></div>
             </div>
             <!-- END PRINT SECTION -->
         </div>
@@ -405,6 +421,22 @@ $currentUser = [
                 document.getElementById('list-pindah').innerHTML = finalHtmlSPD;
                 document.getElementById('list-pindah-tab').innerHTML = finalHtmlSPD;
                 document.getElementById('print-pindah').innerHTML = printHtmlSPD || '<p class="text-sm italic text-zinc-600">Tidak ada data surat pindah.</p>';
+                
+                // RENDER SURAT PERNYATAAN ORTU
+                let htmlSPOrtu = '';
+                let printHtmlSPOrtu = '';
+                data.pernyataan_ortu.forEach(s => {
+                    htmlSPOrtu += `
+                <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100 mb-2">
+                    <p class="font-bold text-emerald-800 text-[10px] uppercase">Tgl Surat: ${s.tanggal_surat}</p>
+                    <p class="text-zinc-700 mt-1 leading-relaxed"><span class="font-medium text-emerald-700">Tujuan:</span> Menyatakan sanggup membina siswa.</p>
+                </div>`;
+                    printHtmlSPOrtu += `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">Tanggal: ${s.tanggal_surat}</span><br>Menyatakan sanggup membina siswa.</div>`;
+                });
+                const finalHtmlSPOrtu = htmlSPOrtu || '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>';
+                document.getElementById('list-pernyataan-ortu').innerHTML = finalHtmlSPOrtu;
+                document.getElementById('list-pernyataan-ortu-tab').innerHTML = finalHtmlSPOrtu;
+                document.getElementById('print-pernyataan-ortu').innerHTML = printHtmlSPOrtu || '<p class="text-sm italic text-zinc-600">Tidak ada data surat pernyataan orang tua.</p>';
 
             } catch (error) {
                 console.error("Gagal narik data:", error);
