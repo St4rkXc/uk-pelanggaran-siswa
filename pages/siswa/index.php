@@ -23,7 +23,8 @@ $currentUser = [
 ];
 
 // [WIDGET STATISTIK] Menggunakan helper dbCount untuk menghitung total baris dan ditampilkan di atas halaman
-$jumlahSiswa = dbCount($pdo, 'Siswa');
+$jumlahSiswa = dbCount($pdo, 'Siswa', "status = 'aktif'");
+$jumlahSiswaTidakAktif = dbCount($pdo, 'Siswa', "status = 'pindah' or status = 'nonaktif' ");
 $jumlahPelanggaran = dbCount($pdo, 'Pelanggaran');
 
 // [LOGIKA FILTER & PENCARIAN (READ DATA)]
@@ -32,6 +33,7 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 // 2. Menangkap filter pilihan dropdown
 $jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
 $kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+$status_filter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
 
 // [PAGINATION]
 // Menentukan batas data per halaman (10 record)
@@ -64,6 +66,11 @@ if (!empty($jurusan_filter)) {
 if (!empty($kelas_filter)) {
     $condition .= " AND kelas = ?";
     $params[] = $kelas_filter;
+}
+
+if (!empty($status_filter)) {
+    $condition .= " AND status = ?";
+    $params[] = $status_filter;
 }
 
 // Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman)
@@ -113,6 +120,15 @@ $stmt->execute($params);
                             <p class="font-paragraph-14 font-medium text-zinc-600">Total Pelanggaran Tercatat</p>
                         </div>
                     </div>
+                    <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
+                        <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
+                            <span class="icon-siren h-6 w-6"></span>
+                        </div>
+                        <div>
+                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahSiswaTidakAktif) ?> Pelanggaran</h5>
+                            <p class="font-paragraph-14 font-medium text-zinc-600">Total Siswa tidak aktif </p>
+                        </div>
+                    </div>
                 </div>
                 <div class="w-full mt-6 gap-4">
                     <form method="GET" id="searchForm" class="flex flex-col gap-4">
@@ -131,6 +147,12 @@ $stmt->execute($params);
                                         <?php foreach ($all_kelas as $k): ?>
                                             <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
                                         <?php endforeach; ?>
+                                    </select>
+                                    <select name="status_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                        <option value="">Semua Status</option>
+                                        <option value="Aktif" <?= $status_filter == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
+                                        <option value="Pindah" <?= $status_filter == 'Pindah' ? 'selected' : '' ?>>Pindah</option>
+                                        <option value="Nonaktif" <?= $status_filter == 'Nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
                                     </select>
                                     <div class="relative flex items-center">
                                         <input type="text"

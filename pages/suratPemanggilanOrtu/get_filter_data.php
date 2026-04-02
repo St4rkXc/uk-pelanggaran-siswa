@@ -25,8 +25,8 @@ try {
     } elseif ($type === 'siswa') {
         $kelas = $_GET['kelas'] ?? '';
 
-        // Ambil id dan nama siswa berdasarkan kelas
-        $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa FROM siswa WHERE TRIM(kelas) = ? ORDER BY nama_siswa ASC");
+        // Ambil id dan nama siswa berdasarkan kelas, hanya yang statusnya 'Aktif'
+        $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa FROM siswa WHERE TRIM(kelas) = ? AND status = 'Aktif' ORDER BY nama_siswa ASC");
         $stmt->execute([trim($kelas)]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

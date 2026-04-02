@@ -24,7 +24,7 @@ $currentUser = [
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
-<body class="flex w-dvw">
+<body class="flex w-dvw overflow-x-hidden">
     <div class="flex w-full h-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class="flex-1">

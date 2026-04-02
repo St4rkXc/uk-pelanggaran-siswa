@@ -19,7 +19,7 @@ $currentUser = [
 ];
 
 
-$totalSiswa = dbCount($pdo, 'siswa');
+$totalSiswa = dbCount($pdo, 'siswa', 'status = "aktif"');
 
 // [PAGINATION LOGIC]
 // Menentukan jumlah maksimal data yang tampil per halaman

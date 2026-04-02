@@ -1,10 +1,10 @@
 <?php
+session_start();
 $requiredRole = ['guru_bk', 'admin'];
 if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     header("Location: index.php?status=error&msg=Unauthorized");
     exit;
 }
-session_start();
 require_once __DIR__ . '/../../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -29,7 +29,8 @@ if ($type === 'kelas') {
 elseif ($type === 'siswa') {
     $kelas = $_GET['kelas'] ?? '';
     // Mengambil id_siswa dan nama_siswa saja (tidak butuh data lengkap) untuk menghemat bandwidth
-    $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa FROM siswa WHERE TRIM(kelas) = ? ORDER BY nama_siswa ASC");
+    // Hanya menampilkan siswa dengan status 'Aktif'
+    $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa FROM siswa WHERE TRIM(kelas) = ? AND status = 'Aktif' ORDER BY nama_siswa ASC");
     $stmt->execute([trim($kelas)]);
 
     // Mengembalikan data murid berbentuk JSON
