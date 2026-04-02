@@ -33,6 +33,7 @@ $currentUser = [
 </head>
 
 <body class="bg-zinc-50 w-dvw overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">

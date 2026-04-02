@@ -16,6 +16,7 @@ $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
 </head>
 
 <body class="w-dvw h-dvh flex flex-col justify-center items-center bg-zinc-100">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="p-8 rounded-2xl border border-zinc-300 w-[400px] bg-zinc-50">
         <div class="mb-4 space-y-3">
             <div class="p-3 rounded-2xl border border-zinc-300 w-fit">

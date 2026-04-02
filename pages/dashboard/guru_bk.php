@@ -69,6 +69,7 @@ $suratLog = $pdo->query($querySuratLog)->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body class="bg-zinc-50 overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class=" flex-1">

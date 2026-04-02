@@ -82,6 +82,7 @@ $riwayatLaporan = $stmtRiwayat->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body class="bg-zinc-50 overflow-x-hidden h-screen">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
     <main class="container mx-auto bg-zinc-50 p-6">
         <div class="grid grid-cols-4 gap-4">

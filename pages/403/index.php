@@ -28,6 +28,7 @@ $logoPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
     </style>
 </head>
 <body class="bg-zinc-100 min-h-screen flex items-center justify-center p-6 font-sans">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <!-- Left Side: Illustration -->
         <div class="relative flex justify-center">

@@ -48,6 +48,7 @@ $currentUser = [
 </head>
 
 <body class="flex bg-zinc-50 border-0 m-0">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full flex-row">
         <aside class="sidebar print:hidden shrink-0 border-r border-zinc-200">
             <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
@@ -217,6 +218,8 @@ $currentUser = [
                         Laporan Detail Siswa
                     </h2>
                     <p class="text-md mt-2 font-bold" id="print-siswa-name">-</p>
+                    <p class="text-md mt-2 font-bold" id="print-siswa-nis/nisn">-</p>
+                    <p class="text-md mt-2 font-bold" id="print-siswa-kelas">-</p>
                 </div>
 
                 <div class="mb-2 text-md font-bold text-zinc-900 border-b-2 border-zinc-900 pb-1 uppercase">Riwayat Pelanggaran</div>
@@ -253,69 +256,107 @@ $currentUser = [
 </html>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
         const selJurusan = document.getElementById('filter-jurusan');
         const selKelas = document.getElementById('filter-kelas');
         const selSiswa = document.getElementById('filter-siswa');
         const reportContent = document.getElementById('report-content');
         const emptyState = document.getElementById('empty-state');
 
-        // Tabs Logic
+        // [REFACTOR DOCS]: Logika Tab yang Disederhanakan
+        // Menggunakan toggle() dengan kondisi boolean (isActive) untuk mempersingkat sintaks 
+        // penambahan/penghapusan class. Menghapus kebutuhan loop bersarang yang repetitif.
         const tabsBtns = document.querySelectorAll('.tab-btn');
         const tabPanes = document.querySelectorAll('.tab-pane');
 
         tabsBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Reset styling
-                tabsBtns.forEach(b => {
-                    b.classList.remove('border-orange-500', 'text-orange-600');
-                    b.classList.add('border-transparent', 'text-zinc-500');
-                });
-
-                // Add active styling
-                btn.classList.add('border-orange-500', 'text-orange-600');
-                btn.classList.remove('border-transparent', 'text-zinc-500');
-
-                // Hide all panes
-                tabPanes.forEach(pane => {
-                    pane.classList.remove('block');
-                    pane.classList.add('hidden');
-                });
-
-                // Show target pane
                 const targetId = btn.getAttribute('data-target');
-                document.getElementById(targetId).classList.remove('hidden');
-                document.getElementById(targetId).classList.add('block');
+                
+                tabsBtns.forEach(b => {
+                    const isActive = b === btn;
+                    b.classList.toggle('border-orange-500', isActive);
+                    b.classList.toggle('text-orange-600', isActive);
+                    b.classList.toggle('border-transparent', !isActive);
+                    b.classList.toggle('text-zinc-500', !isActive);
+                });
+
+                tabPanes.forEach(pane => {
+                    const isActive = pane.id === targetId;
+                    pane.classList.toggle('block', isActive);
+                    pane.classList.toggle('hidden', !isActive);
+                });
             });
         });
 
+        // [REFACTOR DOCS]: Helper Fungsi 'fetchData'
+        // Fungsi pembungkus (wrapper) untuk fetch API agar kode tidak dipenuhi
+        // oleh blok try...catch di setiap request. Mengembalikan data JSON secara langsung.
+        const fetchData = async (url) => {
+            try {
+                const res = await fetch(url);
+                return await res.json();
+            } catch (error) {
+                console.error(`Error fetching from ${url}:`, error);
+                return null;
+            }
+        };
+
+        // [REFACTOR DOCS]: Helper Fungsi 'renderList'
+        // Menggantikan proses manual forEach() dan manipulasi string pada DOM. 
+        // Fungsi ini menggunakan pola map().join() untuk merender array data ke HTML string
+        // dengan performa lebih baik dan sangat mengurangi baris kode.
+        // Mendukung multi-container (contoh: tab dan print sekaligus).
+        const renderList = (data, containerIds, renderer, emptyMsg, printContainerId = null, printRenderer = null, printEmptyMsg = null) => {
+            const hasData = data && data.length > 0;
+            const html = hasData ? data.map(renderer).join('') : emptyMsg;
+            containerIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = html;
+            });
+            
+            if (printContainerId) {
+                const printHtml = hasData && printRenderer ? data.map(printRenderer).join('') : (printEmptyMsg || emptyMsg);
+                const printEl = document.getElementById(printContainerId);
+                if (printEl) printEl.innerHTML = printHtml;
+            }
+        };
+
         // 1. Jurusan -> Kelas
         selJurusan.addEventListener('change', async () => {
-            if (!selJurusan.value) return;
-            const res = await fetch(`get_filter_data.php?type=kelas&jurusan=${encodeURIComponent(selJurusan.value)}`);
-            const data = await res.json();
-
-            selKelas.innerHTML = '<option value="">Pilih Kelas</option>';
-            data.forEach(item => {
-                selKelas.innerHTML += `<option value="${item.kelas}">${item.kelas}</option>`;
-            });
-            selKelas.disabled = false;
-            selSiswa.disabled = true;
+            const jurusan = selJurusan.value;
+            selKelas.innerHTML = '<option value="">Pilih Jurusan Terlebih Dahulu</option>';
             selSiswa.innerHTML = '<option value="">Pilih Kelas Terlebih Dahulu</option>';
+            selKelas.disabled = true;
+            selSiswa.disabled = true;
+            
+            if (!jurusan) return;
+
+            const data = await fetchData(`get_filter_data.php?type=kelas&jurusan=${encodeURIComponent(jurusan)}`);
+            if (data) {
+                selKelas.innerHTML = '<option value="">Pilih Kelas</option>' + 
+                    data.map(item => `<option value="${item.kelas}">${item.kelas}</option>`).join('');
+                selKelas.disabled = false;
+            }
         });
 
         // 2. Kelas -> Siswa
         selKelas.addEventListener('change', async () => {
-            if (!selKelas.value) return;
-            const res = await fetch(`get_filter_data.php?type=siswa&kelas=${encodeURIComponent(selKelas.value)}`);
-            const data = await res.json();
+            const kelas = selKelas.value;
+            selSiswa.innerHTML = '<option value="">Pilih Kelas Terlebih Dahulu</option>';
+            selSiswa.disabled = true;
+            
+            if (!kelas) return;
 
-            selSiswa.innerHTML = '<option value="">Pilih Siswa</option>';
-            data.forEach(item => {
-                // Add data-name for print layout
-                selSiswa.innerHTML += `<option value="${item.id_siswa}" data-name="${item.nama_siswa}">${item.nama_siswa}</option>`;
-            });
-            selSiswa.disabled = false;
+            const data = await fetchData(`get_filter_data.php?type=siswa&kelas=${encodeURIComponent(kelas)}`);
+            if (data) {
+                // [REFACTOR DOCS]: Injeksi Data ke DOM attributes
+                // Menyimpan data tambahan (nis, nisn, jurusan, kelas) dari backend ke dalam fungsi data-*
+                // agar ketika siswa dipilih, kita bisa langsung mengambil datanya untuk laporan cetak.
+                selSiswa.innerHTML = '<option value="">Pilih Siswa</option>' + 
+                    data.map(item => `<option value="${item.id_siswa}" data-name="${item.nama_siswa}" data-nis="${item.nis || '-'}" data-nisn="${item.nisn || '-'}" data-jurusan="${item.jurusan || '-'}" data-kelas="${item.kelas || '-'}">${item.nama_siswa}</option>`).join('');
+                selSiswa.disabled = false;
+            }
         });
 
         // 3. Siswa -> Load All Data
@@ -323,120 +364,91 @@ $currentUser = [
             const idSiswa = selSiswa.value;
             if (!idSiswa) return;
 
+            // [REFACTOR DOCS]: Penggunaan Dataset
+            // Mengambil metadata (dataset) secara instan dari attribute option yang sedang dipilih
+            // lalu disematkan ke elemen header untuk keperluan Cetak (Print).
             const selectedOption = selSiswa.options[selSiswa.selectedIndex];
-            const siswaName = selectedOption.getAttribute('data-name');
-            document.getElementById('print-siswa-name').innerText = "Nama Siswa: " + (siswaName ? siswaName : idSiswa);
+            const dataset = selectedOption.dataset;
+            const siswaName = dataset.name || idSiswa;
 
-            // UI Feedback
+            document.getElementById('print-siswa-name').innerText = `Nama Siswa: ${siswaName}`;
+            document.getElementById('print-siswa-nis/nisn').innerText = `NIS/NISN: ${dataset.nis} / ${dataset.nisn}`;
+            document.getElementById('print-siswa-kelas').innerText = `Jurusan/Kelas: ${dataset.jurusan} / ${dataset.kelas}`;
+
             emptyState.classList.add('hidden');
             reportContent.classList.remove('hidden');
 
-            try {
-                // Tarik SEMUA data (pelanggaran + 3 jenis surat)
-                const res = await fetch(`get_filter_data.php?type=full_report&id_siswa=${idSiswa}`);
-                const data = await res.json();
+            const data = await fetchData(`get_filter_data.php?type=full_report&id_siswa=${idSiswa}`);
+            if (!data) return alert("Terjadi kesalahan saat mengambil data laporan.");
 
-                // RENDER PELANGGARAN
-                let htmlP = '';
-                let printHtmlP = '';
-                data.pelanggaran.forEach(p => {
-                    htmlP += `
+            // [REFACTOR DOCS]: Penggunaan `renderList` untuk membersihkan kode
+            // Sekarang fungsi rendering untuk view utama dan view print dilakukan dalam 1 pemanggilan
+            // Tidak perlu lagi menulis iterasi looping dan string matching berulang-ulang untuk tiap jenis data.
+            
+            // RENDER PELANGGARAN
+            renderList(data.pelanggaran, ['table-pelanggaran', 'table-pelanggaran-tab'], p => `
                 <tr class="border-t border-zinc-100">
                     <td class="p-4 text-zinc-500">${p.tanggal_pelaporan}</td>
                     <td class="p-4 font-bold text-zinc-800">${p.nama_jenis}</td>
                     <td class="p-4 text-zinc-500">${p.keterangan || '-'}</td>
-                </tr>`;
-                    printHtmlP += `
+                </tr>`, 
+                '<tr><td colspan="3" class="p-4 text-center text-zinc-400 italic">Tidak ada riwayat pelanggaran</td></tr>',
+                'print-pelanggaran', p => `
                 <tr>
                     <td class="px-4 py-2 border border-zinc-900 text-sm text-zinc-900">${p.tanggal_pelaporan}</td>
                     <td class="px-4 py-2 border border-zinc-900 font-bold text-sm text-zinc-900">${p.nama_jenis}</td>
                     <td class="px-4 py-2 border border-zinc-900 text-sm text-zinc-900">${p.keterangan || '-'}</td>
-                </tr>`;
-                });
+                </tr>`,
+                '<tr><td colspan="3" class="px-4 py-2 border border-zinc-900 text-center italic text-sm text-zinc-600">Tidak ada riwayat pelanggaran</td></tr>'
+            );
 
-                const finalHtmlP = htmlP || '<tr><td colspan="3" class="p-4 text-center text-zinc-400 italic">Tidak ada riwayat pelanggaran</td></tr>';
-                document.getElementById('table-pelanggaran').innerHTML = finalHtmlP;
-                document.getElementById('table-pelanggaran-tab').innerHTML = finalHtmlP;
-                document.getElementById('print-pelanggaran').innerHTML = printHtmlP || '<tr><td colspan="3" class="px-4 py-2 border border-zinc-900 text-center italic text-sm text-zinc-600">Tidak ada riwayat pelanggaran</td></tr>';
-
-                // RENDER SURAT PERJANJIAN
-                let htmlSPJ = '';
-                let printHtmlSPJ = '';
-                data.perjanjian.forEach(s => {
-                    htmlSPJ += `
+            // RENDER SURAT PERJANJIAN
+            renderList(data.perjanjian, ['list-perjanjian', 'list-perjanjian-tab'], s => `
                 <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 mb-2">
                     <p class="font-bold text-blue-800 text-[10px] uppercase">Tgl Surat: ${s.tanggal_surat}</p>
                     <p class="text-zinc-700 mt-1 leading-relaxed">${s.isi_perjanjian}</p>
-                </div>`;
-                    printHtmlSPJ += `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">Tanggal: ${s.tanggal_surat}</span><br>${s.isi_perjanjian}</div>`;
-                });
-                const finalHtmlSPJ = htmlSPJ || '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>';
-                document.getElementById('list-perjanjian').innerHTML = finalHtmlSPJ;
-                document.getElementById('list-perjanjian-tab').innerHTML = finalHtmlSPJ;
-                document.getElementById('print-perjanjian').innerHTML = printHtmlSPJ || '<p class="text-sm italic text-zinc-600">Tidak ada data surat perjanjian.</p>';
+                </div>`, 
+                '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>',
+                'print-perjanjian', s => `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">Tanggal: ${s.tanggal_surat}</span><br>${s.isi_perjanjian}</div>`,
+                '<p class="text-sm italic text-zinc-600">Tidak ada data surat perjanjian.</p>'
+            );
 
-                // RENDER PANGGILAN ORTU
-                let htmlSPO = '';
-                let htmlSPOTab = '';
-                let printHtmlSPO = '';
-                data.panggilan.forEach(s => {
-                    const content = `
+            // RENDER PANGGILAN ORTU
+            renderList(data.panggilan, ['list-panggilan', 'list-panggilan-tab'], s => `
                 <div class="p-3 bg-orange-50 rounded-lg border border-orange-100 mb-2">
                     <div class="flex justify-between items-start">
                         <p class="font-bold text-orange-800 text-[10px] uppercase">No: ${s.nomor_surat || '-'}</p>
                         <p class="font-bold text-orange-800 text-[10px] uppercase">${s.tanggal_temu}</p>
                     </div>
                     <p class="text-zinc-700 mt-1 leading-relaxed"><span class="font-medium text-orange-700">Keperluan:</span> ${s.keperluan}</p>
-                </div>`;
-                    htmlSPO += content;
-                    htmlSPOTab += content;
-                    printHtmlSPO += `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">No: ${s.nomor_surat || '-'} | Tanggal Temu: ${s.tanggal_temu}</span><br>Keperluan: ${s.keperluan}</div>`;
-                });
-                const finalHtmlSPO = htmlSPO || '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>';
-                document.getElementById('list-panggilan').innerHTML = finalHtmlSPO;
-                document.getElementById('list-panggilan-tab').innerHTML = finalHtmlSPO;
-                document.getElementById('print-panggilan').innerHTML = printHtmlSPO || '<p class="text-sm italic text-zinc-600">Tidak ada data surat panggilan.</p>';
+                </div>`, 
+                '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>',
+                'print-panggilan', s => `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">No: ${s.nomor_surat || '-'} | Tanggal Temu: ${s.tanggal_temu}</span><br>Keperluan: ${s.keperluan}</div>`,
+                '<p class="text-sm italic text-zinc-600">Tidak ada data surat panggilan.</p>'
+            );
 
-                // RENDER SURAT PINDAH
-                let htmlSPD = '';
-                let htmlSPDTab = '';
-                let printHtmlSPD = '';
-                data.pindah.forEach(s => {
-                    const content = `
+            // RENDER SURAT PINDAH
+            renderList(data.pindah, ['list-pindah', 'list-pindah-tab'], s => `
                 <div class="p-3 bg-red-50 rounded-lg border border-red-100 mb-2">
                     <p class="font-bold text-red-800 text-[10px] uppercase">No: ${s.nomor_surat || '-'}</p>
                     <p class="text-zinc-800 font-medium mt-1">Ke: ${s.nama_sekolah}</p>
                     <p class="text-zinc-600 mt-1 text-[11px] italic">Alasan: ${s.alasan_pindah || '-'}</p>
-                </div>`;
-                    htmlSPD += content;
-                    htmlSPDTab += content;
-                    printHtmlSPD += `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">No: ${s.nomor_surat || '-'}</span> | Pindah ke: ${s.nama_sekolah}<br>Alasan: ${s.alasan_pindah || '-'}</div>`;
-                });
-                const finalHtmlSPD = htmlSPD || '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>';
-                document.getElementById('list-pindah').innerHTML = finalHtmlSPD;
-                document.getElementById('list-pindah-tab').innerHTML = finalHtmlSPD;
-                document.getElementById('print-pindah').innerHTML = printHtmlSPD || '<p class="text-sm italic text-zinc-600">Tidak ada data surat pindah.</p>';
-                
-                // RENDER SURAT PERNYATAAN ORTU
-                let htmlSPOrtu = '';
-                let printHtmlSPOrtu = '';
-                data.pernyataan_ortu.forEach(s => {
-                    htmlSPOrtu += `
+                </div>`, 
+                '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>',
+                'print-pindah', s => `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">No: ${s.nomor_surat || '-'}</span> | Pindah ke: ${s.nama_sekolah}<br>Alasan: ${s.alasan_pindah || '-'}</div>`,
+                '<p class="text-sm italic text-zinc-600">Tidak ada data surat pindah.</p>'
+            );
+            
+            // RENDER SURAT PERNYATAAN ORTU
+            renderList(data.pernyataan_ortu, ['list-pernyataan-ortu', 'list-pernyataan-ortu-tab'], s => `
                 <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-100 mb-2">
                     <p class="font-bold text-emerald-800 text-[10px] uppercase">Tgl Surat: ${s.tanggal_surat}</p>
                     <p class="text-zinc-700 mt-1 leading-relaxed"><span class="font-medium text-emerald-700">Tujuan:</span> Menyatakan sanggup membina siswa.</p>
-                </div>`;
-                    printHtmlSPOrtu += `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">Tanggal: ${s.tanggal_surat}</span><br>Menyatakan sanggup membina siswa.</div>`;
-                });
-                const finalHtmlSPOrtu = htmlSPOrtu || '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>';
-                document.getElementById('list-pernyataan-ortu').innerHTML = finalHtmlSPOrtu;
-                document.getElementById('list-pernyataan-ortu-tab').innerHTML = finalHtmlSPOrtu;
-                document.getElementById('print-pernyataan-ortu').innerHTML = printHtmlSPOrtu || '<p class="text-sm italic text-zinc-600">Tidak ada data surat pernyataan orang tua.</p>';
-
-            } catch (error) {
-                console.error("Gagal narik data:", error);
-                alert("Terjadi kesalahan saat mengambil data laporan.");
-            }
+                </div>`, 
+                '<p class="text-zinc-400 italic text-center py-2">Tidak ada data.</p>',
+                'print-pernyataan-ortu', s => `<div class="mb-3 text-sm border-l-4 pl-3 border-zinc-900 text-zinc-900"><span class="font-bold">Tanggal: ${s.tanggal_surat}</span><br>Menyatakan sanggup membina siswa.</div>`,
+                '<p class="text-sm italic text-zinc-600">Tidak ada data surat pernyataan orang tua.</p>'
+            );
         });
     });
 </script>

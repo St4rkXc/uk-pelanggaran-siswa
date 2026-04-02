@@ -17,8 +17,10 @@ $currentUser = [
 ];
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
 $kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
 
+$all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
 $all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
 
 $condition = "1=1";
@@ -27,6 +29,10 @@ $params = [];
 if (!empty($search)) {
     $condition .= " AND sw.nama_siswa LIKE ?";
     $params[] = "%$search%";
+}
+if (!empty($jurusan_filter)) {
+    $condition .= " AND sw.jurusan = ?";
+    $params[] = $jurusan_filter;
 }
 if (!empty($kelas_filter)) {
     $condition .= " AND sw.kelas = ?";
@@ -62,7 +68,8 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
-<body class="flex w-dvw overflow-x-hidden">
+<body class="flex w-dvw bg-zinc-50 overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class="flex-1">
@@ -86,6 +93,12 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="flex justify-between items-center">
                             <p class="font-heading-6 font-semibold text-zinc-800"> Tabel Surat Pernyataan Orang Tua</p>
                             <div class="flex items-center gap-2">
+                                <select name="jurusan_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                    <option value="">Semua Jurusan</option>
+                                    <?php foreach ($all_jurusan as $j): ?>
+                                        <option value="<?= htmlspecialchars($j) ?>" <?= $jurusan_filter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                                 <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                     <option value="">Semua Kelas</option>
                                     <?php foreach ($all_kelas as $k): ?>

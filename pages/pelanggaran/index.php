@@ -17,22 +17,52 @@ $currentUser = [
 
 $totalSiswa = dbCount($pdo, 'siswa', 'status = "aktif"');
 
+// [LOGIKA FILTER & PENCARIAN]
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
+$kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+
+// Mengambil list jurusan dan kelas untuk dropdown filter
+$all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
+$all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
+
+// Menyusun kondisi filter
+$condition = "1=1";
+$params = [];
+
+if (!empty($search)) {
+    $condition .= " AND (s.nama_siswa LIKE ? OR s.nis LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
+if (!empty($jurusan_filter)) {
+    $condition .= " AND s.jurusan = ?";
+    $params[] = $jurusan_filter;
+}
+
+if (!empty($kelas_filter)) {
+    $condition .= " AND s.kelas = ?";
+    $params[] = $kelas_filter;
+}
+
 // [PAGINATION LOGIC]
-// Menentukan jumlah maksimal data yang tampil per halaman
 $limit = 10;
-// Menangkap nomor halaman aktif dari URL. Jika tidak ada, default ke halaman 1.
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
-// Menghitung pergeseran baris (offset) untuk kueri database
 $offset = ($page - 1) * $limit;
 
-// Menghitung total seluruh data pelanggaran untuk menentukan jumlah halaman
+// Menghitung total seluruh data pelanggaran untuk statistik
 $totalPelanggaran = dbCount($pdo, 'pelanggaran');
-$total_rows = $totalPelanggaran; // Variabel yang dibutuhkan oleh component pagination.php
+
+// Menghitung total data dengan filter
+$sqlCount = "SELECT COUNT(*) FROM pelanggaran p JOIN siswa s ON p.id_siswa = s.id_siswa WHERE $condition";
+$stmtCount = $pdo->prepare($sqlCount);
+$stmtCount->execute($params);
+$total_rows = $stmtCount->fetchColumn();
 $total_pages = ceil($total_rows / $limit);
 
 // [QUERY DATA]
-// Mengambil data pelanggaran dengan relasi tabel Siswa, Jenis Pelanggaran, dan User (Pelapor)
 $sql = "SELECT 
             p.id_pelanggaran, 
             p.keterangan, 
@@ -46,10 +76,12 @@ $sql = "SELECT
         JOIN siswa s ON p.id_siswa = s.id_siswa
         JOIN jenis_pelanggaran jp ON p.id_jenis = jp.id_jenis
         JOIN users u ON p.pelapor = u.id_users
+        WHERE $condition
         ORDER BY p.tanggal_pelaporan DESC
         LIMIT $limit OFFSET $offset";
 
-$stmt = $pdo->query($sql);
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 
 
 
@@ -66,7 +98,8 @@ $stmt = $pdo->query($sql);
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
-<body class="flex w-dvw overflow-x-hidden">
+<body class="flex w-dvw bg-zinc-50 overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class="flex-1">
@@ -94,12 +127,38 @@ $stmt = $pdo->query($sql);
                     </div>
                 </div>
                 <div class="mt-6 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <p class="font-heading-6 font-semibold text-zinc-800">Daftar Pelanggaran</p>
-                        <div class="">
-                            <button class="button-primary" onclick="modal_add_pelanggaran.showModal()">Add</button>
+                    <form method="GET" id="searchForm" class="flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <p class="font-heading-6 font-semibold text-zinc-800">Daftar Pelanggaran</p>
+                            <div class="flex gap-2">
+                                <div class="flex gap-2">
+                                    <select name="jurusan_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                        <option value="">Semua Jurusan</option>
+                                        <?php foreach ($all_jurusan as $j): ?>
+                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusan_filter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                        <option value="">Semua Kelas</option>
+                                        <?php foreach ($all_kelas as $k): ?>
+                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="relative flex items-center">
+                                        <input type="text"
+                                            id="searchInput"
+                                            name="search"
+                                            value="<?= htmlspecialchars($search) ?>"
+                                            class="rounded-lg border border-zinc-300 py-3 px-4 pr-10 w-65 placeholder:text-[14px] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Cari nama atau NIS..."
+                                            autocomplete="off">
+                                        <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
+                                    </div>
+                                </div>
+                                <button type="button" class="button-primary" onclick="modal_add_pelanggaran.showModal()">Add</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     <div class="rounded-2xl border border-zinc-300 p-8">
                         <table class="w-full text-left table-auto">
                             <thead>
@@ -119,7 +178,7 @@ $stmt = $pdo->query($sql);
                                 while ($row = $stmt->fetch()):
                                     $waktu = date('d M Y, H:i', strtotime($row['tanggal_pelaporan']));
                                 ?>
-                                    <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-all cursor-pointer" onclick="openViewPelanggaran(this)"
+                                    <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-all cursor-pointer" onclick="openViewPelanggaran(this)"
                                         data-nama="<?= htmlspecialchars($row['nama_siswa']); ?>"
                                         data-kelas="<?= htmlspecialchars($row['kelas']); ?>"
                                         data-jenis="<?= htmlspecialchars($row['nama_jenis']); ?>"
@@ -325,6 +384,25 @@ $stmt = $pdo->query($sql);
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        let timer;
+
+        if (searchInput && searchForm) {
+            searchInput.addEventListener('input', () => {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    searchForm.submit();
+                }, 500);
+            });
+
+            // Focus search input on load and move cursor to end
+            const val = searchInput.value;
+            searchInput.focus();
+            searchInput.value = '';
+            searchInput.value = val;
+        }
+
         const selJurusan = document.getElementById('select-jurusan');
         const selKelas = document.getElementById('select-kelas');
         const selSiswa = document.getElementById('select-siswa-final');

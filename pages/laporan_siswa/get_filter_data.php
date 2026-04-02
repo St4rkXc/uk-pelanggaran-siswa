@@ -25,8 +25,10 @@ try {
     } elseif ($type === 'siswa') {
         $kelas = $_GET['kelas'] ?? '';
 
-        // Ambil id dan nama siswa berdasarkan kelas, hanya yang statusnya 'Aktif'
-        $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa FROM siswa WHERE TRIM(kelas) = ? AND status = 'Aktif' ORDER BY nama_siswa ASC");
+        // [REFACTOR DOCS]: Query ini diperbarui untuk juga mengambil data 'nis', 'nisn', 'jurusan', dan 'kelas'.
+        // Data ekstra ini diambil di awal agar frontend bisa langsung menampilkannya di halaman cetak (print)
+        // tanpa harus melakukan request AJAX/fetch terpisah saat mencetak laporan.
+        $stmt = $pdo->prepare("SELECT id_siswa, nama_siswa, nis, nisn, jurusan, kelas FROM siswa WHERE TRIM(kelas) = ? AND status = 'Aktif' ORDER BY nama_siswa ASC");
         $stmt->execute([trim($kelas)]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

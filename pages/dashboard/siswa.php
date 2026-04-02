@@ -33,7 +33,7 @@ $queryRiwayat = "SELECT p.*, jp.nama_jenis, jp.point as point_potong
                  JOIN jenis_pelanggaran jp ON p.id_jenis = jp.id_jenis
                  WHERE p.id_siswa = ? 
                  ORDER BY p.tanggal_pelaporan DESC 
-                 LIMIT 5";
+                 LIMIT 10";
 $stmtRiwayat = $pdo->prepare($queryRiwayat);
 $stmtRiwayat->execute([$idSiswa]);
 $riwayat = $stmtRiwayat->fetchAll();
@@ -44,12 +44,12 @@ $statusColor = "text-emerald-600";
 $bgColor = "bg-emerald-50";
 $barColor = "bg-emerald-500";
 
-if ($poin < 50) {
+if ($poin <= 50) {
     $statusColor = "text-amber-600";
     $bgColor = "bg-amber-50";
     $barColor = "bg-amber-500";
 }
-if ($poin < 25) {
+if ($poin <= 25) {
     $statusColor = "text-red-600";
     $bgColor = "bg-red-50";
     $barColor = "bg-red-500";
@@ -70,6 +70,7 @@ if ($poin < 25) {
 </head>
 
 <body class="h-screen bg-zinc-50 overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <?php require_once BASE_PATH . '/includes/ui/header/header.php'; ?>
     <main class="container mx-auto p-6 space-y-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">

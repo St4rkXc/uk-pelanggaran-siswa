@@ -24,7 +24,8 @@ $currentUser = [
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
-<body class="flex w-dvw overflow-x-hidden">
+<body class="flex bg-zinc-50 w-dvw overflow-x-hidden">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full h-full">
         <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
         <div class="flex-1">
@@ -53,7 +54,7 @@ $currentUser = [
                             $stmt = $pdo->query("SELECT * FROM jenis_pelanggaran ORDER BY id_jenis DESC");
                             while ($row = $stmt->fetch()):
                             ?>
-                                <tr class="border-b border-b-zinc-300 hover:bg-zinc-50 transition-all"
+                                <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 transition-all"
                                     data-id="<?= $row['id_jenis']; ?>"
                                     data-nama="<?= htmlspecialchars($row['nama_jenis']); ?>"
                                     data-deskripsi="<?= htmlspecialchars($row['deskripsi']); ?>"

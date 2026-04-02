@@ -108,6 +108,7 @@ $grandTotal = array_sum(array_column($reports, 'total'));
 </style>
 
 <body class="flex w-vdw">
+    <?php require_once BASE_PATH . '/includes/ui/alert/alert.php'; ?>
     <div class="flex w-full">
         <aside class="sidebar print:hidden">
             <?php require_once BASE_PATH . '/includes/ui/sidebar/sidebar.php'; ?>
