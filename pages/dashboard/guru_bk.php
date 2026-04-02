@@ -178,7 +178,7 @@ $suratLog = $pdo->query($querySuratLog)->fetchAll(PDO::FETCH_ASSOC);
                                         <?php
                                         $no = 1;
                                         // Fetch data pakai PDO
-                                        $stmt = $pdo->query("SELECT * FROM siswa ORDER BY point LIMIT 20");
+                                        $stmt = $pdo->query("SELECT * FROM siswa ORDER BY point LIMIT 10");
                                         while ($row = $stmt->fetch()):
                                         ?>
                                             <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 hover:cursor-pointer duration-200  ">

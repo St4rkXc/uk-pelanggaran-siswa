@@ -1,14 +1,11 @@
 <?php
 session_start();
-
-// [OTORISASI AKSES]
-// Cek Role (Biasanya cuma admin atau guru_bk yang boleh hapus data)
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    exit("Akses ditolak!");
-}
 
 require_once __DIR__ . '/../../config/database.php';
+require_once BASE_PATH . '/middleware/auth.php';
+require_once BASE_PATH . '/middleware/role.php';
+require_once BASE_PATH . '/includes/helpers.php';
 
 // [PROSES HAPUS DATA]
 // Memastikan script menangkap parameter ID dari query url (?id=...)

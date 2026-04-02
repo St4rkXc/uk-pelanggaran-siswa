@@ -1,13 +1,7 @@
 <?php
 session_start();
-$requiredRole = ['guru_bk', 'admin'];
-
-require_once __DIR__ . '/../../config/database.php';
-
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    exit;
-}
+
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';

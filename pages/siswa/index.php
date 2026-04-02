@@ -1,15 +1,7 @@
 <?php
-session_start(); // Memulai/melanjutkan sesi dari pengguna yang login
-
-// [OTORISASI AKSES]
-// Cek Role: Pengawasan ini dipasang agar yang dapat membuka page Daftar Siswa hanyalah role 'admin' atau 'guru_bk'
+session_start();
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    // Jika rolenya tidak cocok atau belum login, blokir/tolak akses proses (biasa dikelola oleh router utama)
-    exit;
-}
 
-// Mengimpor koneksi database beserta fungsi helper dan pengecekan akses (middleware)
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
@@ -26,6 +18,7 @@ $currentUser = [
 $jumlahSiswa = dbCount($pdo, 'Siswa', "status = 'aktif'");
 $jumlahSiswaTidakAktif = dbCount($pdo, 'Siswa', "status = 'pindah' or status = 'nonaktif' ");
 $jumlahPelanggaran = dbCount($pdo, 'Pelanggaran');
+$jumlahPerluPerhatian = dbCount($pdo, 'siswa', 'point <= 50');
 
 // [LOGIKA FILTER & PENCARIAN (READ DATA)]
 // 1. Menangkap inputan pencarian (Jika ada), contoh: mengetikkan nama Budi
@@ -79,7 +72,7 @@ $total_rows = dbCount($pdo, 'siswa', $condition, $params);
 $total_pages = ceil($total_rows / $limit);
 
 // 5. Mengambil subset data berdasarkan LIMIT dan OFFSET sesuai halaman aktif. Mengurutkan dari ID terbesar (terbaru).
-$query = "SELECT * FROM siswa WHERE $condition ORDER BY id_siswa DESC LIMIT $limit OFFSET $offset";
+$query = "SELECT * FROM siswa WHERE $condition ORDER BY point LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 ?>
@@ -126,8 +119,17 @@ $stmt->execute($params);
                             <span class="icon-siren h-6 w-6"></span>
                         </div>
                         <div>
-                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahSiswaTidakAktif) ?> Pelanggaran</h5>
+                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahSiswaTidakAktif) ?> Siswa Tidak Aktif</h5>
                             <p class="font-paragraph-14 font-medium text-zinc-600">Total Siswa tidak aktif </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-1 flex-col rounded-lg bg-red-500 p-6 gap-6  justify-end">
+                        <div class="p-3 rounded-full hidden justify-center items-center w-fit">
+                            <span class="icon-siren h-6 w-6"></span>
+                        </div>
+                        <div>
+                            <h5 class="font-heading-5 font-semibold text-white"><?= htmlspecialchars($jumlahPerluPerhatian) ?> Perlu Perhatian</h5>
+                            <p class="font-paragraph-14 font-medium text-white/80">Siswa Point Dibawah 50! </p>
                         </div>
                     </div>
                 </div>
@@ -221,7 +223,7 @@ $stmt->execute($params);
                                                                                                                                                             $point = (int)$row['point'];
                                                                                                                                                             if ($point < 20) {
                                                                                                                                                                 echo 'bg-red-200 text-red-800';
-                                                                                                                                                            } elseif ($point < 50) {
+                                                                                                                                                            } elseif ($point <= 50) {
                                                                                                                                                                 echo 'bg-yellow-200 text-yellow-800';
                                                                                                                                                             } else {
                                                                                                                                                                 echo 'bg-green-200 text-green-800';
@@ -232,7 +234,7 @@ $stmt->execute($params);
                                                                                                                                     $point = (int)$row['point'];
                                                                                                                                     if ($point < 20) {
                                                                                                                                         echo 'bg-red-500';
-                                                                                                                                    } elseif ($point < 50) {
+                                                                                                                                    } elseif ($point <= 50) {
                                                                                                                                         echo 'bg-yellow-500';
                                                                                                                                     } else {
                                                                                                                                         echo 'bg-green-500';
@@ -242,7 +244,7 @@ $stmt->execute($params);
                                                                                                                 $point = (int)$row['point'];
                                                                                                                 if ($point < 20) {
                                                                                                                     echo 'bg-red-600';
-                                                                                                                } elseif ($point < 50) {
+                                                                                                                } elseif ($point <= 50) {
                                                                                                                     echo 'bg-yellow-600';
                                                                                                                 } else {
                                                                                                                     echo 'bg-green-600';

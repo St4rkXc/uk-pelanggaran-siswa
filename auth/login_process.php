@@ -10,30 +10,23 @@ $stmt = $pdo->prepare("SELECT * FROM users WHERE name = ?");
 $stmt->execute([$usernameInput]);
 $user = $stmt->fetch();
 
-if ($user && password_verify($passwordInput, $user['password'])) {
-    $_SESSION['login'] = true;
-
-    // GANTI INI: Pakai nama kolom yang bener (id_users)
-    $_SESSION['id_users'] = $user['id_users'];
-
-    $_SESSION['nama']  = $user['name'];
-    $_SESSION['role']  = $user['role'];
-    $_SESSION['id_siswa'] = $user['id_siswa'];
-
-    header("Location: ../pages/dashboard/{$user['role']}.php");
-    exit;
-}
-echo "Login gagal";
-
 if ($user) {
-    echo "User ditemukan!<br>";
     if (password_verify($passwordInput, $user['password'])) {
-        echo "Password cocok!";
-        // ... sisa kode login ...
+        $_SESSION['login'] = true;
+        $_SESSION['id_users'] = $user['id_users'];
+        $_SESSION['nama']  = $user['name'];
+        $_SESSION['role']  = $user['role'];
+        $_SESSION['id_siswa'] = $user['id_siswa'];
+
+        header("Location: ../pages/dashboard/{$user['role']}.php");
+        exit;
     } else {
-        echo "Password salah. Hash di DB: " . $user['password'];
-        echo "Password yang dimasukkan: " . $passwordInput;
+        // Password salah
+        header("Location: login.php?error=wrong_password");
+        exit;
     }
 } else {
-    echo "Username tidak ditemukan di database.";
+    // Akun tidak ditemukan
+    header("Location: login.php?error=no_account");
+    exit;
 }

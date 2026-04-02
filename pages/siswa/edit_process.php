@@ -1,17 +1,11 @@
 <?php
-session_start(); // Memulai sesi login pengguna
-
-// [OTORISASI AKSES]
-// Cek Role: Modul ini hanya membolehkan role 'admin' atau 'guru_bk'
+session_start();
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    // Karena request edit mungkin dikirim dengan AJAX/Form, kita bisa melempar return format JSON atau redirect
-    header('Content-Type: application/json');
-    echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
-    exit;
-}
 
-require_once __DIR__ . '/../../config/database.php'; // Mengimpor koneksi database
+require_once __DIR__ . '/../../config/database.php';
+require_once BASE_PATH . '/middleware/auth.php';
+require_once BASE_PATH . '/middleware/role.php';
+require_once BASE_PATH . '/includes/helpers.php';
 
 // [PROSES UPDATE DATA]
 // Pastikan skrip ini hanya dijalankan ketika menerima request POST (saat modal edit disubmit)

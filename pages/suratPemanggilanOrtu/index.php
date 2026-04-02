@@ -1,10 +1,6 @@
 <?php
 session_start();
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    header("Location: index.php?status=error&msg=Unauthorized");
-    exit;
-}
 
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';

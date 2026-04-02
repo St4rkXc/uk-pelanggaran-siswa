@@ -26,6 +26,26 @@ $imgPath = BASE_URL . '/src/public/assets/img/logo_sekolah.png';
                 <p class="font-paragraph-14 font-medium text-zinc-500">Silahkan login untuk melanjutkan</p>
             </div>
         </div>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="mb-4 p-4 rounded-xl border flex items-start space-x-3 bg-red-50 border-red-100 text-red-600 animate-in fade-in slide-in-from-top-2 duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+                <div class="text-sm font-medium">
+                    <?php 
+                    if ($_GET['error'] === 'no_account') {
+                        echo "Akun tidak ditemukan. Silahkan hubungi administrator.";
+                    } elseif ($_GET['error'] === 'wrong_password') {
+                        echo "Username atau password salah. Silahkan coba lagi.";
+                    } else {
+                        echo "Terjadi kesalahan saat login. Silahkan coba lagi.";
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <form method="POST" action="login_process.php" class="space-y-3">
             <div class="relative flex items-center">
                 <input type="text" name="username" placeholder="Username" required class="py-3 px-4 outline outline-zinc-300 rounded-lg w-full placeholder:text-[14px] font-paragraph-14">

@@ -1,11 +1,7 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/database.php';
-
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    exit;
-}
+
 require_once __DIR__ . '/../../config/database.php';
 require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
@@ -27,7 +23,8 @@ $rekapBy    = $_GET['rekap_by'] ?? 'bulan';          // Default rekap per bulan
 $tabelDetail = [
     'surat_pindah' => 'surat_pindah',
     'surat_panggilan_ortu' => 'surat_panggilan_ortu',
-    'surat_perjanjian' => 'surat_perjanjian'
+    'surat_perjanjian' => 'surat_perjanjian',
+    'surat_pernyataan' => 'surat_pernyataan_ortu'
 ];
 
 $targetTable = $tabelDetail[$jenisSurat];
@@ -135,6 +132,7 @@ $grandTotal = array_sum(array_column($reports, 'total'));
                                 <option value="surat_pindah" <?= $jenisSurat == 'surat_pindah' ? 'selected' : '' ?>>Surat Pindah Sekolah</option>
                                 <option value="surat_panggilan_ortu" <?= $jenisSurat == 'surat_panggilan_ortu' ? 'selected' : '' ?>>Surat Panggilan Ortu</option>
                                 <option value="surat_perjanjian" <?= $jenisSurat == 'surat_perjanjian' ? 'selected' : '' ?>>Surat Perjanjian Siswa</option>
+                                <option value="surat_pernyataan" <?= $jenisSurat == 'surat_pernyataan' ? 'selected' : '' ?>>Surat Pernyataan Orang Tua</option>
                             </select>
                         </div>
 

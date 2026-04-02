@@ -1,5 +1,5 @@
 <?php
 if (!isset($_SESSION['login'])) {
-    header("Location: ../auth/login.php");
+    header("Location: " . BASE_URL . "/auth/login.php");
     exit;
 }

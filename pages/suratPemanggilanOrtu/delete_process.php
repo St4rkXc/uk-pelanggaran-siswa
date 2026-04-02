@@ -1,14 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
 
-
-// Proteksi admin
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    header("Location: index.php?status=error&msg=Unauthorized");
-    exit;
-}
+require_once __DIR__ . '/../../config/database.php';
+require_once BASE_PATH . '/middleware/auth.php';
+require_once BASE_PATH . '/middleware/role.php';
+require_once BASE_PATH . '/includes/helpers.php';
 // Ambil ID detail dari URL (GET)
 $id_detail = $_GET['id'] ?? null;
 

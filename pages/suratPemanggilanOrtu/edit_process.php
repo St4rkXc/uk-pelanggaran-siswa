@@ -1,13 +1,11 @@
 <?php
 session_start();
-require_once __DIR__ . '/../../config/database.php';
 $requiredRole = ['admin', 'guru_bk'];
 
-// Proteksi: Cuma admin yang boleh eksekusi
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    header("Location: index.php?status=error&msg=Unauthorized");
-    exit;
-}
+require_once __DIR__ . '/../../config/database.php';
+require_once BASE_PATH . '/middleware/auth.php';
+require_once BASE_PATH . '/middleware/role.php';
+require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo "<pre>"; print_r($_POST); echo "</pre>"; die();

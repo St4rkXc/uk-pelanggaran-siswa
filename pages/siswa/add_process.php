@@ -1,15 +1,10 @@
 <?php
-session_start(); // Memulai sesi pengguna yang sedang login
-require_once __DIR__ . '/../../config/database.php'; // Mengimpor koneksi database
-
-// [OTORISASI AKSES]
-// Cek Role: Hanya user dengan role 'admin' atau 'guru_bk' yang diizinkan untuk menambah data siswa
+session_start();
 $requiredRole = ['admin', 'guru_bk'];
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
-    // Jika tidak diizinkan, kembalikan ke dashboard dengan notifikasi gagal
-    header("Location: ../dashboard.php?status=error&msg=Akses ditolak!");
-    exit;
-}
+
+require_once __DIR__ . '/../../config/database.php';
+require_once BASE_PATH . '/middleware/auth.php';
+require_once BASE_PATH . '/middleware/role.php';
 
 // [PROSES SIMPAN DATA]
 // Pastikan skrip ini hanya dijalankan ketika menerima request POST (saat form disubmit)
