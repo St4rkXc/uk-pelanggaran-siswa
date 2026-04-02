@@ -21,6 +21,23 @@ $currentUser = [
     'role' => $_SESSION['role'],
 ];
 
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+
+$all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
+
+$condition = "1=1";
+$params = [];
+
+if (!empty($search)) {
+    $condition .= " AND sw.nama_siswa LIKE ?";
+    $params[] = "%$search%";
+}
+if (!empty($kelas_filter)) {
+    $condition .= " AND sw.kelas = ?";
+    $params[] = $kelas_filter;
+}
+
 $query = "SELECT 
             sp.id_surat_pindah,
             sp.id_siswa,
@@ -37,9 +54,11 @@ $query = "SELECT
                        AND s.jenis_surat = 'surat_pindah'
           JOIN siswa sw ON sp.id_siswa = sw.id_siswa
           JOIN sekolah sk ON sp.id_sekolah = sk.id_sekolah
+          WHERE $condition
           ORDER BY s.nomor_surat DESC";
 
-$stmt = $pdo->query($query);
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
 $pindahList = $stmt->fetchAll(PDO::FETCH_ASSOC); // Pastiin variabel ini yang dipake di foreach card
 // Ambil angka terbesar dari seluruh tabel surat (Global)
 $stmtNext = $pdo->query("SELECT MAX(nomor_surat) as max_num FROM surat");
@@ -55,7 +74,8 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Surat Pindah | Sistem Pelanggaran</title>
+    <link rel="shortcut icon" href="<?= BASE_URL ?>/src/public/assets/img/logo_sekolah.png" type="image/x-icon">
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 </head>
 
@@ -80,12 +100,30 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                 </div>
                 <div class="mt-6 space-y-4">
                     <!-- filter & information goes here -->
-                    <div class="flex justify-between items-center">
-                        <p class="font-heading-6 font-semibold text-zinc-800"> Tabel Surat Pindah</p>
-                        <div class="flex items-center">
-                            <button class="button-primary" onclick="modal_add_pindah.showModal()">Add</button>
+                    <form method="GET" id="searchForm" class="flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <p class="font-heading-6 font-semibold text-zinc-800"> Tabel Surat Pindah</p>
+                            <div class="flex items-center gap-2">
+                                <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                                    <option value="">Semua Kelas</option>
+                                    <?php foreach ($all_kelas as $k): ?>
+                                        <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="relative flex items-center">
+                                    <input type="text"
+                                        id="searchInput"
+                                        name="search"
+                                        value="<?= htmlspecialchars($search) ?>"
+                                        class="rounded-lg border border-zinc-300 py-3 px-4 pr-10 w-65 placeholder:text-[14px] placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Cari nama siswa..."
+                                        autocomplete="off">
+                                    <span class="icon-search h-4 w-4 absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"></span>
+                                </div>
+                                <button type="button" class="button-primary" onclick="modal_add_pindah.showModal()">Add</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     <!-- table goes here -->
                     <div class="mt-6 space-y-4">
                         <?php if (empty($pindahList)): ?>
@@ -325,5 +363,23 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
         document.getElementById('edit-pindah-alasan').value = alasan;
 
         if (targetModal) targetModal.showModal();
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    const searchForm = document.getElementById('searchForm');
+    let timer;
+
+    if (searchInput && searchForm) {
+        searchInput.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                searchForm.submit();
+            }, 500);
+        });
+
+        const val = searchInput.value;
+        searchInput.value = '';
+        searchInput.focus();
+        searchInput.value = val;
     }
 </script>

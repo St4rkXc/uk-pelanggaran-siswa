@@ -90,7 +90,8 @@ $stmt->execute($params);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
+    <title>Daftar Siswa | Sistem Pelanggaran</title>
+    <link rel="shortcut icon" href="<?= BASE_URL ?>/src/public/assets/img/logo_sekolah.png" type="image/x-icon">
     <?php require_once BASE_PATH . '/layout/layout.php'; ?>
 
 </head>
