@@ -187,13 +187,13 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
                                     </div>
 
                                     <div class="flex items-center gap-2">
-                                        <button onclick="openEditPanggilan(
-    '<?= $item['id_surat_panggilan_ortu'] ?>', 
-    '<?= addslashes($item['nama_siswa'] ?? '') ?>', 
-    '<?= $item['kelas'] ?? '' ?>', 
-    '<?= $item['tanggal_temu'] ?? '' ?>', 
-    '<?= addslashes($item['keperluan'] ?? '') ?>'
-)" class="button-secondary p-3">
+                                        <button onclick='openEditPanggilan(
+    "<?= $item['id_surat_panggilan_ortu'] ?>", 
+    <?= htmlspecialchars(json_encode($item['nama_siswa'] ?? ''), ENT_QUOTES, 'UTF-8') ?>, 
+    "<?= $item['kelas'] ?? '' ?>", 
+    "<?= $item['tanggal_temu'] ?? '' ?>", 
+    <?= htmlspecialchars(json_encode($item['keperluan'] ?? ''), ENT_QUOTES, 'UTF-8') ?>
+)' class="button-secondary p-3">
                                             <span class="icon-edit w-5 h-5"></span>
                                         </button>
                                         <a href="delete_process.php?id=<?= $item['id_surat_panggilan_ortu'] ?>"

@@ -417,7 +417,7 @@ $stmt->execute($params);
                     Tutup
                 </button>
                 <button type="button" id="btn-delete-user" class="px-4 py-3 rounded-xl font-semibold bg-red-50 text-red-600 border border-red-100 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all text-sm flex items-center justify-center gap-2">
-                    <span class="icon-trash h-4 w-4"></span>
+                    <span class="icon-delete h-4 w-4"></span>
                     Hapus User
                 </button>
             </div>

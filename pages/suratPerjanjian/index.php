@@ -174,7 +174,7 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     </div>
 
                                     <div class="flex items-center gap-2">
-                                        <button onclick="openEditSurat('<?= $item['id_perjanjian'] ?>', '<?= $item['id_siswa'] ?>', '<?= addslashes($item['nama_siswa']) ?>', '<?= $item['id_pelanggaran'] ?>', '<?= $item['tanggal_perjanjian'] ?>', '<?= addslashes($item['isi_perjanjian']) ?>')"
+                                        <button onclick='openEditSurat("<?= $item['id_perjanjian'] ?>", "<?= $item['id_siswa'] ?>", <?= htmlspecialchars(json_encode($item['nama_siswa']), ENT_QUOTES, 'UTF-8') ?>, "<?= $item['id_pelanggaran'] ?>", "<?= $item['tanggal_perjanjian'] ?>", <?= htmlspecialchars(json_encode($item['isi_perjanjian']), ENT_QUOTES, 'UTF-8') ?>)'
                                             class="button-secondary p-3">
                                             <span class="icon-edit w-5 h-5"></span>
                                         </button>
@@ -333,19 +333,6 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </dialog>
 
 <script>
-    function openEditSurat(id, id_siswa, id_pelanggaran, tgl_perjanjian, isi) {
-        // Mapping ke modal edit (Pastiin modal-box lo punya ID-ID ini)
-        const modal = document.getElementById('modal_edit_surat_perjanjian');
-        if (!modal) return console.error('Modal edit not found!');
-
-        document.getElementById('edit-id-perjanjian').value = id;
-        document.getElementById('edit-id-siswa').value = id_siswa;
-        document.getElementById('edit-id-pelanggaran').value = id_pelanggaran;
-        document.getElementById('edit-tgl-perjanjian').value = tgl_perjanjian;
-        document.getElementById('edit-isi-perjanjian').value = isi;
-
-        modal.showModal();
-    }
 
     async function openEditSurat(id, id_siswa, nama_siswa, id_pelanggaran, tgl_perjanjian, isi) {
         // 1. Isi data dasar

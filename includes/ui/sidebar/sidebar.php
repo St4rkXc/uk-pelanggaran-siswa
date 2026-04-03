@@ -117,7 +117,7 @@ $isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false)
                                 <div class="icon-report h-5 w-5"></div>
                                 Laporan
                             </summary>
-                            <ul>
+                            <ul class="space-y-2">
                                 <li>
                                     <a href="<?php echo $laporanSurat; ?>" class="sidebar-link <?php echo $isActiveLaporanSurat; ?>">
                                         <p class="font-paragraph-14 text-700">Surat</p>

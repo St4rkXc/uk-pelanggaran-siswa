@@ -452,27 +452,27 @@ $stmt->execute($params);
                     </div>
 
                     <div class="space-y-2">
-                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
-                        <input type="text" name="nama_ortu" placeholder="Nama ayah/ibu" class="my-input w-full" />
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua / Wali</span></label>
+                        <input type="text" name="nama_ortu" placeholder="Nama ayah/ibu/wali" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
-                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua</span></label>
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua/Wali</span></label>
                         <input type="text" name="pekerjaan_ortu" placeholder="Contoh: PNS / Wiraswasta" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
-                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua</span></label>
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nomor HP Orang Tua/Wali</span></label>
                         <input type="text" name="nomor_ortu" placeholder="08123456789" class="my-input w-full" />
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu</span></label>
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu/Wali</span></label>
                             <input type="text" name="tempat_lahir_ortu" placeholder="Kota lahir" class="my-input w-full" />
                         </div>
                         <div class="space-y-2">
-                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu</span></label>
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu/Wali</span></label>
                             <input type="date" name="tanggal_lahir_ortu" class="my-input w-full" />
                         </div>
                     </div>
@@ -618,12 +618,12 @@ $stmt->execute($params);
                     </div>
 
                     <div class="space-y-2">
-                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua</span></label>
-                        <input type="text" name="nama_ortu" id="edit-nama-ortu" placeholder="Nama ayah/ibu" class="my-input w-full" />
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Nama Orang Tua/Wali</span></label>
+                        <input type="text" name="nama_ortu" id="edit-nama-ortu" placeholder="Nama ayah/ibu/wali" class="my-input w-full" />
                     </div>
 
                     <div class="space-y-2">
-                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua</span></label>
+                        <label class="label"><span class="label-text font-semibold text-zinc-600">Pekerjaan Orang Tua/Wali</span></label>
                         <input type="text" name="pekerjaan_ortu" id="edit-kerja-ortu" placeholder="Contoh: PNS / Wiraswasta" class="my-input w-full" />
                     </div>
 
@@ -634,11 +634,11 @@ $stmt->execute($params);
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
-                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu</span></label>
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tempat Lahir Ortu/Wali</span></label>
                             <input type="text" name="tempat_lahir_ortu" id="edit-tempat-lahir-ortu" placeholder="Kota lahir" class="my-input w-full" />
                         </div>
                         <div class="space-y-2">
-                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu</span></label>
+                            <label class="label"><span class="label-text font-semibold text-zinc-600">Tanggal Lahir Ortu/Wali</span></label>
                             <input type="date" name="tanggal_lahir_ortu" id="edit-tanggal-lahir-ortu" class="my-input w-full" />
                         </div>
                     </div>

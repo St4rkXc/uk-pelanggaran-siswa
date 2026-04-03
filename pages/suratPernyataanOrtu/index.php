@@ -157,7 +157,7 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     Orang Tua
                                                 </span>
                                             </div>
-                                            <p class="text-sm text-zinc-600 line-clamp-1 italic">Nama Wali: <?= htmlspecialchars($item['nama_ortu']) ?></p>
+                                            <p class="text-sm text-zinc-600 line-clamp-1 italic">Nama Wali / Ortu : <?= htmlspecialchars($item['nama_ortu']) ?></p>
                                         </div>
                                     </div>
 
