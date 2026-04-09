@@ -66,9 +66,9 @@ if (!empty($status_filter)) {
     $params[] = $status_filter;
 }
 
-// Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman)
+// Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman) - Pagination
 $total_rows = dbCount($pdo, 'siswa', $condition, $params);
-// Menghitung jumlah total halaman yang tersedia
+// Menghitung jumlah total halaman yang tersedia - Pagination
 $total_pages = ceil($total_rows / $limit);
 
 // 5. Mengambil subset data berdasarkan LIMIT dan OFFSET sesuai halaman aktif. Mengurutkan dari ID terbesar (terbaru).
@@ -515,17 +515,17 @@ $stmt->execute($params);
         </div>
 
         <div class="grid grid-cols-1 gap-y-3 text-sm">
-            <div class="flex"><span class="w-40 text-zinc-500">Jenis Kelamin</span><span class="font-medium" id="m-jk"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">NIS</span><span class="font-medium" id="m-nis"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">NISN</span><span class="font-medium" id="m-nisn"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Alamat Rumah</span><span class="font-medium" id="m-alamat"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Jurusan</span><span class="font-medium" id="m-jurusan"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Orang Tua</span><span class="font-medium" id="m-nama-ortu"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Pekerjaan</span><span class="font-medium" id="m-kerja-ortu"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium" id="m-telp-ortu"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Tempat Lahir Ortu</span><span class="font-medium" id="m-tempat-lahir-ortu"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Tanggal Lahir Ortu</span><span class="font-medium" id="m-tanggal-lahir-ortu"></span></div>
-            <div class="flex"><span class="w-40 text-zinc-500">Status Siswa</span><span class="font-medium text-zinc-900" id="m-status"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Jenis Kelamin</span><span class="font-medium text-[18px]" id="m-jk"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">NIS</span><span class="font-medium text-[18px]" id="m-nis"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">NISN</span><span class="font-medium text-[18px]" id="m-nisn"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Alamat Rumah</span><span class="font-medium text-[18px]" id="m-alamat"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Jurusan</span><span class="font-medium text-[18px]" id="m-jurusan"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Orang Tua</span><span class="font-medium text-[18px]" id="m-nama-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Pekerjaan</span><span class="font-medium text-[18px]" id="m-kerja-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Nomor Orang Tua</span><span class="font-medium text-[18px]" id="m-telp-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Tempat Lahir Ortu</span><span class="font-medium text-[18px]" id="m-tempat-lahir-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Tanggal Lahir Ortu</span><span class="font-medium text-[18px]" id="m-tanggal-lahir-ortu"></span></div>
+            <div class="flex"><span class="w-40 text-zinc-500">Status Siswa</span><span class="font-medium text-zinc-900 text-[18px]" id="m-status"></span></div>
         </div>
         <div class="modal-action grid grid-cols-2 gap-4 py-6 mt-6 border-t border-zinc-200">
             <button type="button" class="btn bg-zinc-100 border-zinc-200 text-zinc-800"

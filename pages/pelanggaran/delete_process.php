@@ -51,7 +51,7 @@ if ($id_pelanggaran) {
         if ($_SESSION['role'] === 'guru_mapel') {
             header("Location: ../dashboard/guru_mapel.php?status=error&msg=" . urlencode($e->getMessage()));
         } else {
-            header("Location: index.php?status=error&msg=" . urlencode($e->getMessage()));
+            header("Location: index.php?status=error&msg=Pelanggaran gagal dihapus karena digunakan pada surat perjanjian atau surat pernyataan orang tua.");
         }
     }
 } else {

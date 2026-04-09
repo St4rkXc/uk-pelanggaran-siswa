@@ -333,7 +333,6 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </dialog>
 
 <script>
-
     async function openEditSurat(id, id_siswa, nama_siswa, id_pelanggaran, tgl_perjanjian, isi) {
         // 1. Isi data dasar
         document.getElementById('edit-id-perjanjian').value = id;

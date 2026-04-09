@@ -59,18 +59,7 @@ try {
 } catch (Exception $e) {
     die("Error Database: " . $e->getMessage());
 }
-// Query Utama: Hitung total berdasarkan Join
-$query = "SELECT $selectColumn, COUNT(*) AS total 
-          FROM $targetTable td
-          JOIN siswa sw ON td.id_siswa = sw.id_siswa
-          $groupBy";
 
-try {
-    $stmt = $pdo->query($query);
-    $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    die("Error Database: " . $e->getMessage());
-}
 $grandTotal = array_sum(array_column($reports, 'total'));
 ?>
 

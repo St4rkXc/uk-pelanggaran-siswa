@@ -87,7 +87,7 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mt-6 space-y-4">
                     <form method="GET" id="searchForm" class="flex flex-col gap-4">
                         <div class="flex justify-between items-center">
@@ -119,10 +119,10 @@ $suratList = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                     </form>
-                    
+
                     <div id="table-need-focus" class="mt-6 space-y-3">
                     </div>
-                    
+
                     <div id="surat-pernyataan" class="mt-6 space-y-3">
                         <?php if (empty($suratList)): ?>
                             <div class="p-10 text-center border-2 border-dashed border-zinc-200 rounded-xl text-zinc-400">

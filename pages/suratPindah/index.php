@@ -340,20 +340,35 @@ $nextNum = ($rowNext['max_num'] !== null) ? (int)$rowNext['max_num'] + 1 : 1;
         const pSiswa = document.getElementById('pindah-siswa');
 
         pJurusan?.addEventListener('change', async function() {
-            const res = await fetch(`get_filter_data.php?type=kelas&jurusan=${this.value}`);
-            const data = await res.json();
-            pKelas.innerHTML = '<option value="" disabled selected>Pilih Kelas</option>';
-            data.forEach(item => pKelas.innerHTML += `<option value="${item.kelas}">${item.kelas}</option>`);
-            pKelas.disabled = false;
-            pSiswa.disabled = true;
+            const val = encodeURIComponent(this.value);
+            try {
+                const res = await fetch(`get_filter_data.php?type=kelas&jurusan=${val}`);
+                const data = await res.json();
+                pKelas.innerHTML = '<option value="" disabled selected>Pilih Kelas</option>';
+                data.forEach(item => {
+                    pKelas.innerHTML += `<option value="${item.kelas}">${item.kelas}</option>`;
+                });
+                pKelas.disabled = false;
+                pSiswa.disabled = true;
+                pSiswa.innerHTML = '<option value="">Pilih Kelas Dulu</option>';
+            } catch (err) {
+                console.error("Fetch Error (Kelas):", err);
+            }
         });
 
         pKelas?.addEventListener('change', async function() {
-            const res = await fetch(`get_filter_data.php?type=siswa&kelas=${this.value}`);
-            const data = await res.json();
-            pSiswa.innerHTML = '<option value="" disabled selected>Pilih Siswa</option>';
-            data.forEach(item => pSiswa.innerHTML += `<option value="${item.id_siswa}">${item.nama_siswa}</option>`);
-            pSiswa.disabled = false;
+            const val = encodeURIComponent(this.value);
+            try {
+                const res = await fetch(`get_filter_data.php?type=siswa&kelas=${val}`);
+                const data = await res.json();
+                pSiswa.innerHTML = '<option value="" disabled selected>Pilih Siswa</option>';
+                data.forEach(item => {
+                    pSiswa.innerHTML += `<option value="${item.id_siswa}">${item.nama_siswa}</option>`;
+                });
+                pSiswa.disabled = false;
+            } catch (err) {
+                console.error("Fetch Error (Siswa):", err);
+            }
         });
     });
 
