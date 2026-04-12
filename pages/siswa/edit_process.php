@@ -12,7 +12,7 @@ require_once BASE_PATH . '/includes/helpers.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         // 1. Menangkap semua baris input dari form edit di View, termasuk primary key (ID)
-        $id_siswa = $_POST['id_siswa']; // Kunci Utama (Primary Key), tidak boleh diedit user
+        $idSiswa = $_POST['id_siswa']; // Kunci Utama (Primary Key), tidak boleh diedit user
         $nama     = $_POST['nama_siswa'];
         $jurusan  = $_POST['jurusan'];
         $kelas    = $_POST['kelas'];
@@ -23,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ortu     = $_POST['nama_ortu'];
         $kerja    = $_POST['pekerjaan_ortu'];
         $telp     = $_POST['nomor_ortu'];
-        $tempat_lahir  = $_POST['tempat_lahir_ortu'] ?? '';
-        $tanggal_lahir = $_POST['tanggal_lahir_ortu'] ?: null;
+        $tempatLahir  = $_POST['tempat_lahir_ortu'] ?? '';
+        $tanggalLahir = $_POST['tanggal_lahir_ortu'] ?: null;
         $point    = $_POST['point'];
         $status   = $_POST['status']; // Mengambil nilai dropdown pilihan Status ('Aktif', 'Pindah', dll) dari modal form edit
 
@@ -60,11 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ortu,
             $kerja,
             $telp,
-            $tempat_lahir,
-            $tanggal_lahir,
+            $tempatLahir,
+            $tanggalLahir,
             $point,
             $status,
-            $id_siswa // Target Primary Key untuk dieksekusi UPDATE
+            $idSiswa // Target Primary Key untuk dieksekusi UPDATE
         ]);
 
         // 4. Kembali secara mulus (Redirect) menuju halaman darimana user berasal ketika berhasil di perbarui

@@ -8,13 +8,13 @@ require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_siswa     = $_POST['id_siswa'] ?? null;
-    $id_sekolah   = $_POST['id_sekolah'] ?? null;
+    $idSiswa     = $_POST['id_siswa'] ?? null;
+    $idSekolah   = $_POST['id_sekolah'] ?? null;
     $alasan       = $_POST['alasan_pindah'] ?? '';
-    $nomor_surat  = (int)($_POST['nomor_surat'] ?? 0);
-    $tgl_surat    = date('Y-m-d');
+    $nomorSurat  = (int)($_POST['nomor_surat'] ?? 0);
+    $tglSurat    = date('Y-m-d');
 
-    if (!$id_siswa || !$id_sekolah || !$nomor_surat) {
+    if (!$idSiswa || !$idSekolah || !$nomorSurat) {
         die("Data tidak lengkap, bro!");
     }
 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sqlDetail = "INSERT INTO surat_pindah (id_siswa, id_sekolah, alasan_pindah, tanggal_surat) 
                       VALUES (?, ?, ?, ?)";
         $stmtDetail = $pdo->prepare($sqlDetail);
-        $stmtDetail->execute([$id_siswa, $id_sekolah, $alasan, $tgl_surat]);
+        $stmtDetail->execute([$idSiswa, $idSekolah, $alasan, $tglSurat]);
 
         $lastIdPindah = $pdo->lastInsertId();
 
@@ -33,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sqlSurat = "INSERT INTO surat (id_jenis_surat, jenis_surat, nomor_surat) 
                      VALUES (?, 'surat_pindah', ?)";
         $stmtSurat = $pdo->prepare($sqlSurat);
-        $stmtSurat->execute([$lastIdPindah, $nomor_surat]);
+        $stmtSurat->execute([$lastIdPindah, $nomorSurat]);
 
         // 3. Update Status Siswa jadi Non-Aktif
         $sqlUpdateSiswa = "UPDATE siswa SET status = 'pindah' WHERE id_siswa = ?";
         $stmtUpdateSiswa = $pdo->prepare($sqlUpdateSiswa);
-        $stmtUpdateSiswa->execute([$id_siswa]);
+        $stmtUpdateSiswa->execute([$idSiswa]);
 
         $pdo->commit();
 

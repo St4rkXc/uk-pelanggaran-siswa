@@ -10,12 +10,12 @@ require_once BASE_PATH . '/includes/helpers.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo "<pre>"; print_r($_POST); echo "</pre>"; die();
     // Ambil data dari form modal edit
-    $id_panggilan = $_POST['id_surat_panggilan_ortu'] ?? null;
-    $tanggal_temu = $_POST['tanggal_temu'] ?? null;
+    $idPanggilan = $_POST['id_surat_panggilan_ortu'] ?? null;
+    $tanggalTemu = $_POST['tanggal_temu'] ?? null;
     $keperluan   = $_POST['keperluan'] ?? ''; 
 
     // Validasi basic
-    if (!$id_panggilan || !$tanggal_temu || !$keperluan) {
+    if (!$idPanggilan || !$tanggalTemu || !$keperluan) {
         header("Location: index.php?status=error&msg=Data tidak lengkap!");
         exit;
     }
@@ -29,9 +29,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            ':tgl' => $tanggal_temu,
+            ':tgl' => $tanggalTemu,
             ':kep' => $keperluan,
-            ':id'  => $id_panggilan
+            ':id'  => $idPanggilan
         ]);
 
         // Redirect dengan feedback

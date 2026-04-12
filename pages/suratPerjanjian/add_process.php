@@ -8,11 +8,11 @@ require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_siswa = $_POST['id_siswa'];
-    $id_pelanggaran = $_POST['id_pelanggaran'];
-    $tgl_perjanjian = $_POST['tanggal_perjanjian'];
-    $tgl_surat = $_POST['tanggal_surat'];
-    $isi_perjanjian = $_POST['isi_perjanjian'];
+    $idSiswa = $_POST['id_siswa'];
+    $idPelanggaran = $_POST['id_pelanggaran'];
+    $tglPerjanjian = $_POST['tanggal_perjanjian'];
+    $tglSurat = $_POST['tanggal_surat'];
+    $isiPerjanjian = $_POST['isi_perjanjian'];
 
     try {
         // Karena cuma ke satu tabel, lo gak wajib pake transaction, tapi buat jaga-jaga tetep oke
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sqlPerjanjian = "INSERT INTO surat_perjanjian (id_siswa, id_pelanggaran, tanggal_perjanjian, isi_perjanjian, tanggal_surat) 
                           VALUES (?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sqlPerjanjian);
-        $stmt->execute([$id_siswa, $id_pelanggaran, $tgl_perjanjian, $isi_perjanjian, $tgl_surat]);
+        $stmt->execute([$idSiswa, $idPelanggaran, $tglPerjanjian, $isiPerjanjian, $tglSurat]);
 
         $pdo->commit();
 

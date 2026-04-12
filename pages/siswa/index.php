@@ -24,9 +24,9 @@ $jumlahPerluPerhatian = dbCount($pdo, 'siswa', 'point <= 50');
 // 1. Menangkap inputan pencarian (Jika ada), contoh: mengetikkan nama Budi
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 // 2. Menangkap filter pilihan dropdown
-$jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
-$kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
-$status_filter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
+$jurusanFilter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
+$kelasFilter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+$statusFilter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
 
 // [PAGINATION]
 // Menentukan batas data per halaman (10 record)
@@ -38,8 +38,8 @@ if ($page < 1) $page = 1;
 $offset = ($page - 1) * $limit;
 
 // 3. Mengambil opsi-opsi list Jurusan dan Kelas untuk ditampilkan di dropdown Filter (Tanpa nilai kembar/DISTINCT)
-$all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
-$all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
+$allJurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
+$allKelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
 
 // 4. Menyusun kondisi filter untuk menghitung total data dan menampilkan list
 $condition = "1=1";
@@ -51,30 +51,31 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
-if (!empty($jurusan_filter)) {
+if (!empty($jurusanFilter)) {
     $condition .= " AND jurusan = ?";
-    $params[] = $jurusan_filter;
+    $params[] = $jurusanFilter;
 }
 
-if (!empty($kelas_filter)) {
+if (!empty($kelasFilter)) {
     $condition .= " AND kelas = ?";
-    $params[] = $kelas_filter;
+    $params[] = $kelasFilter;
 }
 
-if (!empty($status_filter)) {
+if (!empty($statusFilter)) {
     $condition .= " AND status = ?";
-    $params[] = $status_filter;
+    $params[] = $statusFilter;
 }
 
 // Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman) - Pagination
-$total_rows = dbCount($pdo, 'siswa', $condition, $params);
+$totalRows = dbCount($pdo, 'siswa', $condition, $params);
 // Menghitung jumlah total halaman yang tersedia - Pagination
-$total_pages = ceil($total_rows / $limit);
+$totalPages = ceil($totalRows / $limit);
 
 // 5. Mengambil subset data berdasarkan LIMIT dan OFFSET sesuai halaman aktif. Mengurutkan dari ID terbesar (terbaru).
 $query = "SELECT * FROM siswa WHERE $condition ORDER BY point LIMIT $limit OFFSET $offset";
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
+
 ?>
 
 <!DOCTYPE html>
@@ -142,21 +143,21 @@ $stmt->execute($params);
                                 <div class="flex gap-2">
                                     <select name="jurusan_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                         <option value="">Semua Jurusan</option>
-                                        <?php foreach ($all_jurusan as $j): ?>
-                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusan_filter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
+                                        <?php foreach ($allJurusan as $j): ?>
+                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusanFilter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                         <option value="">Semua Kelas</option>
-                                        <?php foreach ($all_kelas as $k): ?>
-                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
+                                        <?php foreach ($allKelas as $k): ?>
+                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelasFilter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <select name="status_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                         <option value="">Semua Status</option>
-                                        <option value="Aktif" <?= $status_filter == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
-                                        <option value="Pindah" <?= $status_filter == 'Pindah' ? 'selected' : '' ?>>Pindah</option>
-                                        <option value="Nonaktif" <?= $status_filter == 'Nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
+                                        <option value="Aktif" <?= $statusFilter == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
+                                        <option value="Pindah" <?= $statusFilter == 'Pindah' ? 'selected' : '' ?>>Pindah</option>
+                                        <option value="Nonaktif" <?= $statusFilter == 'Nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
                                     </select>
                                     <div class="relative flex items-center">
                                         <input type="text"

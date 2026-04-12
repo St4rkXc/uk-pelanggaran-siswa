@@ -8,9 +8,9 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
 }
 
 // Ambil ID Detail dari URL
-$id_panggilan = $_GET['id'] ?? '';
+$idPanggilan = $_GET['id'] ?? '';
 
-if (empty($id_panggilan)) {
+if (empty($idPanggilan)) {
     die("ID Surat tidak valid!");
 }
 
@@ -28,7 +28,7 @@ try {
     LIMIT 1";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$id_panggilan]);
+    $stmt->execute([$idPanggilan]);
     $s = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$s) {

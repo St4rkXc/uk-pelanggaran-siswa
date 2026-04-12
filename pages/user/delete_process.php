@@ -8,16 +8,16 @@ require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
 
-$id_to_delete = $_GET['id'] ?? null;
-$current_user_id = $_SESSION['id_users']; // Pastiin lu simpen ID pas login
+$idToDelete = $_GET['id'] ?? null;
+$currentUserId = $_SESSION['id_users']; // Pastiin lu simpen ID pas login
 
-if (!$id_to_delete) {
+if (!$idToDelete) {
     header("Location: index.php?status=error&msg=ID tidak ditemukan");
     exit;
 }
 
 
-if ($id_to_delete == $current_user_id) {
+if ($idToDelete == $currentUserId) {
     header("Location: index.php?status=error&msg=Lu nggak bisa hapus akun lu sendiri, bro!");
     exit;
 }
@@ -26,7 +26,7 @@ try {
 
     $checkSql = "SELECT name FROM Users WHERE id_users = ?";
     $checkStmt = $pdo->prepare($checkSql);
-    $checkStmt->execute([$id_to_delete]);
+    $checkStmt->execute([$idToDelete]);
     $user = $checkStmt->fetch();
 
     if (!$user) {
@@ -37,7 +37,7 @@ try {
     $sql = "DELETE FROM Users WHERE id_users = ?";
     $stmt = $pdo->prepare($sql);
 
-    if ($stmt->execute([$id_to_delete])) {
+    if ($stmt->execute([$idToDelete])) {
         header("Location: index.php?status=success&msg=User " . $user['name'] . " berhasil didelete!");
     } else {
         header("Location: index.php?status=error&msg=Gagal menghapus user");

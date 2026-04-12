@@ -46,8 +46,8 @@ if (!empty($filterRole)) {
 }
 
 // Menghitung total seluruh data Users yang sesuai kriteria untuk menentukan jumlah halaman
-$total_rows = dbCount($pdo, 'Users', $condition, $params);
-$total_pages = ceil($total_rows / $limit);
+$totalRows = dbCount($pdo, 'Users', $condition, $params);
+$totalPages = ceil($totalRows / $limit);
 
 // [QUERY DATA]
 // Mengambil data Users dengan limit dan offset sesuai halaman aktif

@@ -7,9 +7,9 @@ require_once BASE_PATH . '/middleware/auth.php';
 require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
-$id_pelanggaran = $_GET['id'] ?? null;
+$idPelanggaran = $_GET['id'] ?? null;
 
-if ($id_pelanggaran) {
+if ($idPelanggaran) {
     try {
         $pdo->beginTransaction();
 
@@ -19,21 +19,21 @@ if ($id_pelanggaran) {
                     JOIN jenis_pelanggaran jp ON p.id_jenis = jp.id_jenis 
                     WHERE p.id_pelanggaran = ?";
         $stmtInfo = $pdo->prepare($sqlInfo);
-        $stmtInfo->execute([$id_pelanggaran]);
+        $stmtInfo->execute([$idPelanggaran]);
         $data = $stmtInfo->fetch();
 
         if ($data) {
-            $id_siswa = $data['id_siswa'];
-            $poin_refund = $data['point'];
+            $idSiswa = $data['id_siswa'];
+            $poinRefund = $data['point'];
 
             // 2. Hapus data pelanggaran
             $stmtDel = $pdo->prepare("DELETE FROM pelanggaran WHERE id_pelanggaran = ?");
-            $stmtDel->execute([$id_pelanggaran]);
+            $stmtDel->execute([$idPelanggaran]);
 
             // 3. Refund poin ke tabel siswa (tambahin lagi poinnya)
             $sqlRefund = "UPDATE siswa SET point = point + ? WHERE id_siswa = ?";
             $stmtRefund = $pdo->prepare($sqlRefund);
-            $stmtRefund->execute([$poin_refund, $id_siswa]);
+            $stmtRefund->execute([$poinRefund, $idSiswa]);
 
             $pdo->commit();
             if ($_SESSION['role'] === 'guru_mapel') {

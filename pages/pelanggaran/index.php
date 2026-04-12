@@ -19,13 +19,13 @@ $totalSiswa = dbCount($pdo, 'siswa', 'status = "aktif"');
 
 // [LOGIKA FILTER & PENCARIAN]
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$jurusan_filter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
-$kelas_filter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
+$jurusanFilter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
+$kelasFilter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
 
 // Mengambil list jurusan dan kelas untuk dropdown filter
-$all_jurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
-$all_kelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
-
+$allJurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan ASC")->fetchAll(PDO::FETCH_COLUMN);
+$allKelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
+// var_dump($allJurusan, $allKelas);
 // Menyusun kondisi filter
 $condition = "1=1";
 $params = [];
@@ -36,14 +36,14 @@ if (!empty($search)) {
     $params[] = "%$search%";
 }
 
-if (!empty($jurusan_filter)) {
+if (!empty($jurusanFilter)) {
     $condition .= " AND s.jurusan = ?";
-    $params[] = $jurusan_filter;
+    $params[] = $jurusanFilter;
 }
 
-if (!empty($kelas_filter)) {
+if (!empty($kelasFilter)) {
     $condition .= " AND s.kelas = ?";
-    $params[] = $kelas_filter;
+    $params[] = $kelasFilter;
 }
 
 // [PAGINATION LOGIC]
@@ -59,8 +59,8 @@ $totalPelanggaran = dbCount($pdo, 'pelanggaran');
 $sqlCount = "SELECT COUNT(*) FROM pelanggaran p JOIN siswa s ON p.id_siswa = s.id_siswa WHERE $condition";
 $stmtCount = $pdo->prepare($sqlCount);
 $stmtCount->execute($params);
-$total_rows = $stmtCount->fetchColumn();
-$total_pages = ceil($total_rows / $limit);
+$totalRows = $stmtCount->fetchColumn();
+$totalPages = ceil($totalRows / $limit);
 
 // [QUERY DATA]
 $sql = "SELECT 
@@ -134,14 +134,14 @@ $stmt->execute($params);
                                 <div class="flex gap-2">
                                     <select name="jurusan_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                         <option value="">Semua Jurusan</option>
-                                        <?php foreach ($all_jurusan as $j): ?>
-                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusan_filter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
+                                        <?php foreach ($allJurusan as $j): ?>
+                                            <option value="<?= htmlspecialchars($j) ?>" <?= $jurusanFilter == $j ? 'selected' : '' ?>><?= htmlspecialchars($j) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <select name="kelas_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                                         <option value="">Semua Kelas</option>
-                                        <?php foreach ($all_kelas as $k): ?>
-                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelas_filter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
+                                        <?php foreach ($allKelas as $k): ?>
+                                            <option value="<?= htmlspecialchars($k) ?>" <?= $kelasFilter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="relative flex items-center">

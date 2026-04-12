@@ -17,18 +17,18 @@ $laporanSiswa = BASE_URL . '/pages/laporan_siswa/';
 
 
 // current url
-$current_url = $_SERVER['PHP_SELF'];
-$isActiveDashboard = (strpos($current_url, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
-$isActiveSiswa = (strpos($current_url, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
-$isActiveUser = (strpos($current_url, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
-$isActiveJenisPelanggaran = (strpos($current_url, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';
-$isActivePelanggaran = (strpos($current_url, 'pages/pelanggaran/') !== false) ? 'sidebar-link-active' : '';
-$isActiveSuratPemanggilanOrtu = (strpos($current_url, 'pages/suratPemanggilanOrtu/') !== false) ? 'sidebar-link-active' : '';
-$isActiveSuratPerjanjian = (strpos($current_url, 'pages/suratPerjanjian/') !== false) ? 'sidebar-link-active' : '';
-$isActiveSuratPernyataanOrtu = (strpos($current_url, 'pages/suratPernyataanOrtu/') !== false) ? 'sidebar-link-active' : '';
-$isActiveSuratPindah = (strpos($current_url, 'pages/suratPindah/') !== false) ? 'sidebar-link-active' : '';
-$isActiveLaporanSurat = (strpos($current_url, 'pages/laporan_surat/') !== false) ? 'sidebar-link-active' : '';
-$isActiveLaporanSiswa = (strpos($current_url, 'pages/laporan_siswa/') !== false) ? 'sidebar-link-active' : '';
+$currentUrl = $_SERVER['PHP_SELF'];
+$isActiveDashboard = (strpos($currentUrl, 'pages/dashboard/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSiswa = (strpos($currentUrl, 'pages/siswa/') !== false) ? 'sidebar-link-active' : '';
+$isActiveUser = (strpos($currentUrl, 'pages/user/') !== false) ? 'sidebar-link-active' : '';
+$isActiveJenisPelanggaran = (strpos($currentUrl, 'pages/jenis_pelanggaran/') !== false) ? 'sidebar-link-active' : '';
+$isActivePelanggaran = (strpos($currentUrl, 'pages/pelanggaran/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPemanggilanOrtu = (strpos($currentUrl, 'pages/suratPemanggilanOrtu/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPerjanjian = (strpos($currentUrl, 'pages/suratPerjanjian/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPernyataanOrtu = (strpos($currentUrl, 'pages/suratPernyataanOrtu/') !== false) ? 'sidebar-link-active' : '';
+$isActiveSuratPindah = (strpos($currentUrl, 'pages/suratPindah/') !== false) ? 'sidebar-link-active' : '';
+$isActiveLaporanSurat = (strpos($currentUrl, 'pages/laporan_surat/') !== false) ? 'sidebar-link-active' : '';
+$isActiveLaporanSiswa = (strpos($currentUrl, 'pages/laporan_siswa/') !== false) ? 'sidebar-link-active' : '';
 
 ?>
 

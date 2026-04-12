@@ -10,12 +10,12 @@ require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form modal edit
-    $id_pindah  = $_POST['id_surat_pindah'] ?? null;
-    $id_sekolah = $_POST['id_sekolah'] ?? null;
+    $idPindah  = $_POST['id_surat_pindah'] ?? null;
+    $idSekolah = $_POST['id_sekolah'] ?? null;
     $alasan     = $_POST['alasan_pindah'] ?? '';
 
     // Validasi brutal: jangan kasih lolos kalau ID kosong
-    if (!$id_pindah || !$id_sekolah) {
+    if (!$idPindah || !$idSekolah) {
         $_SESSION['error'] = "Data tidak valid atau ID hilang, bro!";
         header("Location: index.php");
         exit;
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE id_surat_pindah = ?";
 
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_sekolah, $alasan, $id_pindah]);
+        $stmt->execute([$idSekolah, $alasan, $idPindah]);
 
         // Set pesan sukses buat ditampilin di dashboard
         $_SESSION['success'] = "Data kepindahan siswa berhasil diperbarui!";

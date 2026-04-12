@@ -7,9 +7,9 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     exit;
 }
 
-$id_surat = $_GET['id'] ?? '';
+$idSurat = $_GET['id'] ?? '';
 
-if (empty($id_surat)) {
+if (empty($idSurat)) {
     die("ID Surat tidak valid!");
 }
 
@@ -25,7 +25,7 @@ try {
     LIMIT 1";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$id_surat]);
+    $stmt->execute([$idSurat]);
     $s = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$s) {
@@ -38,13 +38,13 @@ try {
 $kopPath = BASE_URL . '/src/public/assets/img/kop_surat.jpg';
 
 // Format tempat tanggal lahir ortu
-$ttl_ortu = "-";
+$ttlOrtu = "-";
 if (!empty($s['tempat_lahir_ortu']) && !empty($s['tanggal_lahir_ortu'])) {
-    $ttl_ortu = htmlspecialchars($s['tempat_lahir_ortu']) . ', ' . date('d F Y', strtotime($s['tanggal_lahir_ortu']));
+    $ttlOrtu = htmlspecialchars($s['tempat_lahir_ortu']) . ', ' . date('d F Y', strtotime($s['tanggal_lahir_ortu']));
 } elseif (!empty($s['tempat_lahir_ortu'])) {
-    $ttl_ortu = htmlspecialchars($s['tempat_lahir_ortu']);
+    $ttlOrtu = htmlspecialchars($s['tempat_lahir_ortu']);
 } elseif (!empty($s['tanggal_lahir_ortu'])) {
-    $ttl_ortu = date('d F Y', strtotime($s['tanggal_lahir_ortu']));
+    $ttlOrtu = date('d F Y', strtotime($s['tanggal_lahir_ortu']));
 }
 
 ?>
@@ -122,7 +122,7 @@ if (!empty($s['tempat_lahir_ortu']) && !empty($s['tanggal_lahir_ortu'])) {
                 <tr>
                     <td class="w-48 py-2">Tempat/ tanggal Lahir</td>
                     <td class="w-4 py-2">:</td>
-                    <td class="py-2"><?= $ttl_ortu ?></td>
+                    <td class="py-2"><?= $ttlOrtu ?></td>
                 </tr>
                 <tr>
                     <td class="w-48 py-2">Pekerjaan</td>

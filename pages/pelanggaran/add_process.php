@@ -9,12 +9,12 @@ require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari Modal Add tadi
-    $id_siswa   = $_POST['id_siswa'] ?? null;
-    $id_jenis   = $_POST['id_jenis'] ?? null;
+    $idSiswa   = $_POST['id_siswa'] ?? null;
+    $idJenis   = $_POST['id_jenis'] ?? null;
     $keterangan = trim($_POST['keterangan'] ?? '');
     $pelapor    = $_SESSION['id_users'] ?? null;
     // Validasi input minimal
-    if (!$id_siswa || !$id_jenis || !$pelapor) {
+    if (!$idSiswa || !$idJenis || !$pelapor) {
         if ($_SESSION['role'] === 'guru_mapel') {
             header("Location: ../dashboard/guru_mapel.php?status=error&msg=Data seleksi tidak lengkap!");
         } else {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (!$id_siswa || !$id_jenis || !$pelapor) {
+    if (!$idSiswa || !$idJenis || !$pelapor) {
         if ($_SESSION['role'] === 'guru_mapel') {
             header("Location: ../dashboard/guru_mapel.php?status=error&msg=Data seleksi tidak lengkap! Pelapor: " . ($pelapor ? 'Ada' : 'Kosong'));
         } else {
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // 1. Ambil bobot poin dari tabel jenis_pelanggaran
         $stmtJenis = $pdo->prepare("SELECT point FROM jenis_pelanggaran WHERE id_jenis = ?");
-        $stmtJenis->execute([$id_jenis]);
+        $stmtJenis->execute([$idJenis]);
         $bobot = $stmtJenis->fetchColumn();
 
         if ($bobot === false) {
@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                       VALUES (:id_siswa, :id_jenis, :keterangan, :pelapor, NOW())";
         $stmtIns = $pdo->prepare($sqlInsert);
         $stmtIns->execute([
-            ':id_siswa'   => $id_siswa,
-            ':id_jenis'   => $id_jenis,
+            ':id_siswa'   => $idSiswa,
+            ':id_jenis'   => $idJenis,
             ':keterangan' => $keterangan,
             ':pelapor'    => $pelapor
         ]);
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtUpd = $pdo->prepare($sqlUpdate);
         $stmtUpd->execute([
             ':bobot'    => $bobot,
-            ':id_siswa' => $id_siswa
+            ':id_siswa' => $idSiswa
         ]);
 
         // Kalau semua OK, simpan permanen

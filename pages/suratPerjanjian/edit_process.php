@@ -12,13 +12,13 @@ require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form modal edit
-    $id_perjanjian = $_POST['id_perjanjian'];
-    $id_pelanggaran = $_POST['id_pelanggaran'];
-    $tgl_perjanjian = $_POST['tanggal_perjanjian'];
-    $isi_perjanjian = $_POST['isi_perjanjian'];
+    $idPerjanjian = $_POST['id_perjanjian'];
+    $idPelanggaran = $_POST['id_pelanggaran'];
+    $tglPerjanjian = $_POST['tanggal_perjanjian'];
+    $isiPerjanjian = $_POST['isi_perjanjian'];
 
     // Validasi basic biar gak ada field kosong
-    if (empty($id_perjanjian) || empty($id_pelanggaran) || empty($tgl_perjanjian) || empty($isi_perjanjian)) {
+    if (empty($idPerjanjian) || empty($idPelanggaran) || empty($tglPerjanjian) || empty($isiPerjanjian)) {
         header("Location: index.php?status=error&msg=Semua field wajib diisi!");
         exit;
     }
@@ -33,10 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
-            $id_pelanggaran,
-            $tgl_perjanjian,
-            $isi_perjanjian,
-            $id_perjanjian
+            $idPelanggaran,
+            $tglPerjanjian,
+            $isiPerjanjian,
+            $idPerjanjian
         ]);
 
         // Redirect balik ke dashboard dengan pesan sukses

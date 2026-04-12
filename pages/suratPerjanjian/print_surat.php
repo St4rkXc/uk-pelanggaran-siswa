@@ -7,9 +7,9 @@ if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], $requiredRole)) {
     exit;
 }
 // Ambil ID dari URL (print_surat.php?id=123)
-$id_perjanjian = $_GET['id'] ?? '';
+$idPerjanjian = $_GET['id'] ?? '';
 
-if (empty($id_perjanjian)) {
+if (empty($idPerjanjian)) {
     die("ID Surat tidak valid!");
 }
 
@@ -29,7 +29,7 @@ try {
     LIMIT 1";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$id_perjanjian]);
+    $stmt->execute([$idPerjanjian]);
     $s = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$s) {

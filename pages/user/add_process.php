@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name     = trim($_POST['name'] ?? '');
     $password = $_POST['password'] ?? '';
     $role     = $_POST['role'] ?? '';
-    $id_siswa = !empty($_POST['id_siswa']) ? $_POST['id_siswa'] : null;
+    $idSiswa = !empty($_POST['id_siswa']) ? $_POST['id_siswa'] : null;
 
     if (empty($name) || empty($password) || empty($role)) {
         header("Location: index.php?status=error&msg=Field tidak boleh kosong!");
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':name'     => $name,
             ':password' => $hashedPassword,
             ':role'     => $role,
-            ':id_siswa' => $id_siswa
+            ':id_siswa' => $idSiswa
         ]);
 
         header("Location: index.php?status=success&msg=User baru berhasil ditambahkan!");

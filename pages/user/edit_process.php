@@ -8,12 +8,12 @@ require_once BASE_PATH . '/middleware/role.php';
 require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_users = $_POST['id_users'] ?? null;
+    $idUsers = $_POST['id_users'] ?? null;
     $name     = trim($_POST['name'] ?? '');
     $role     = $_POST['role'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    if (!$id_users || empty($name) || empty($role)) {
+    if (!$idUsers || empty($name) || empty($role)) {
         header("Location: index.php?status=error&msg=Data tidak lengkap!");
         exit;
     }
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':name'     => $name,
                 ':role'     => $role,
                 ':password' => $hashedPassword,
-                ':id'       => $id_users
+                ':id'       => $idUsers
             ];
         } else {
             // Jika password gak diganti (abaikan kolom password)
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $params = [
                 ':name' => $name,
                 ':role' => $role,
-                ':id'   => $id_users
+                ':id'   => $idUsers
             ];
         }
 

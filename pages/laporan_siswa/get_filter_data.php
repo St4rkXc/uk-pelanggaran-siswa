@@ -34,7 +34,7 @@ try {
 
         echo json_encode($result);
     } elseif ($type === 'pelanggaran') {
-        $id_siswa = $_GET['id_siswa'] ?? '';
+        $idSiswa = $_GET['id_siswa'] ?? '';
 
         $stmt = $pdo->prepare("
         SELECT p.id_pelanggaran, jp.nama_jenis, p.tanggal_pelaporan 
@@ -43,12 +43,12 @@ try {
         WHERE p.id_siswa = ? 
         ORDER BY p.tanggal_pelaporan DESC
     ");
-        $stmt->execute([$id_siswa]);
+        $stmt->execute([$idSiswa]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         echo json_encode($result);
     } elseif ($type === 'full_report') {
-        $id_siswa = $_GET['id_siswa'] ?? '';
+        $idSiswa = $_GET['id_siswa'] ?? '';
 
         // 1. Ambil Data Pelanggaran
         $stmtP = $pdo->prepare("
@@ -57,7 +57,7 @@ try {
             JOIN jenis_pelanggaran jp ON p.id_jenis = jp.id_jenis
             WHERE p.id_siswa = ? ORDER BY p.tanggal_pelaporan DESC
         ");
-        $stmtP->execute([$id_siswa]);
+        $stmtP->execute([$idSiswa]);
         $pelanggaran = $stmtP->fetchAll(PDO::FETCH_ASSOC);
 
         // 2. Ambil Data Surat Panggilan (Include No Surat dari tabel surat)
@@ -67,14 +67,14 @@ try {
             LEFT JOIN surat s ON spo.id_surat_panggilan_ortu = s.id_jenis_surat AND s.jenis_surat = 'surat_panggilan_ortu'
             WHERE spo.id_siswa = ? ORDER BY spo.tanggal_surat DESC
         ");
-        $stmtSPO->execute([$id_siswa]);
+        $stmtSPO->execute([$idSiswa]);
         $panggilan = $stmtSPO->fetchAll(PDO::FETCH_ASSOC);
 
         // 3. Ambil Data Surat Perjanjian
         $stmtSPJ = $pdo->prepare("
             SELECT * FROM surat_perjanjian WHERE id_siswa = ? ORDER BY tanggal_surat DESC
         ");
-        $stmtSPJ->execute([$id_siswa]);
+        $stmtSPJ->execute([$idSiswa]);
         $perjanjian = $stmtSPJ->fetchAll(PDO::FETCH_ASSOC);
 
         // ... di dalam elseif ($type === 'full_report')
@@ -86,18 +86,18 @@ try {
     LEFT JOIN surat s ON sp.id_surat_pindah = s.id_jenis_surat AND s.jenis_surat = 'surat_pindah'
     WHERE sp.id_siswa = ?
 ");
-        $stmtSPD->execute([$id_siswa]);
+        $stmtSPD->execute([$idSiswa]);
         $pindah = $stmtSPD->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmtSPD->execute([$id_siswa]);
+        $stmtSPD->execute([$idSiswa]);
         $pindah = $stmtSPD->fetchAll(PDO::FETCH_ASSOC);
 
         // 5. Ambil Data Surat Pernyataan Orang Tua
         $stmtSPOrtu = $pdo->prepare("
             SELECT * FROM surat_pernyataan_ortu WHERE id_siswa = ? ORDER BY tanggal_surat DESC
         ");
-        $stmtSPOrtu->execute([$id_siswa]);
-        $pernyataan_ortu = $stmtSPOrtu->fetchAll(PDO::FETCH_ASSOC);
+        $stmtSPOrtu->execute([$idSiswa]);
+        $pernyataanOrtu = $stmtSPOrtu->fetchAll(PDO::FETCH_ASSOC);
 
         // Gabungin semua jadi satu response JSON
         echo json_encode([
@@ -105,7 +105,7 @@ try {
             'panggilan'        => $panggilan,
             'perjanjian'       => $perjanjian,
             'pindah'           => $pindah,
-            'pernyataan_ortu'  => $pernyataan_ortu
+            'pernyataan_ortu'  => $pernyataanOrtu
         ]);
     } else {
         echo json_encode([]);

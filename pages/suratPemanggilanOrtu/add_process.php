@@ -9,13 +9,13 @@ require_once BASE_PATH . '/includes/helpers.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Ambil data dari form
-    $id_siswa = $_POST['id_siswa'] ?? null;
-    $nomor_surat = $_POST['nomor_surat'] ?? null;
+    $idSiswa = $_POST['id_siswa'] ?? null;
+    $nomorSurat = $_POST['nomor_surat'] ?? null;
     $keperluan = $_POST['keperluan'] ?? ''; 
-    $tanggal_temu = $_POST['tanggal_temu'] ?? null;
-    $tanggal_surat = date('Y-m-d'); // Tanggal surat terbit hari ini
+    $tanggalTemu = $_POST['tanggal_temu'] ?? null;
+    $tanggalSurat = date('Y-m-d'); // Tanggal surat terbit hari ini
 
-    if (!$id_siswa || !$nomor_surat || !$tanggal_temu) {
+    if (!$idSiswa || !$nomorSurat || !$tanggalTemu) {
         die("Data tidak lengkap, bro!");
     }
 
@@ -39,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtDetail = $pdo->prepare($sqlDetail);
         $stmtDetail->execute([
-            ':id_siswa' => $id_siswa,
+            ':id_siswa' => $idSiswa,
             ':keperluan' => $keperluan,
-            ':tanggal_temu' => $tanggal_temu,
-            ':tanggal_surat' => $tanggal_surat
+            ':tanggal_temu' => $tanggalTemu,
+            ':tanggal_surat' => $tanggalSurat
         ]);
 
         // Ambil ID detail yang barusan di-insert
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtSurat->execute([
             ':id_jenis' => $lastDetailId,
             ':jenis_surat' => 'surat_panggilan_ortu',
-            ':nomor' => $nomor_surat
+            ':nomor' => $nomorSurat
         ]);
 
         // COMMIT SEMUA TRANSAKSI

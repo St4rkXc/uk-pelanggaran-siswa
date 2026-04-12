@@ -12,18 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. Menangkap semua inputan dari form HTML
     // Disertai pencegahan null (menggunakan ??) untuk memberikan nilai kosong default jika input tidak diisi
-    $nama_siswa     = $_POST['nama_siswa'] ?? '';
+    $namaSiswa     = $_POST['nama_siswa'] ?? '';
     $nis            = $_POST['nis'] ?? '';
     $nisn           = $_POST['nisn'] ?? '';
-    $alamat_rumah   = $_POST['alamat_rumah'] ?? '';
+    $alamatRumah   = $_POST['alamat_rumah'] ?? '';
     $kelas          = $_POST['kelas'] ?? '';
     $jurusan        = $_POST['jurusan'] ?? '';
-    $jenis_kelamin  = $_POST['jenis_kelamin'] ?? '';
-    $nama_ortu      = $_POST['nama_ortu'] ?? '';
-    $pekerjaan_ortu = $_POST['pekerjaan_ortu'] ?? '';
-    $nomor_ortu     = $_POST['nomor_ortu'] ?? '';
-    $tempat_lahir_ortu  = $_POST['tempat_lahir_ortu'] ?? '';
-    $tanggal_lahir_ortu = $_POST['tanggal_lahir_ortu'] ?? null;
+    $jenisKelamin  = $_POST['jenis_kelamin'] ?? '';
+    $namaOrtu      = $_POST['nama_ortu'] ?? '';
+    $pekerjaanOrtu = $_POST['pekerjaan_ortu'] ?? '';
+    $nomorOrtu     = $_POST['nomor_ortu'] ?? '';
+    $tempatLahirOrtu  = $_POST['tempat_lahir_ortu'] ?? '';
+    $tanggalLahirOrtu = $_POST['tanggal_lahir_ortu'] ?? null;
 
     // 2. Nilai Default Poin & Status
     // Saat pendaftaran pertama kali, otomatis siswa mendapat 100 Poin prilaku
@@ -47,18 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // 4. Mendaftarkan mapping Data variabel menuju Parameter Query Bind (#Bind Param)
         $stmt = $pdo->prepare($query);
         $params = [
-            ':nama'       => $nama_siswa,
+            ':nama'       => $namaSiswa,
             ':nis'        => $nis,
             ':nisn'       => $nisn,
-            ':alamat'     => $alamat_rumah,
+            ':alamat'     => $alamatRumah,
             ':kelas'      => $kelas,
             ':jurusan'    => $jurusan,
-            ':jk'         => $jenis_kelamin,
-            ':nama_ortu'  => $nama_ortu,
-            ':kerja_ortu' => $pekerjaan_ortu,
-            ':telp_ortu'  => $nomor_ortu,
-            ':tempat_lahir'  => $tempat_lahir_ortu,
-            ':tanggal_lahir' => $tanggal_lahir_ortu,
+            ':jk'         => $jenisKelamin,
+            ':nama_ortu'  => $namaOrtu,
+            ':kerja_ortu' => $pekerjaanOrtu,
+            ':telp_ortu'  => $nomorOrtu,
+            ':tempat_lahir'  => $tempatLahirOrtu,
+            ':tanggal_lahir' => $tanggalLahirOrtu,
             ':point'      => $point,
             ':status'     => $status
         ];

@@ -32,7 +32,7 @@ try {
 
         echo json_encode($result);
     } elseif ($type === 'pelanggaran') {
-        $id_siswa = $_GET['id_siswa'] ?? '';
+        $idSiswa = $_GET['id_siswa'] ?? '';
 
         $stmt = $pdo->prepare("
         SELECT p.id_pelanggaran, jp.nama_jenis, p.tanggal_pelaporan 
@@ -41,7 +41,7 @@ try {
         WHERE p.id_siswa = ? 
         ORDER BY p.tanggal_pelaporan DESC
     ");
-        $stmt->execute([$id_siswa]);
+        $stmt->execute([$idSiswa]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         echo json_encode($result);
