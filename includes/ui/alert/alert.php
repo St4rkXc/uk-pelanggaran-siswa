@@ -3,22 +3,30 @@
 if ((isset($_GET['status']) && isset($_GET['msg'])) || isset($_GET['error'])) {
     // Ambil nilai status, jika tidak ada default ke 'error'
     $status = isset($_GET['status']) ? htmlspecialchars($_GET['status']) : 'error';
-    
+
     // Tentukan pesan (msg) berdasarkan parameter yang tersedia
     if (isset($_GET['msg'])) {
         $msg = htmlspecialchars($_GET['msg']);
     } elseif (isset($_GET['error'])) {
         // Tangani pesan error umum (contoh: dari login.php)
-        $msg = htmlspecialchars($_GET['error']);
-        if ($msg === 'no_account') $msg = 'Akun tidak ditemukan atau salah password.';
+        // [REFACOTOR DOCS]
+        // Php hanya menggunakan ekflusif else if jadi hanya mengambil isset error hanya sekali.
+        $errorCode = $_GET['error'];
+        if ($errorCode === 'no_account') {
+            $msg = 'Akun tidak ditemukan.';
+        } elseif ($errorCode === 'wrong_password') {
+            $msg = 'Password Salah';
+        } else {
+            $msg = htmlspecialchars($errorCode);
+        }
     } else {
         $msg = 'Terjadi kesalahan.';
     }
-    
+
     // Default class dan icon untuk alert (Info)
     $alertClass = 'alert-info text-white';
     $icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
-    
+
     // Ubah class dan icon sesuai status success atau error
     if ($status === 'success') {
         $alertClass = 'alert-success text-white';
@@ -38,11 +46,13 @@ if ((isset($_GET['status']) && isset($_GET['msg'])) || isset($_GET['error'])) {
             </div>
             <!-- Tombol silang untuk menutup alert secara manual -->
             <button onclick="dismissAlert('global-alert')" class="btn btn-ghost btn-sm btn-circle opacity-70 hover:opacity-100">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
         </div>
     </div>
-    
+
     <script>
         // Fungsi JS untuk menghilangkan popup dengan efek fade out
         function dismissAlert(id) {
@@ -52,7 +62,7 @@ if ((isset($_GET['status']) && isset($_GET['msg'])) || isset($_GET['error'])) {
                 el.style.opacity = '0'; // Buat transparan
                 setTimeout(() => el.remove(), 400); // Hapus elemen dari DOM
             }
-            
+
             // Bersihkan parameter dari URL agar popup tidak muncul saat halaman di refresh
             const url = new URL(window.location);
             url.searchParams.delete('status');

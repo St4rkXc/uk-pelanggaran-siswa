@@ -9,7 +9,7 @@ require_once BASE_PATH . '/includes/helpers.php';
 
 
 // inget include database dlu ya biar bisa make $pdo
-$totalSiswa = dbCount($pdo, 'Siswa');
+$jumlahSiswa = dbCount($pdo, 'Siswa', "status = 'aktif'");
 $totalGuru = dbCount($pdo, 'Users', "role IN ('admin', 'guru_bk', 'guru_mapel')");
 $totalSurat = dbCount($pdo, 'Surat');
 $currentUser = [
@@ -45,14 +45,14 @@ $currentUser = [
                             <span class="icon-user h-6 w-6 "></span>
                         </div>
                         <div>
-                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $totalSiswa ?> Siswa</h5>
+                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $jumlahSiswa ?> Siswa</h5>
                             <p class="font-paragraph-14 font font-medium text-zinc-600">Total Siswa Tercatat</p>
                         </div>
                     </div>
                     <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
                         <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
                             <span class="icon-user h-6 w-6 "></span>
-                        </div> 
+                        </div>
                         <div>
                             <h5 class="font-heading-5 font-semibold text-zinc-800"><?php echo $totalGuru ?> Guru</h5>
                             <p class="font-paragraph-14 font font-medium text-zinc-600">Total Guru Tercatat</p>
@@ -213,7 +213,7 @@ $currentUser = [
                                             </span>
                                         </td>
 
-                                       
+
                                     </tr>
                                 <?php endwhile; ?>
                             </tbody>

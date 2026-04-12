@@ -354,7 +354,7 @@ $stmt->execute($params);
 
     var tomSelect = new TomSelect("#select-siswa", settings);
 
-    document.querySelector('select[name="role"]').addEventListener('change', function() {
+    document.querySelector('s"elect[name=role"]').addEventListener('change', function() {
         if (this.value !== 'siswa') {
             tomSelect.disable();
             tomSelect.clear();

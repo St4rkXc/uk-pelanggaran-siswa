@@ -26,7 +26,6 @@ $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 // 2. Menangkap filter pilihan dropdown
 $jurusanFilter = isset($_GET['jurusan_filter']) ? trim($_GET['jurusan_filter']) : '';
 $kelasFilter = isset($_GET['kelas_filter']) ? trim($_GET['kelas_filter']) : '';
-$statusFilter = isset($_GET['status_filter']) ? trim($_GET['status_filter']) : '';
 
 // [PAGINATION]
 // Menentukan batas data per halaman (10 record)
@@ -42,7 +41,7 @@ $allJurusan = $pdo->query("SELECT DISTINCT jurusan FROM siswa ORDER BY jurusan A
 $allKelas = $pdo->query("SELECT DISTINCT kelas FROM siswa ORDER BY kelas ASC")->fetchAll(PDO::FETCH_COLUMN);
 
 // 4. Menyusun kondisi filter untuk menghitung total data dan menampilkan list
-$condition = "1=1";
+$condition = "status = 'aktif'";
 $params = [];
 
 if (!empty($search)) {
@@ -59,11 +58,6 @@ if (!empty($jurusanFilter)) {
 if (!empty($kelasFilter)) {
     $condition .= " AND kelas = ?";
     $params[] = $kelasFilter;
-}
-
-if (!empty($statusFilter)) {
-    $condition .= " AND status = ?";
-    $params[] = $statusFilter;
 }
 
 // Menghitung total data keseluruhan yang sesuai dengan kriteria filter (untuk menghitung total halaman) - Pagination
@@ -116,15 +110,6 @@ $stmt->execute($params);
                             <p class="font-paragraph-14 font-medium text-zinc-600">Total Pelanggaran Tercatat</p>
                         </div>
                     </div>
-                    <div class="flex flex-1 flex-col rounded-lg border border-zinc-300 p-6 gap-6">
-                        <div class="p-3 rounded-full border border-zinc-300 flex justify-center items-center w-fit">
-                            <span class="icon-siren h-6 w-6"></span>
-                        </div>
-                        <div>
-                            <h5 class="font-heading-5 font-semibold text-zinc-800"><?= htmlspecialchars($jumlahSiswaTidakAktif) ?> Siswa Tidak Aktif</h5>
-                            <p class="font-paragraph-14 font-medium text-zinc-600">Total Siswa tidak aktif </p>
-                        </div>
-                    </div>
                     <div class="flex flex-1 flex-col rounded-lg bg-red-500 p-6 gap-6  justify-end">
                         <div class="p-3 rounded-full hidden justify-center items-center w-fit">
                             <span class="icon-siren h-6 w-6"></span>
@@ -153,11 +138,6 @@ $stmt->execute($params);
                                             <option value="<?= htmlspecialchars($k) ?>" <?= $kelasFilter == $k ? 'selected' : '' ?>><?= htmlspecialchars($k) ?></option>
                                         <?php endforeach; ?>
                                     </select>
-                                    <select name="status_filter" onchange="this.form.submit()" class="rounded-lg border border-zinc-300 py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                                        <option value="">Semua Status</option>
-                                        <option value="Aktif" <?= $statusFilter == 'Aktif' ? 'selected' : '' ?>>Aktif</option>
-                                        <option value="Pindah" <?= $statusFilter == 'Pindah' ? 'selected' : '' ?>>Pindah</option>
-                                        <option value="Nonaktif" <?= $statusFilter == 'Nonaktif' ? 'selected' : '' ?>>Nonaktif</option>
                                     </select>
                                     <div class="relative flex items-center">
                                         <input type="text"
@@ -211,7 +191,7 @@ $stmt->execute($params);
                                             data-tanggal-lahir-ortu="<?= htmlspecialchars($row['tanggal_lahir_ortu'] ?? '-'); ?>"
                                             data-status="<?= $row['status']; ?>">
 
-                                            <td class="p-4 text-zinc-800 font-medium flex gap-4 items-center">
+                                            <td class="p-4 text-zinc-800 font-medium flex gap-4 items-center ">
                                                 <div class="p-3 bg-zinc-100 border border-zinc-300 rounded-full flex justify-center items-center">
                                                     <span class="icon-user h-4 w-4 text-zinc-500"></span>
                                                 </div>
