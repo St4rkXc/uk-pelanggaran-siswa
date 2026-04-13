@@ -175,7 +175,7 @@ $stmt->execute($params);
                                         $style = $roleStyles[$row['role']] ?? 'bg-zinc-50 text-zinc-600 border-zinc-200';
                                         $label = $roleName[$row['role']] ?? $row['role'];
                                     ?>
-                                        <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 duration-100 cursor-pointer" 
+                                        <tr class="border-b border-b-zinc-300 hover:bg-zinc-100 duration-100 cursor-pointer"
                                             onclick="openModalUser(this)"
                                             data-id="<?= $row['id_users'] ?>"
                                             data-name="<?= htmlspecialchars($row['name']) ?>"
@@ -208,9 +208,9 @@ $stmt->execute($params);
                                         </tr>
                                     <?php endwhile; ?>
                                 </tbody>
-                             </table>
-                             <?php include BASE_PATH . '/includes/ui/pagination/pagination.php'; ?>
-                         </div>
+                            </table>
+                            <?php include BASE_PATH . '/includes/ui/pagination/pagination.php'; ?>
+                        </div>
 
                     </div>
             </main>
@@ -344,17 +344,17 @@ $stmt->execute($params);
         },
         render: {
             option: function(data, escape) {
-                return '<div class=" hover:bg-zinc-100 cursor-pointer border-0 font-paragraph-14">' + escape(data.text) + '</div>';
+                return '<div class="py-2 px-3 hover:bg-zinc-100 cursor-pointer border-0 font-paragraph-14">' + escape(data.text) + '</div>';
             },
             item: function(data, escape) {
-                return '<div class="text-zinc-800 font-medium font-paragraph-14">' + escape(data.text) + '</div>';
+                return '<div class="text-zinc-800 font-medium font-paragraph-14 py-1">' + escape(data.text) + '</div>';
             }
         }
     };
 
     var tomSelect = new TomSelect("#select-siswa", settings);
 
-    document.querySelector('s"elect[name=role"]').addEventListener('change', function() {
+    document.querySelector('select[name="role"]').addEventListener('change', function() {
         if (this.value !== 'siswa') {
             tomSelect.disable();
             tomSelect.clear();
@@ -447,10 +447,10 @@ $stmt->execute($params);
                     <label class="label font-semibold text-zinc-600">Password Baru (Kosongkan jika tidak ganti)</label>
                     <input type="password" name="password" placeholder="********" class="my-input w-full" />
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-2 opacity-50">
                     <label class="label font-semibold text-zinc-600">Role</label>
-                    <select name="role" id="edit-user-role" class="my-select w-full" required>
-                        <!-- <option disabled selected>Pilih Role</option> -->
+                    <select name="role" id="edit-user-role" class="my-select w-full cursor-not-allowed" required disabled>
+                        <option disabled selected>Pilih Role</option>
                         <option value="admin">Master</option>
                         <option value="guru_bk">Guru BK</option>
                         <option value="guru_mapel">Guru Mapel</option>
